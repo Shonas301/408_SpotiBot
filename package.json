@@ -17,7 +17,9 @@
     "express": "^4.13.4",
     "fs": "0.0.1-security",
     "request": "^2.72.0",
-    "spotify-web-api-node": "^2.5.0"
+    "spotify-web-api-node": "^2.5.0",
+    "mongodb": "^2.2.34",
+    "request": "^2.72.0"
   },
   "engines": {
     "node": "~4.1.2"
