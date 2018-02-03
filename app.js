@@ -15,6 +15,7 @@ const
   express = require('express'),
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
+  fs = require('fs')
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -95,6 +96,7 @@ function handleMessage(sender_psid, received_message) {
     response = {
       "text": `You sent the message: "${received_message.text}".`
     }
+    console.log('${recieved_message.text}')
   } 
   
   // Send the response message
