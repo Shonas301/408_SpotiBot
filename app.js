@@ -38,10 +38,12 @@ MongoClient.connect(mongoUrl, function (err, database) {
   if (err) throw err;
   db = database.db("users");
 
-  // Sets server port and logs message on success
-  app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
-  // Start the application after the database connection is ready
-  console.log("Listening on port 1337");
+  //standard http listen
+  http.listen(80)
+  //standard https listen
+  https.listen(443)
+
+  console.log("HTTP and HTTPS running with database")
 });
 
 // Accepts POST requests at /webhook endpoint
