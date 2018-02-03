@@ -30,13 +30,7 @@ const
 
 
 
-// Sets server port and logs message on success
-//app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-//Listen on standard http server
-http.listen(80)
-//listen on standard https server
-https.listen(443)
 var db;
 
 // Create connection to the mongo server, and start the server
