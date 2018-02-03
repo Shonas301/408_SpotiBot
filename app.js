@@ -14,11 +14,24 @@ const
   request = require('request'),
   express = require('express'),
   body_parser = require('body-parser'),
+  http = require('http')
+  https = require('https')
   app = express().use(body_parser.json()); // creates express http server
   fs = require('fs')
+  privateKey = fs.readFileSync('encryption/spotibot.tech.key', 'utf8');
+  privateCert = fs.readFileSync( 'encryption/spotibot.tech.crt', 'utf8' );
+  credentials = {key: privateKey, cert: privateCert }
+  http = http.createServer(app)
+  https = https.createServer(credentials,app)
+
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+//app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+
+//Listen on standard http server
+http.listen(80)
+//listen on standard https server
+https.listen(443)
 
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {  
@@ -98,6 +111,9 @@ function handleMessage(sender_psid, received_message) {
     }
     console.log('${recieved_message.text}')
   } 
+  else if (recieved_message.text === "login") {
+    authToken = oAuth(recieved_message.text)
+  }
   
   // Send the response message
   callSendAPI(sender_psid, response);    
