@@ -142,3 +142,19 @@ function callSendAPI(sender_psid, response) {
     }
   }); 
 }
+
+//creates collection
+var collection = db.collection('users');
+
+//function to add users to db
+function addToDB() { //need to give it the user info
+  var date = new Date();
+  date += 0;
+
+  db.collection('users').insertOne({
+    user_id: 0,
+    user_token: "",
+    refresh_token: "",
+    expires_at: date,
+  })
+}
