@@ -158,3 +158,31 @@ function addToDB() { //need to give it the user info
     expires_at: date,
   })
 }
+
+//function to throw user's top 50 played songs in a list
+// offset is optional (and not necessary for our implementation)
+function getTop50(limit, offset, time_range) {
+	// TODO (helper function)
+	// call the endpoint with the params
+	// return array to caller
+}
+
+/* !! PROBLEM !!  There is no 'genre' attribute in a track's 
+ 'audio_features' list. Genres can only be extracted from 
+ full album objects, so singles cannot be used when determining
+ a user's top genre.
+*/
+
+// @param timeframe: either 1 or 6 (number of months)
+function findHottestGenre(timeframe) {
+	// TODO
+	// parse the received_message
+
+	if (timeframe != 1 && timeframe != 6) {
+		return; // not sure how we're handling error handling yet
+	}
+
+	top50List = getTop50(50, 0, timeframe);
+	// make sure to only use tracks that are associated with albums
+	// or else the logic will fail & also might crash yoloswag
+}
