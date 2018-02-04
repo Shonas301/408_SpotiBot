@@ -39,12 +39,15 @@ MongoClient.connect(mongoUrl, function (err, database) {
   db = database.db("users");
 
   //standard http listen
-  http.listen(80)
+  http.listen(80);
   //standard https listen
-  https.listen(443)
+  https.listen(443);
 
-  console.log("HTTP and HTTPS running with database")
+  console.log("HTTP and HTTPS running with database");
 });
+
+var spotifyApi = require('spotify-web-api-node');
+
 
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
