@@ -127,7 +127,7 @@ function handleMessage(sender_psid, received_message) {
       "text": `You sent the message: "${received_message.text}".`
     }
     console.log('${recieved_message.text}')
-  } 
+  }
   else if (recieved_message.text === "login") {
     authToken = oAuth(recieved_message.text)
   }
@@ -177,20 +177,20 @@ function callSendAPI(sender_psid, response) {
 
 //function to throw user's top 50 played songs in a list
 // offset is optional (and not necessary for our implementation)
-function getTop50(limit, offset, time_range) {
+function getTopSongs(limit, offset, time_range) {
 	// TODO (helper function)
 	// call the endpoint with the params
 	// return array to caller
 }
 
-/* !! PROBLEM !!  There is no 'genre' attribute in a track's 
- 'audio_features' list. Genres can only be extracted from 
+/* !! PROBLEM !!  There is no 'genre' attribute in a track's
+ 'audio_features' list. Genres can only be extracted from
  full album objects, so singles cannot be used when determining
  a user's top genre.
 */
 
 // @param timeframe: either 1 or 6 (number of months)
-function findHottestGenre(timeframe) {
+function getTopGenre(timeframe) {
 	// TODO
 	// parse the received_message
 
@@ -198,7 +198,32 @@ function findHottestGenre(timeframe) {
 		return; // not sure how we're handling error handling yet
 	}
 
-	top50List = getTop50(50, 0, timeframe);
+	top50List = getTopSongs(50, 0, timeframe); // default to 50 for stat purposes
+
 	// make sure to only use tracks that are associated with albums
 	// or else the logic will fail & also might crash yoloswag
+    for (var i = 0; i < 50; i++) {
+        // check for album info
+        /* unfortunately we can't go from track->album->genre, because
+         * the genre is listed only in the album (full) object, which
+         * is not in the scope of the track object. the track objects
+         * only associate the album name, not the full object (i think)
+    }
+
+}
+
+function getTopKey(timeframe) {
+    // TODO
+    // parse the received_message to get timeframe & args
+
+    if (timeframe != 1 && timeframe != 6) {
+        return; // not sure how we're handling error handling yet
+    }
+
+    top50List = getTopSongs(50, 0, timeframe);
+
+    // magical sorting shit
+    for (var i = 0; i < 50; i++) {
+        // syntax is top50List[i].key
+    }
 }
