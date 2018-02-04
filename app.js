@@ -123,16 +123,10 @@ function handleMessage(sender_psid, received_message) {
       "text": `You sent the message: "${received_message.text}".`
     }
     console.log('${recieved_message.text}')
-<<<<<<< HEAD
   } 
   else if (recieved_message.text === "login") {
     authToken = oAuth(recieved_message.text)
   }
-  
-=======
-  }
-
->>>>>>> 5b91d37752f95904c9eb34968186f1f8a0c6db75
   // Send the response message
   callSendAPI(sender_psid, response);
 }
