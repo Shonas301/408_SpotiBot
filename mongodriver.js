@@ -11,4 +11,18 @@ module.exports = {
       console.log(result);
     });
   }
+
+  addUser: function (db) {
+  	var date = new Date();
+  	date += 0;
+
+	db.collection('users').updateOne(
+	{ user_id: 0,
+	  user_token: "",
+	  refresh_token: "",
+	  expires_at: date,
+	},
+	{upsert: true}
+	);
+  }
 }
