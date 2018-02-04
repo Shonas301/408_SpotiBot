@@ -46,7 +46,11 @@ MongoClient.connect(mongoUrl, function (err, database) {
   console.log("HTTP and HTTPS running with database");
 });
 
-var spotifyApi = require('spotify-web-api-node');
+var SpotifyWebApi = require('spotify-web-api-node');
+var spotifyApi = new SpotifyWebApi({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET
+});
 
 
 // Accepts POST requests at /webhook endpoint
