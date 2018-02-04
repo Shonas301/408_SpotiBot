@@ -177,7 +177,7 @@ function callSendAPI(sender_psid, response) {
 
 //function to throw user's top 50 played songs in a list
 // offset is optional (and not necessary for our implementation)
-function getTop50(limit, offset, time_range) {
+function getTopSongs(limit, offset, time_range) {
 	// TODO (helper function)
 	// call the endpoint with the params
 	// return array to caller
@@ -198,7 +198,7 @@ function findHottestGenre(timeframe) {
 		return; // not sure how we're handling error handling yet
 	}
 
-	top50List = getTop50(50, 0, timeframe);
+	top50List = getTopSongs(50, 0, timeframe);
 	// make sure to only use tracks that are associated with albums
 	// or else the logic will fail & also might crash yoloswag
 }
