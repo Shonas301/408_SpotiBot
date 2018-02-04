@@ -27,6 +27,7 @@ const
   mongoUrl = "mongodb://localhost:27017/",
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient;
+  SpotifyWebApi = require('spotify-web-api-node');
 
 var db;
 
@@ -34,7 +35,12 @@ var db;
 MongoClient.connect(mongoUrl, function (err, database) {
   if (err) throw err;
   db = database.db("users");
-
+  //initialize api connection
+  spotifyApi = new SpotifyWebApi({
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET
+    redirectUri: '/clientAuth'
+  });
   //standard http listen
   http.listen(80);
   //standard https listen
@@ -43,11 +49,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
   console.log("HTTP and HTTPS running with database");
 });
 
-var SpotifyWebApi = require('spotify-web-api-node');
-var spotifyApi = new SpotifyWebApi({
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET
-});
+
 
 
 // Accepts POST requests at /webhook endpoint
