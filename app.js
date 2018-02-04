@@ -28,9 +28,6 @@ const
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient;
 
-
-
-
 var db;
 
 // Create connection to the mongo server, and start the server
