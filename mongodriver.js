@@ -13,30 +13,27 @@ module.exports = {
     });
   },
 
-  addUser: function (db) {
+  addUser: function (db, user) {
     var date = new Date();
     date += 0;
 
     db.collection('users').updateOne(
-      {
-        user_id: 0,
-        user_token: "",
-        refresh_token: "",
-        expires_at: date,
-      },
-      { upsert: true }
+      user,
+      { upsert: true }, function (err, res) {
+        if (err) throw err;
+      }
     );
+
+    return true;
   },
 
-  removeUser: function (db, id) {
-    var query = { user_id: id };
-    return db.collection("users").remove(query, function (err, obj) {
-      if (err) {
-        console.error(err)
-        return false
-      }
+  removeUser: function (db, user) {
+    var query = { user_id: user.user_id };
+    db.collection("users").remove(query, function (err, obj) {
+      if (err) throw error;
       console.log(obj.result.n + " document(s) deleted");
-      return true
     });
+
+    return true;
   }
 }
