@@ -6,9 +6,10 @@ module.exports = {
       return;
     }
 
-    db.collection("users").find({}).toArray(function (err, result) {
+    return db.collection("users").find({}).toArray(function (err, result) {
       if (err) throw err;
       console.log(result);
+      return result;
     });
   },
 
@@ -29,14 +30,13 @@ module.exports = {
 
   removeUser: function (db, id) {
     var query = { user_id: id };
-    result = db.collection("users").remove(query, function (err, obj) {
+    return db.collection("users").remove(query, function (err, obj) {
       if (err) {
-        console.error(err);
-        return false;
+        console.error(err)
+        return false
       }
       console.log(obj.result.n + " document(s) deleted");
-      return true;
+      return true
     });
-    return result;
   }
 }
