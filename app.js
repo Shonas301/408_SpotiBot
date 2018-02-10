@@ -15,30 +15,30 @@ const
   request = require('request'),
   express = require('express'),
   body_parser = require('body-parser'),
-  http = require('http')
-  https = require('https')
   app = express().use(body_parser.json()), // creates express http server
   fs = require('fs'),
   privateKey = fs.readFileSync('encryption/spotibot.tech.key', 'utf8'),
-  privateCert = fs.readFileSync( 'encryption/spotibot.tech.crt', 'utf8' ),
+  privateCert = fs.readFileSync( 'encryption/spotibot_tech.crt', 'utf8' ),
   credentials = {key: privateKey, cert: privateCert },
-  http = http.createServer(app),
-  https = https.createServer(credentials,app),
   mongoUrl = "mongodb://localhost:27017/",
   dbDriver = require('./mongodriver.js'),
-  MongoClient = require('mongodb').MongoClient;
+  MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node');
 
 var db;
 
+var http = require('http');
+http = http.createServer(app);
+var https = require('https');
+https = https.createServer(credentials,app);
 // Create connection to the mongo server, and start the server
 MongoClient.connect(mongoUrl, function (err, database) {
   if (err) throw err;
   db = database.db("users");
   //initialize api connection
-  spotifyApi = new SpotifyWebApi({
+  var spotifyApi = new SpotifyWebApi({
     clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET
+    clientSecret: process.env.CLIENT_SECRET,
     redirectUri: '/clientAuth'
   });
   //standard http listen
