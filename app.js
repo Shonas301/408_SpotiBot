@@ -29,8 +29,8 @@ const
   MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node');
 
-var clientID = fs.readFileSync('encryption/client.id', 'utf8');
-var clientSecret = fs.readFileSync('encryption/client.id','utf8');
+var clientID = fs.readFileSync('encryption/client.id', 'utf8').replace(/\s/g, '');
+var clientSecret = fs.readFileSync('encryption/client.id','utf8').replace(/\s/g, '');
 var db;
 
 var http = require('http');
@@ -72,7 +72,14 @@ app.post('/clientAuth', (req,res) => {
 
 app.get('/clientAuth', (req, res) => {
   var code = req.query.code;
-  console.log(req)
+  console.log(req);
+  spotifyApi.setAccessToken(code);
+  spotifyApi.getMe()
+    .then(function(data) {
+      console.log('info about the user', data.body)
+    }).catch(function(err) {
+      console.log('Something went wrong!', err)
+    });
   res.send(code);
 });
 
