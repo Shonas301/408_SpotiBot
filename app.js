@@ -8,7 +8,6 @@
  */
 
 'use strict';
-const PAGE_ACCESS_TOKEN = fs.readFileSync('encryption/pageaccess.token','utf8');
 
 // Imports dependencies and set up http server
 const
@@ -20,6 +19,7 @@ const
   privateKey = fs.readFileSync('encryption/spotibot.tech.key', 'utf8'),
   privateCert = fs.readFileSync( 'encryption/spotibot_tech.crt', 'utf8' ),
   privateCA = fs.readFileSync('encryption/spotibot_tech.ca-bundle', 'utf8'),
+  PAGE_ACCESS_TOKEN = fs.readFileSync('encryption/pageaccess.token','utf8');
   credentials = {
     ca: privateCA,
     key: privateKey, 
