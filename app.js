@@ -35,12 +35,13 @@ var http = require('http');
 http = http.createServer(app);
 var https = require('https');
 https = https.createServer(credentials,app);
+var spotifyApi;
 // Create connection to the mongo server, and start the server
 MongoClient.connect(mongoUrl, function (err, database) {
   if (err) throw err;
   db = database.db("users");
   //initialize api connection
-  var spotifyApi = new SpotifyWebApi({
+  spotifyApi = new SpotifyWebApi({
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     redirectUri: '/clientAuth'
@@ -58,6 +59,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
 
 
 app.get('/', (req, res) => {
+  var str = spotify
   res.send("hello World");
 });
 app.post('/', (req, res) => {
