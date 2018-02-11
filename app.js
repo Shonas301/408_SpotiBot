@@ -29,7 +29,7 @@ const
   MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node');
 
-var Client = require('./encryption/client_id.js')
+var clientID = fs.readFileSync('encryption/client.id', 'utf8')
 var db;
 
 var http = require('http');
