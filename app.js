@@ -71,7 +71,8 @@ app.post('/clientAuth', (req,res) => {
 });
 
 app.get('/clientAuth', (req, res) => {
-  res.send("mayb worked");
+  var code = req.code;
+  res.send(code);
 });
 
 app.post('/', (req, res) => {
