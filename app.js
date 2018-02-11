@@ -72,6 +72,7 @@ app.post('/clientAuth', (req,res) => {
 
 app.get('/clientAuth', (req, res) => {
   var code = req.code;
+  console.log(req)
   res.send(code);
 });
 
