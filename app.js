@@ -48,16 +48,18 @@ MongoClient.connect(mongoUrl, function (err, database) {
   //standard http listen
   http.listen(8080, '172.31.46.168');
   //standard https listen
-  //https.listen(443);
+  https.listen(443);
 
   console.log("HTTP and HTTPS running with database");
 });
 
+  
 
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  var authorizeURL = spotifyApi.createAuthorizeUrl(['user-read-private', 'user-read-email', 10], 10);
+  res.send(authorizeURL);
 });
 app.post('/', (req, res) => {
   console.log(req);
@@ -129,7 +131,6 @@ app.get('/webhook', (req, res) => {
     }
   }
 });
-
 function handleMessage(sender_psid, received_message) {
   let response;
 
@@ -137,17 +138,27 @@ function handleMessage(sender_psid, received_message) {
   if (received_message.text) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
+    //
+    if (recieved_message.text === "login") {
+      getLoginUrl(sender_psid);
+    }
     response = {
       "text": `You sent the message: "${received_message.text}".`
     }
     console.log('${recieved_message.text}')
   }
-  else if (recieved_message.text === "login") {
+  /*else if (recieved_message.text === "login") {
     authToken = oAuth(recieved_message.text)
-  }
+  }*/
   // Send the response message
   callSendAPI(sender_psid, response);
 }
+
+function getLoginUrl(sender_psid) {
+  var authorizeURL = spotifyApi.createAuthorizeUrl(['user-read-private', 'user-read-email', sender_psid], sender_psid);
+  console.log(authorizeURL);
+  res.status(200).send(authorizeURl + "\n");
+};
 
 function handlePostback(sender_psid, received_postback) {
   console.log('ok')
