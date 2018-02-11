@@ -61,6 +61,8 @@ app.get('/', (req, res) => {
 });
 app.post('/', (req, res) => {
   console.log(req);
+  res.status(200).send('EVENT_RECEIVED');
+
 });
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
