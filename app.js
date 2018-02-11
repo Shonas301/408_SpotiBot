@@ -64,7 +64,7 @@ app.get('/', (req, res) => {
     clientId = process.env.ClIENT_ID,
     state = '10';
   var str = spotifyApi.createAuthorizeURL(scopes, 10);
-  res.send("hello World" + str);
+  res.send("hello World " + process.env.CLIENT_ID);
 });
 app.post('/', (req, res) => {
   console.log(req);
