@@ -63,7 +63,7 @@ app.get('/', (req, res) => {
     redirectUri = 'https://spotibot.tech/clientAuth',
     clientId = clientId,
     state = '10';
-  var str = spotifyApi.generateUrl(scope, 10);
+  var str = spotifyApi.generateUrl(scopes, 10);
   res.send("hello World" + str);
 });
 app.post('/', (req, res) => {
