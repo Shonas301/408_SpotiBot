@@ -8,7 +8,7 @@
  */
 
 'use strict';
-const PAGE_ACCESS_TOKEN = encryption/pageaccess.token;
+const PAGE_ACCESS_TOKEN = fs.readFileSync('encryption/pageaccess.token','utf8');
 
 // Imports dependencies and set up http server
 const
