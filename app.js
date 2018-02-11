@@ -57,7 +57,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
 });
 
 app.get('/', (req, res) => {
-  var scopes = ['user-read-private', 'user-read-email'],
+  var scopes = ['user-read-private', 'user-read-email', 'user-top-read','user-library-read','playlist-modify-private','user-read-currently-playing','user-read-recently-played','user-follow-modify','user-follow-read','user-library-modify','playlist-modify-public','playlist-read-collaborative'],
     redirectUri = 'https://spotibot.tech/clientAuth',
     clientId = clientID,
     state = '10';
@@ -73,7 +73,6 @@ app.post('/clientAuth', (req,res) => {
 app.get('/clientAuth', (req, res) => {
   var code = req.query.code;
   console.log(req);
-  spotifyApi.setAccessToken(code);
   spotifyApi.authorizationCodeGrant(code)
   .then(function(data) {
     console.log('The token expires in ' + data.body['expires_in']);
