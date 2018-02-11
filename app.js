@@ -27,7 +27,8 @@ const
   mongoUrl = "mongodb://localhost:27017/",
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
-  SpotifyWebApi = require('spotify-web-api-node');
+  SpotifyWebApi = require('spotify-web-api-node'),
+  ClientId = require('./encryption/client_id.js');
 
 var db;
 
@@ -54,17 +55,13 @@ MongoClient.connect(mongoUrl, function (err, database) {
   console.log("HTTP and HTTPS running with database");
 });
 
-  
-
-
-
 app.get('/', (req, res) => {
   var scopes = ['user-read-private', 'user-read-email'],
     redirectUri = 'https://spotibot.tech/clientAuth',
     clientId = process.env.ClIENT_ID,
     state = '10';
   var str = spotifyApi.createAuthorizeURL(scopes, 10);
-  res.send("hello World " );
+  res.send("hello World " + clientID);
 });
 app.post('/', (req, res) => {
   console.log(req);
