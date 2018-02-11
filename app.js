@@ -19,7 +19,11 @@ const
   fs = require('fs'),
   privateKey = fs.readFileSync('encryption/spotibot.tech.key', 'utf8'),
   privateCert = fs.readFileSync( 'encryption/spotibot_tech.crt', 'utf8' ),
-  credentials = {key: privateKey, cert: privateCert },
+  privateCA = fs.readFileSync('encryption/spotibot_tech.ca-bundle', 'utf8'),
+  credentials = {
+    ca: privateCA,
+    key: privateKey, 
+    cert: privateCert },
   mongoUrl = "mongodb://localhost:27017/",
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
@@ -42,7 +46,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
     redirectUri: '/clientAuth'
   });
   //standard http listen
-  http.listen(80);
+//  http.listen(80);
   //standard https listen
   https.listen(443);
 
