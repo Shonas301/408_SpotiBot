@@ -59,12 +59,19 @@ MongoClient.connect(mongoUrl, function (err, database) {
 
 
 app.get('/', (req, res) => {
-  var str = spotify
-  res.send("hello World");
+  var scopes = ['user-read-private', 'user-read-email'],
+    redirectUri = 'https://spotibot.tech/clientAuth',
+    clientId = clientId,
+    state = '10';
+  var str = spotifyApi.generateUrl(scope, 10);
+  res.send("hello World" + str);
 });
 app.post('/', (req, res) => {
   console.log(req);
   res.status(200).send('EVENT_RECEIVED');
+
+});
+app.get('/clientAuth', (req, res) => {
 
 });
 // Accepts POST requests at /webhook endpoint
