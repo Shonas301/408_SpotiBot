@@ -37,6 +37,7 @@
        * @returns {Promise|undefined} A promise that if successful, resolves into a paging object of tracks,
        *          otherwise an error. Not returned if a callback is given.
        */
+      /*
       getMyTopTracks: function(options, callback) {
         return WebApiRequest.builder(this.getAccessToken())
           .withPath('/v1/me/top/tracks')
@@ -46,6 +47,7 @@
     },
 
     /* Potentially useful code Puja used to store and sort: */
+    /*
     var multisort = function(sample){
     sample = sample.audio_features;
     window.danceable = sample.slice();
@@ -104,6 +106,8 @@ var SpotifyWebApi = require("../");
  * Please note that this endpoint does not require authentication. However, using an access token
  * when making requests will give your application a higher rate limit.
  */
+
+var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi();
 
