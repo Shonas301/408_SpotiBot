@@ -46,7 +46,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
     redirectUri: '/clientAuth'
   });
   //standard http listen
-//  http.listen(80);
+  http.listen(80);
   //standard https listen
   https.listen(443);
 
