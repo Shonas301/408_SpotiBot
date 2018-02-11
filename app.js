@@ -79,9 +79,6 @@ app.post('/', (req, res) => {
   res.status(200).send('EVENT_RECEIVED');
 
 });
-app.get('/clientAuth', (req, res) => {
-
-});
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
