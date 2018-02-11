@@ -70,7 +70,7 @@ app.post('/clientAuth', (req,res) => {
   res.status(200).send('EVENT_RECIEVED');
 });
 
-app.get('/clientAuth' (req, res) => {
+app.get('/clientAuth', (req, res) => {
   res.send("mayb worked");
 });
 
