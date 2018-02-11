@@ -48,7 +48,22 @@ describe("DB Test", function () {
         });
     });
 
+    describe("DB Fetch Users", function () {
+        it("Get all users from database", function () {
+            expect(db).to.not.equal(null)
+            var result = dbDriver.findAllUsers(db)
+            expect(result.length > 1).to.equal(true);
+        });
+    });
+
     describe("DB Remove", function () {
+        it("Attempt to remove empty user", function () {
+            expect(db).to.not.equal(null)
+            var user = {};
+            var result = dbDriver.removeUser(db, user);
+            expect(result).to.not.equal(true);
+        });
+
         it("Remove one user in the database", function () {
             expect(db).to.not.equal(null)
             var user = {
@@ -56,7 +71,6 @@ describe("DB Test", function () {
                 user_token: "tokens_my_dude_woah",
                 refresh_token: "fresh_token_dude",
             };
-
             var result = dbDriver.removeUser(db, user);
             expect(result).to.equal(true);
         });

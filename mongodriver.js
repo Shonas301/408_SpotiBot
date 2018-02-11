@@ -2,8 +2,8 @@ module.exports = {
 
   findAllUsers: function (db) {
     if (!db) {
-      console.error("Nil DB connection")
-      return;
+      console.error("No DB connection")
+      return null;
     }
 
     return db.collection("users").find({}).toArray(function (err, result) {
@@ -14,8 +14,7 @@ module.exports = {
   },
 
   addUser: function (db, user) {
-    var date = new Date();
-    date += 0;
+    if (isEmpty(user)) return false;
 
     db.collection('users').updateOne(
       user,
@@ -28,6 +27,8 @@ module.exports = {
   },
 
   removeUser: function (db, user) {
+    if (isEmpty(user)) return false;
+
     var query = { user_id: user.user_id };
     db.collection("users").remove(query, function (err, obj) {
       if (err) throw error;
@@ -36,4 +37,9 @@ module.exports = {
 
     return true;
   }
+}
+
+// Checks if a json is empty
+function isEmpty(obj) {
+  return Object.keys(obj).length == 0;
 }
