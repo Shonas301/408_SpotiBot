@@ -30,7 +30,7 @@ const
   SpotifyWebApi = require('spotify-web-api-node');
 
 var clientID = fs.readFileSync('encryption/client.id', 'utf8').replace(/\s/g, '');
-var clientSecret = fs.readFileSync('encryption/client.id','utf8').replace(/\s/g, '');
+var clientSecret = fs.readFileSync('encryption/client.secret','utf8').replace(/\s/g, '');
 var db;
 
 var http = require('http');
