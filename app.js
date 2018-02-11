@@ -61,7 +61,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
 app.get('/', (req, res) => {
   var scopes = ['user-read-private', 'user-read-email'],
     redirectUri = 'https://spotibot.tech/clientAuth',
-    clientId = clientId,
+    clientId = process.env.ClIENT_ID,
     state = '10';
   var str = spotifyApi.createAuthorizeURL(scopes, 10);
   res.send("hello World" + str);
