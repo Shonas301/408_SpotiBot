@@ -28,7 +28,7 @@ const
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node');
-  clientID = require('encryption/client_id.js')
+  clientID = require('./encryption/client_id.js')
 
 var db;
 
