@@ -46,7 +46,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
   spotifyApi = new SpotifyWebApi({
     clientId: clientID,
     clientSecret: clientSecret,  
-    redirectUri: '/clientAuth'
+    redirectUri: 'https://www.spotibot.tech/clientAuth'
   });
   //standard http listen
   http.listen(8080, '172.31.46.168');
@@ -58,7 +58,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
 
 app.get('/', (req, res) => {
   var scopes = ['user-read-private', 'user-read-email'],
-    redirectUri = '/clientAuth',
+    redirectUri = 'https://www.spotibot.tech/clientAuth',
     clientId = clientID,
     state = '10';
   var str = spotifyApi.createAuthorizeURL(scopes, 10);
