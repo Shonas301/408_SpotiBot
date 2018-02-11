@@ -64,10 +64,16 @@ app.get('/', (req, res) => {
   var str = spotifyApi.createAuthorizeURL(scopes, 10);
   res.send("hello World " + str);
 });
+
 app.post('/clientAuth', (req,res) => {
   console.log(req);
   res.status(200).send('EVENT_RECIEVED');
 });
+
+app.get('/clientAuth' (req, res) => {
+  res.send(req);
+});
+
 app.post('/', (req, res) => {
   console.log(req);
   res.status(200).send('EVENT_RECEIVED');
