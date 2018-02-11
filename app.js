@@ -27,7 +27,7 @@ const
   mongoUrl = "mongodb://localhost:27017/",
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
-  SpotifyWebApi = require('spotify-web-api-node'),
+  SpotifyWebApi = require('spotify-web-api-node');
 
 var Client = require('./encryption/client_id.js')
 var db;
