@@ -58,8 +58,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
 
 
 app.get('/', (req, res) => {
-  var authorizeURL = spotifyApi.createAuthorizeUrl(['user-read-private', 'user-read-email', 10], 10);
-  res.send(authorizeURL);
+  res.send("hello World");
 });
 app.post('/', (req, res) => {
   console.log(req);
