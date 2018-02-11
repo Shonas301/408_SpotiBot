@@ -59,6 +59,9 @@ MongoClient.connect(mongoUrl, function (err, database) {
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
+app.post('/', (req, res) => {
+  console.log(req);
+});
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
