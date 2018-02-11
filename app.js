@@ -28,7 +28,6 @@ const
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node'),
-  clientID = require('./encryption/client_id.js');
 
 var db;
 
@@ -65,7 +64,7 @@ app.get('/', (req, res) => {
     clientId = process.env.ClIENT_ID,
     state = '10';
   var str = spotifyApi.createAuthorizeURL(scopes, 10);
-  res.send("hello World " + clientID.clientID);
+  res.send("hello World " );
 });
 app.post('/', (req, res) => {
   console.log(req);
