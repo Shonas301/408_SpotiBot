@@ -185,7 +185,7 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
-        response = {"text": getTopTracks(50, 0, "short_term") }
+        response = {"text": getTopSongs(50, 0, "short_term") }
       }
       else if (res[2] === "long") {
         response = { "text": `You sent command: "${received_message.text}".` }
@@ -222,11 +222,11 @@ function handleMessage(sender_psid, received_message) {
       response = { "text": `You sent command: "${received_message.text}".` }
 
     }
-    else if (!loggedIn) {
+    /*else if (!loggedIn) {
       response = {
         "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
       }
-    }
+    }*/
     else {
       response = { "text": `You sent the message: "${received_message.text}".` }
     }
