@@ -175,8 +175,10 @@ function handleMessage(sender_psid, received_message) {
     if (received_message.text === "login") {
       getLoginUrl(sender_psid);
     }
-    response = {
-      "text": `You sent the message: "${received_message.text}".`
+    else {
+      response = {
+        "text": `You sent the message: "${received_message.text}".`
+      }
     }
     console.log('${recieved_message.text}')
   }
@@ -188,9 +190,13 @@ function handleMessage(sender_psid, received_message) {
 }
 
 function getLoginUrl(sender_psid) {
-  var authorizeURL = spotifyApi.createAuthorizeUrl(['user-read-private', 'user-read-email', sender_psid], sender_psid);
-  console.log(authorizeURL);
-  res.status(200).send(authorizeURl + "\n");
+  var scopes = ['user-read-private', 'user-read-email', 'user-top-read','user-library-read','playlist-modify-private','user-read-currently-playing','user-read-recently-played','user-follow-modify','user-follow-read','user-library-modify','playlist-modify-public','playlist-read-collaborative'],
+    redirectUri = 'https://spotibot.tech/clientAuth',
+    clientId = clientID,
+    state = '10';
+  var str = spotifyApi.createAuthorizeURL(scopes, sender_psid);
+  var authorizeURL = spotifyApi.createAuthorizeUrl(scopes, sender_psid);
+  return authorizeURL;
 };
 
 function handlePostback(sender_psid, received_postback) {
