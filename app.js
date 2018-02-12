@@ -185,7 +185,7 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
-        songs = [];
+        var songs = [];
         getTopSongs(50, 0, "short_term").then(function(data) { 
           console.log(data)
           for(var i = 0; i < 50; i++) 
