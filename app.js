@@ -176,11 +176,50 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     //
-    if (received_message.text === "login") {
+    if (received_message.text.toLowerCase() === "login") {
       var url = getLoginUrl(sender_psid);
       response ={
         "text": `Great! Here is a link to get you started! \n\n "${url}"`
       }
+    } 
+    else if (received_message.text.toLowerCase().substring(0,12) === "top playlist") {
+      var res = received_message.text.split(" ");
+      if (res[2] === "short") {
+        response = {"text": `You sent command: "${received_message.text}".`
+      }
+      } else if(res[2] === "long") {
+        response = {"text": `You sent command: "${received_message.text}".`
+
+      } else if(res[2] === "medium") {
+        response = {"text": `You sent command: "${received_message.text}".`
+
+      } else {
+        response = {
+          "text": `You sent the message: "${received_message.text}".`
+        }
+      }
+
+    }
+
+    } else if (received_message.text.toLowerCase() === "genre") {
+      response = {"text": `You sent command: "${received_message.text}".`
+
+
+    } else if(received_message.text.toLowerCase() === "key") {
+      response = {"text": `You sent command: "${received_message.text}".`
+
+    } else if(received_message.text.toLowerCase() === "happiest") {
+      response = {"text": `You sent command: "${received_message.text}".`
+
+    } else if(received_message.text.toLowerCase() === "saddest") {
+      response = {"text": `You sent command: "${received_message.text}".`
+
+    } else if(received_message.text.toLowerCase() === "slowest") {
+      response = {"text": `You sent command: "${received_message.text}".`
+
+    } else if(received_message.text.toLowerCase() === "fastest") {
+      response = {"text": `You sent command: "${received_message.text}".`
+
     }
     else {
       response = {
