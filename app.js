@@ -188,6 +188,7 @@ function handleMessage(sender_psid, received_message) {
         var songs = [];
         getTopSongs(50, 0, "short_term").then(function(data) { 
           console.log(data)
+          print(typeof(data))
           for(var i = 0; i < 50; i++) 
             songs.push(data.name[i]);
           console.log(songs);
