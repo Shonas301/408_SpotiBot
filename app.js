@@ -309,6 +309,7 @@ function getTopSongs(limit, offset, time_range) {
   }).then(function (data) {
     var songs = [];
     for (var i = 0; i < limit; i++)
+      console.log(data.body.items.name[i]);
       songs.push(data.body.items.name[i]);
     return songs;
   }).catch(function (err) {
