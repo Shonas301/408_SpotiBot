@@ -180,45 +180,45 @@ function handleMessage(sender_psid, received_message) {
     else if (received_message.text.toLowerCase().substring(0,12) === "top playlist") {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
-        response = {"text": `You sent command: "${received_message.text}".`
+        response = {"text": `You sent command: "${received_message.text}".`}
       }
-      } else if(res[2] === "long") {
-        response = {"text": `You sent command: "${received_message.text}".`
+       else if(res[2] === "long") {
+        response = {"text": `You sent command: "${received_message.text}".`}
 
       } else if(res[2] === "medium") {
-        response = {"text": `You sent command: "${received_message.text}".`
+        response = {"text": `You sent command: "${received_message.text}".`}
 
       } else {
         response = {
-          "text": `You sent the message: "${received_message.text}".`
+          "text": `You sent the message: "${received_message.text}".`}
         }
-      }
+      
 
     }
 
-    } else if (received_message.text.toLowerCase() === "genre") {
-      response = {"text": `You sent command: "${received_message.text}".`
+     else if (received_message.text.toLowerCase() === "genre") {
+      response = {"text": `You sent command: "${received_message.text}".` }
 
 
     } else if(received_message.text.toLowerCase() === "key") {
-      response = {"text": `You sent command: "${received_message.text}".`
+      response = {"text": `You sent command: "${received_message.text}".`}
 
     } else if(received_message.text.toLowerCase() === "happiest") {
-      response = {"text": `You sent command: "${received_message.text}".`
+      response = {"text": `You sent command: "${received_message.text}".`}
 
     } else if(received_message.text.toLowerCase() === "saddest") {
-      response = {"text": `You sent command: "${received_message.text}".`
+      response = {"text": `You sent command: "${received_message.text}".`}
 
     } else if(received_message.text.toLowerCase() === "slowest") {
-      response = {"text": `You sent command: "${received_message.text}".`
+      response = {"text": `You sent command: "${received_message.text}".`}
 
     } else if(received_message.text.toLowerCase() === "fastest") {
-      response = {"text": `You sent command: "${received_message.text}".`
+      response = {"text": `You sent command: "${received_message.text}".`}
 
     }
     else {
       response = {
-        "text": `You sent the message: "${received_message.text}".`
+        "text": `You sent the message: "${received_message.text}".`}
       }
     }
     console.log('${recieved_message.text}')
