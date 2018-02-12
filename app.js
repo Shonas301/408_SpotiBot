@@ -197,7 +197,6 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
-        var songs = [];
         getTopSongs(50, 0, "short_term").then(function(data) { 
           data.map(function(song) {
              songs.push(t)
@@ -407,4 +406,7 @@ function createPlaylist(playlist_name) {
         throw err;
     })
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52b12c88c5bac852973b86fafa3b7d3f5228a0d4

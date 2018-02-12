@@ -9,7 +9,7 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi();
 
-spotifyApi.setAccessToken('BQB9vhsmggEdecU7KeSFHUBPo63EF5IkIotxosB4b6oBQwvfaMAkb5YyrpJC2rEWGvA5wOukN_vgPHMQY4drO-VBV0b100haGnr-qmdsUYdz8PhBS7LsHnTIn6W_btSNp3M53L0UKrAYxPZqrVkWk2-LMH222mZH_6dY6NRF3ehGh2JWrOIMQVXKFz2zCqLggHySg-Jr6IcuJfzvKrbG9l0q_1aRf8QehFV4ni6KwqkW6ryviHq_EotSAg');
+spotifyApi.setAccessToken('BQDkUTqsz7Y46WJjAWsz25RSgZ5RcIorwDlJ7uAPvne5o-0EvF4_zjYTmyp12HvEV2lf9GPMCUZbxDH6bnDdfk8G3JCc-EwRtQHtusX4ZL0OjM8_Wu3hlJerHrEjx2l6wb4BbVQ0RRpkUf82y8bLD1aiCcA8v0e1mTj5wMF3Vz_UR9Enxw3wvzZSNv5NvHc1TuRl9q4fEmPFzJhWb2cg30NcIEHg6Bk41dBl8fw1lIWO0w2IKdcaJfwXXLk');
 
 // Example get top 5 tracks
 function getTopTracks() {
@@ -48,6 +48,7 @@ function createPlaylist(playlist_name) {
     })
 }
 
+/*
 createPlaylist("testing").then(function(data){
     console.log(data)
 });
@@ -59,6 +60,7 @@ getTopTracks().then(function(data){
     })
     console.log(songs)
 })
+*/
 
 // Example get top 5 artists (Using for Genre Stats)
 function getTopArtists() {
@@ -70,3 +72,7 @@ function getTopArtists() {
         console.error(err)
     });
 }
+
+getTopArtists().then(function(data){
+    console.log(data)
+})
