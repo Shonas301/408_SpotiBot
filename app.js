@@ -222,11 +222,11 @@ function handleMessage(sender_psid, received_message) {
       response = { "text": `You sent command: "${received_message.text}".` }
 
     }
-    else if (!loggedIn) {
+    /*else if (!loggedIn) {
       response = {
         "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
       }
-    }
+    }*/
     else {
       response = { "text": `You sent the message: "${received_message.text}".` }
     }
