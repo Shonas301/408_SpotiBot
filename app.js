@@ -199,8 +199,9 @@ function handleMessage(sender_psid, received_message) {
         //response = { "text": `You sent command: "${received_message.text}".` }
         var songs = [];
         getTopSongs(50, 0, "short_term").then(function(data) { 
-          console.log(data)
-          console.log(typeof(data))
+          console.log(data);
+          console.log(typeof(data));
+          console.log(data.17);
           for (var prop in data) {
             console.log(prop);
             if (prop === 'name') {
