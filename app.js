@@ -190,8 +190,9 @@ function handleMessage(sender_psid, received_message) {
           console.log(data)
           console.log(typeof(data))
           for (var prop in data) {
+            console.log(prop);
             if (prop === 'name') {
-              songs.push(data[prop])
+              songs.push(data[prop]);
             } 
           }
           console.log(songs);
