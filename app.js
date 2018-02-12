@@ -224,9 +224,9 @@ function handleMessage(sender_psid, received_message) {
         "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\"" 
         }
       }
-  } else {
+    else {
       response = {"text": `You sent the message: "${received_message.text}".`}
-  }
+    }
     console.log('${received_message.text}')
   }
   /*else if (recieved_message.text === "login") {
