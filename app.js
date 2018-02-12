@@ -202,9 +202,9 @@ function handleMessage(sender_psid, received_message) {
           data.map(function(song) {
              songs.push(song)
             });
-          console.log(songs)
+          console.log('songs ' + songs)
         }).then(function() { 
-          callSendAPI(sender_psid,songs);
+          callSendAPI(sender_psid,songs.toString());
          });
         
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
