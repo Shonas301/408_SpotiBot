@@ -74,7 +74,7 @@ app.get('/clientAuth', (req, res) => {
   var code = req.query.code;
   console.log(req);
   var sender_psid = req.query.state;
-  var response;
+  var response ={'text': "something wasn't initialized"};
   spotifyApi.authorizationCodeGrant(code)
   .then(function(data) {
     console.log('The token expires in ' + data.body['expires_in']);
