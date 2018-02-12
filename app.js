@@ -92,9 +92,10 @@ app.get('/clientAuth', (req, res) => {
       'text': "Oops, I'm sorry there was an error, why don't you try emailing us at admin@spotibot.tech!" 
     }
     console.log('Something went wrong!', err);
+  }).then(function() {
+    callSendAPI(sender_psid, response); 
+    res.send(sender_psid + " " + code);
   });  
-  callSendAPI(sender_psid, response)
-  res.send(sender_psid + " " + code);
 });
 
 app.post('/', (req, res) => {
