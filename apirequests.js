@@ -22,6 +22,40 @@ function getTopTracks() {
     });
 }
 
-getTopTracks().then(function(data){
+// Returns a promise containing the link to the users playlist
+function createPlaylist(playlist_name) {
+    // Get the user's id
+    var promise = spotifyApi.getMe()
+        .then(function (data) {
+            return data.body.id;
+        }).catch(function (err) {
+            throw err;
+        })
+
+    // Create a playlist using the user's id
+    return promise.then(function (user_id) {
+        // Create a public playlist
+        spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
+            .then(function (data) {
+                console.log('Created playlist!');
+                console.log(data.body.external_urls.spotify)
+                return data.body.external_urls.spotify;
+            }).catch(function (err) {
+                console.log('Something went wrong!', err);
+            });
+    }).catch(function (err) {
+        throw err;
+    })
+}
+
+createPlaylist("testing").then(function(data){
     console.log(data)
+});
+
+getTopTracks().then(function(data){
+    var songs = []
+    data.map(function(t) {
+        songs.push(t)
+    })
+    console.log(songs)
 })
