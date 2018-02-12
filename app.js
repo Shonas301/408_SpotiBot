@@ -306,7 +306,8 @@ function callSendAPI(sender_psid, response) {
 }
 
 //function to throw user's top 25 played songs in a list
-// offset is optional (and not necessary for our implementation)
+// offset is optional (and not necessary for our implementation
+// returns a promise which contains the top user's songs
 function getTopSongs(limit, offset, time_range) {
   return spotifyApi.getMyTopTracks({
     limit: limit,
@@ -363,4 +364,30 @@ function getTopKey(timeframe) {
   for (var i = 0; i < 50; i++) {
     // syntax is top50List[i].key
   }
+}
+
+// Returns a promise containing the link to the users playlist
+function createPlaylist(playlist_name) {
+    // Get the user's id
+    var promise = spotifyApi.getMe()
+        .then(function (data) {
+            return data.body.id;
+        }).catch(function (err) {
+            throw err;
+        })
+
+    // Create a playlist using the user's id
+    return promise.then(function (user_id) {
+        // Create a public playlist
+        spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
+            .then(function (data) {
+                console.log('Created playlist!');
+                console.log(data.body.external_urls.spotify)
+                return data.body.external_urls.spotify;
+            }).catch(function (err) {
+                console.log('Something went wrong!', err);
+            });
+    }).catch(function (err) {
+        throw err;
+    })
 }
