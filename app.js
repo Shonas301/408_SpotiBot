@@ -199,7 +199,6 @@ function handleMessage(sender_psid, received_message) {
         //response = { "text": `You sent command: "${received_message.text}".` }
         getTopSongs(50, 0, "short_term").then(function(data) { 
           console.log(data)
-          response = {"text": data};
         )};
         
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
