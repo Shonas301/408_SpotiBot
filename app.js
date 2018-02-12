@@ -287,7 +287,7 @@ function callSendAPI(sender_psid, response) {
   });
 }
 
-//function to throw user's top 50 played songs in a list
+//function to throw user's top 25 played songs in a list
 // offset is optional (and not necessary for our implementation)
 function getTopSongs(limit, offset, time_range) {
   spotifyApi.getMyTopTracks({
