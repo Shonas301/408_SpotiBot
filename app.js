@@ -202,6 +202,7 @@ function handleMessage(sender_psid, received_message) {
           data.map(function(song) {
              songs.push(song)
             });
+          console.log(songs)
         }).then(function() { 
           callSendAPI(sender_psid,songs);
          });
