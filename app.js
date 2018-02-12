@@ -185,7 +185,18 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
-        response = {"text": getTopSongs(50, 0, "short_term") }
+        var songs = [];
+        getTopSongs(50, 0, "short_term").then(function(data) { 
+          console.log(data)
+          console.log(typeof(data))
+          for(var i = 0; i < 50; i++) 
+            songs.push(data.name[i]);
+          console.log(songs);
+          response = {"text": songs.toString()};
+        }).then(function() {
+          callSendAPI(sender_psid, response);
+        });
+        //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
       else if (res[2] === "long") {
         response = { "text": `You sent command: "${received_message.text}".` }
@@ -293,7 +304,8 @@ function callSendAPI(sender_psid, response) {
 function getTopSongs(limit, offset, time_range) {
   return spotifyApi.getMyTopTracks({
     limit: limit,
-    offset: offset
+    offset: offset,
+    time_range: time_range
   }).then(function (data) {
     return data.body.items;
   }).catch(function (err) {
