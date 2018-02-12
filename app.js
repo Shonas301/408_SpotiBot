@@ -82,6 +82,7 @@ app.get('/clientAuth', (req, res) => {
     response = {
       'text': "Great! Thanks for logging in!" 
     }
+    //TODO Add database storage
   }, function(err) {
     response = {
       'text': "Oops, I'm sorry there was an error, why don't you try emailing us at admin@spotibot.tech!" 
@@ -171,6 +172,8 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     //
+    // TODO
+    //var loggedIn = db.contains(sender_psid)
     if (received_message.text.toLowerCase() === "login") {
       var url = getLoginUrl(sender_psid);
       response ={
@@ -216,12 +219,15 @@ function handleMessage(sender_psid, received_message) {
       response = {"text": `You sent command: "${received_message.text}".`}
 
     }
-    else {
+    else if(!loggedIn) {
       response = {
-        "text": `You sent the message: "${received_message.text}".`}
+        "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\"" 
+        }
       }
-    }
-    console.log('${recieved_message.text}')
+  } else {
+      response = {"text": `You sent the message: "${received_message.text}".`}
+  }
+    console.log('${received_message.text}')
   }
   /*else if (recieved_message.text === "login") {
     authToken = oAuth(recieved_message.text)
