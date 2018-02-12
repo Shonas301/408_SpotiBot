@@ -185,7 +185,15 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
-        getTopSongs(50, 0, "short_term").then(function(data) { console.log(data)});
+        songs = [];
+        getTopSongs(50, 0, "short_term").then(function(data) { 
+          console.log(data)
+          for(var i = 0; i < 50; i++) 
+            songs.push(data.name[i]);
+          response = {"text": songs.toString()};
+        }).then(function() {
+          callSendAPI(sender_psid, response);
+        });
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
       else if (res[2] === "long") {
