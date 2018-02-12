@@ -57,12 +57,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
 });
 
 app.get('/', (req, res) => {
-  var scopes = ['user-read-private', 'user-read-email', 'user-top-read','user-library-read','playlist-modify-private','user-read-currently-playing','user-read-recently-played','user-follow-modify','user-follow-read','user-library-modify','playlist-modify-public','playlist-read-collaborative'],
-    redirectUri = 'https://spotibot.tech/clientAuth',
-    clientId = clientID,
-    state = '10';
-  var str = spotifyApi.createAuthorizeURL(scopes, 10);
-  res.send("hello World " + str);
+  res.send("Welcome to SpotiBot");
 });
 
 app.post('/clientAuth', (req,res) => {
@@ -94,7 +89,7 @@ app.get('/clientAuth', (req, res) => {
     console.log('Something went wrong!', err);
   }).then(function() {
     callSendAPI(sender_psid, response); 
-    res.send(sender_psid + " " + code);
+    res.send("Great, Thanks! Go back to your messenger chat now!");
   });  
 });
 
