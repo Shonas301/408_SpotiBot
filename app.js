@@ -184,7 +184,8 @@ function handleMessage(sender_psid, received_message) {
     else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
-        response = { "text": `You sent command: "${received_message.text}".` }
+        //response = { "text": `You sent command: "${received_message.text}".` }
+        response = {"text": getTopTracks(50, 0, "short_term") }
       }
       else if (res[2] === "long") {
         response = { "text": `You sent command: "${received_message.text}".` }
