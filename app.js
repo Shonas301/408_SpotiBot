@@ -296,6 +296,7 @@ function getTopSongs(limit, offset, time_range) {
     offset: offset
   }).then(function (data) {
     var songs = [];
+    console.log(data);
     for (var i = 0; i < limit; i++)
       console.log(data.body.items.name[i]);
       songs.push(data.body.items.name[i]);
