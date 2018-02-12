@@ -201,9 +201,9 @@ function handleMessage(sender_psid, received_message) {
         getTopSongs(50, 0, "short_term").then(function(data) { 
           console.log(data);
           console.log(typeof(data));
-          console.log(data.17);
+          console.log(data);
           for (var prop in data) {
-            console.log(prop);
+            console.log(data.prop);
             if (prop === 'name') {
               songs.push(data[prop]);
             } 
