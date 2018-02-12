@@ -173,7 +173,7 @@ function handleMessage(sender_psid, received_message) {
     // will be added to the body of our request to the Send API
     //
     if (received_message.text === "login") {
-      getLoginUrl(sender_psid);
+      response = getLoginUrl(sender_psid);
     }
     else {
       response = {
