@@ -17,26 +17,27 @@ const
   app = express().use(body_parser.json()), // creates express http server
   fs = require('fs'),
   privateKey = fs.readFileSync('encryption/spotibot.tech.key', 'utf8'),
-  privateCert = fs.readFileSync( 'encryption/spotibot_tech.crt', 'utf8' ),
+  privateCert = fs.readFileSync('encryption/spotibot_tech.crt', 'utf8'),
   privateCA = fs.readFileSync('encryption/spotibot_tech.ca-bundle', 'utf8'),
-  PAGE_ACCESS_TOKEN = fs.readFileSync('encryption/pageaccess.token','utf8'),
+  PAGE_ACCESS_TOKEN = fs.readFileSync('encryption/pageaccess.token', 'utf8'),
   credentials = {
     ca: privateCA,
-    key: privateKey, 
-    cert: privateCert },
+    key: privateKey,
+    cert: privateCert
+  },
   mongoUrl = "mongodb://localhost:27017/",
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node');
 
 var clientID = fs.readFileSync('encryption/client.id', 'utf8').replace(/\s/g, '');
-var clientSecret = fs.readFileSync('encryption/client.secret','utf8').replace(/\s/g, '');
+var clientSecret = fs.readFileSync('encryption/client.secret', 'utf8').replace(/\s/g, '');
 var db;
 
 var http = require('http');
 http = http.createServer(app);
 var https = require('https');
-https = https.createServer(credentials,app);
+https = https.createServer(credentials, app);
 var spotifyApi;
 // Create connection to the mongo server, and start the server
 MongoClient.connect(mongoUrl, function (err, database) {
@@ -45,7 +46,7 @@ MongoClient.connect(mongoUrl, function (err, database) {
   //initialize api connection
   spotifyApi = new SpotifyWebApi({
     clientId: clientID,
-    clientSecret: clientSecret,  
+    clientSecret: clientSecret,
     redirectUri: 'https://spotibot.tech/clientAuth'
   });
   //standard http listen
@@ -60,7 +61,7 @@ app.get('/', (req, res) => {
   res.send("Welcome to SpotiBot");
 });
 
-app.post('/clientAuth', (req,res) => {
+app.post('/clientAuth', (req, res) => {
   console.log(req);
   res.status(200).send('EVENT_RECIEVED');
 });
@@ -69,29 +70,29 @@ app.get('/clientAuth', (req, res) => {
   var code = req.query.code;
   console.log(req);
   var sender_psid = req.query.state;
-  var response ={'text': "something wasn't initialized"};
+  var response = { 'text': "something wasn't initialized" };
   spotifyApi.authorizationCodeGrant(code)
-  .then(function(data) {
-    console.log('The token expires in ' + data.body['expires_in']);
-    console.log('The access token is ' + data.body['access_token']);
-    console.log('The refresh token is ' + data.body['refresh_token']);
+    .then(function (data) {
+      console.log('The token expires in ' + data.body['expires_in']);
+      console.log('The access token is ' + data.body['access_token']);
+      console.log('The refresh token is ' + data.body['refresh_token']);
 
-    // Set the access token on the API object to use it in later calls
-    spotifyApi.setAccessToken(data.body['access_token']);
-    spotifyApi.setRefreshToken(data.body['refresh_token']);
-    response = {
-      'text': "Great! Thanks for logging in!" 
-    }
-    //TODO Add database storage
-  }, function(err) {
-    response = {
-      'text': "Oops, I'm sorry there was an error, why don't you try emailing us at admin@spotibot.tech!" 
-    }
-    console.log('Something went wrong!', err);
-  }).then(function() {
-    callSendAPI(sender_psid, response); 
-    res.send("Great, Thanks! Go back to your messenger chat now!");
-  });  
+      // Set the access token on the API object to use it in later calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+      spotifyApi.setRefreshToken(data.body['refresh_token']);
+      response = {
+        'text': "Great! Thanks for logging in!"
+      }
+      //TODO Add database storage
+    }, function (err) {
+      response = {
+        'text': "Oops, I'm sorry there was an error, why don't you try emailing us at admin@spotibot.tech!"
+      }
+      console.log('Something went wrong!', err);
+    }).then(function () {
+      callSendAPI(sender_psid, response);
+      res.send("Great, Thanks! Go back to your messenger chat now!");
+    });
 });
 
 app.post('/', (req, res) => {
@@ -176,56 +177,57 @@ function handleMessage(sender_psid, received_message) {
     //var loggedIn = db.contains(sender_psid)
     if (received_message.text.toLowerCase() === "login") {
       var url = getLoginUrl(sender_psid);
-      response ={
+      response = {
         "text": `Great! Here is a link to get you started! \n\n "${url}"`
       }
-    } 
-    else if (received_message.text.toLowerCase().substring(0,12) === "top playlist") {
+    }
+    else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
-        response = {"text": `You sent command: "${received_message.text}".`}
+        response = { "text": `You sent command: "${received_message.text}".` }
       }
-       else if(res[2] === "long") {
-        response = {"text": `You sent command: "${received_message.text}".`}
+      else if (res[2] === "long") {
+        response = { "text": `You sent command: "${received_message.text}".` }
 
-      } else if(res[2] === "medium") {
-        response = {"text": `You sent command: "${received_message.text}".`}
+      } else if (res[2] === "medium") {
+        response = { "text": `You sent command: "${received_message.text}".` }
 
       } else {
         response = {
-          "text": `You sent the message: "${received_message.text}".`}
-        }
-      
-
-    }
-
-     else if (received_message.text.toLowerCase() === "genre") {
-      response = {"text": `You sent command: "${received_message.text}".` }
-
-
-    } else if(received_message.text.toLowerCase() === "key") {
-      response = {"text": `You sent command: "${received_message.text}".`}
-
-    } else if(received_message.text.toLowerCase() === "happiest") {
-      response = {"text": `You sent command: "${received_message.text}".`}
-
-    } else if(received_message.text.toLowerCase() === "saddest") {
-      response = {"text": `You sent command: "${received_message.text}".`}
-
-    } else if(received_message.text.toLowerCase() === "slowest") {
-      response = {"text": `You sent command: "${received_message.text}".`}
-
-    } else if(received_message.text.toLowerCase() === "fastest") {
-      response = {"text": `You sent command: "${received_message.text}".`}
-
-    }
-    else if(!loggedIn) {
-      response = {
-        "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\"" 
+          "text": `You sent the message: "${received_message.text}".`
         }
       }
+
+
+    }
+
+    else if (received_message.text.toLowerCase() === "genre") {
+      response = { "text": `You sent command: "${received_message.text}".` }
+
+
+    } else if (received_message.text.toLowerCase() === "key") {
+      response = { "text": `You sent command: "${received_message.text}".` }
+
+    } else if (received_message.text.toLowerCase() === "happiest") {
+      response = { "text": `You sent command: "${received_message.text}".` }
+
+    } else if (received_message.text.toLowerCase() === "saddest") {
+      response = { "text": `You sent command: "${received_message.text}".` }
+
+    } else if (received_message.text.toLowerCase() === "slowest") {
+      response = { "text": `You sent command: "${received_message.text}".` }
+
+    } else if (received_message.text.toLowerCase() === "fastest") {
+      response = { "text": `You sent command: "${received_message.text}".` }
+
+    }
+    else if (!loggedIn) {
+      response = {
+        "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
+      }
+    }
     else {
-      response = {"text": `You sent the message: "${received_message.text}".`}
+      response = { "text": `You sent the message: "${received_message.text}".` }
     }
     console.log('${received_message.text}')
   }
@@ -237,7 +239,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 function getLoginUrl(sender_psid) {
-  var scopes = ['user-read-private', 'user-read-email', 'user-top-read','user-library-read','playlist-modify-private','user-read-currently-playing','user-read-recently-played','user-follow-modify','user-follow-read','user-library-modify','playlist-modify-public','playlist-read-collaborative'],
+  var scopes = ['user-read-private', 'user-read-email', 'user-top-read', 'user-library-read', 'playlist-modify-private', 'user-read-currently-playing', 'user-read-recently-played', 'user-follow-modify', 'user-follow-read', 'user-library-modify', 'playlist-modify-public', 'playlist-read-collaborative'],
     redirectUri = 'https://spotibot.tech/clientAuth',
     clientId = clientID,
     state = '10';
@@ -288,9 +290,14 @@ function callSendAPI(sender_psid, response) {
 //function to throw user's top 50 played songs in a list
 // offset is optional (and not necessary for our implementation)
 function getTopSongs(limit, offset, time_range) {
-	// TODO (helper function)
-	// call the endpoint with the params
-	// return array to caller
+  spotifyApi.getMyTopTracks({
+    limit: limit,
+    offset: offset
+  }).then(function (data) {
+    return data.body.items;
+  }).catch(function (err) {
+    throw err;
+  });
 }
 
 /* !! PROBLEM !!  There is no 'genre' attribute in a track's
@@ -301,40 +308,40 @@ function getTopSongs(limit, offset, time_range) {
 
 // @param timeframe: either 1 or 6 (number of months)
 function getTopGenre(timeframe) {
-	// TODO
-	// parse the received_message
+  // TODO
+  // parse the received_message
 
-	if (timeframe != 1 && timeframe != 6) {
-		return; // not sure how we're handling error handling yet
-	}
+  if (timeframe != 1 && timeframe != 6) {
+    return; // not sure how we're handling error handling yet
+  }
 
-	top50List = getTopSongs(50, 0, timeframe); // default to 50 for stat purposes
+  top50List = getTopSongs(50, 0, timeframe); // default to 50 for stat purposes
 
-	// make sure to only use tracks that are associated with albums
-	// or else the logic will fail & also might crash yoloswag
-    for (var i = 0; i < 50; i++) {
-        // check for album info
-        /* unfortunately we can't go from track->album->genre, because
-         * the genre is listed only in the album (full) object, which
-         * is not in the scope of the track object. the track objects
-         * only associate the album name, not the full object (i think)
-         */
-    }
+  // make sure to only use tracks that are associated with albums
+  // or else the logic will fail & also might crash yoloswag
+  for (var i = 0; i < 50; i++) {
+    // check for album info
+    /* unfortunately we can't go from track->album->genre, because
+     * the genre is listed only in the album (full) object, which
+     * is not in the scope of the track object. the track objects
+     * only associate the album name, not the full object (i think)
+     */
+  }
 
 }
 
 function getTopKey(timeframe) {
-    // TODO
-    // parse the received_message to get timeframe & args
+  // TODO
+  // parse the received_message to get timeframe & args
 
-    if (timeframe != 1 && timeframe != 6) {
-        return; // not sure how we're handling error handling yet
-    }
+  if (timeframe != 1 && timeframe != 6) {
+    return; // not sure how we're handling error handling yet
+  }
 
-    top50List = getTopSongs(50, 0, timeframe);
+  top50List = getTopSongs(50, 0, timeframe);
 
-    // magical sorting shit
-    for (var i = 0; i < 50; i++) {
-        // syntax is top50List[i].key
-    }
+  // magical sorting shit
+  for (var i = 0; i < 50; i++) {
+    // syntax is top50List[i].key
+  }
 }
