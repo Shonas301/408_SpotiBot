@@ -185,7 +185,8 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
-        response = {"text": getTopSongs(50, 0, "short_term").toString() }
+        getTopSongs(50, 0, "short_term").then(function(data) { console.log(data)});
+        //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
       else if (res[2] === "long") {
         response = { "text": `You sent command: "${received_message.text}".` }
@@ -296,12 +297,7 @@ function getTopSongs(limit, offset, time_range) {
     offset: offset,
     time_range: time_range
   }).then(function (data) {
-    var songs = [];
-    console.log(data);
-    for (var i = 0; i < limit; i++)
-      console.log(data.body.items.name[i]);
-      songs.push(data.body.items.name[i]);
-    return songs;
+    return data.body.items;
   }).catch(function (err) {
     throw err;
   });
