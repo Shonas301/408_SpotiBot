@@ -203,7 +203,7 @@ function handleMessage(sender_psid, received_message) {
              songs.push(song)
             });
           console.log('bout to print some songs')
-          console.log(songs[1].id)
+          console.log(songs[1].name)
         }).then(function() { 
           callSendAPI(sender_psid,songs.toString());
          });
