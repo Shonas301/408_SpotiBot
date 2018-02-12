@@ -197,6 +197,7 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
+        var songs = []
         getTopSongs(50, 0, "short_term").then(function(data) { 
           data.map(function(song) {
              songs.push(t)
