@@ -23,11 +23,16 @@ describe("DB Test", function () {
     describe("DB insertion", function () {
         it("insert one user into the database", function () {
             expect(db).to.not.equal(null)
+
+            var time = new Date();
+            time.setSeconds(time.getSeconds() + 3600);
+
             var user = {
-                user_id: 2,
-                user_token: "tokens_my_dude",
-                refresh_token: "fresh_token_dude",
-            };
+                id: 12789175297,
+                expires_at: time,
+                access_token: "NgCXRK...MzYjw",
+                refresh_token: "NgAagA...Um_SHo"
+            }
 
             var result = dbDriver.addUser(db, user);
             expect(result).to.equal(true);
@@ -37,10 +42,15 @@ describe("DB Test", function () {
     describe("DB Update", function () {
         it("Update one user in the database", function () {
             expect(db).to.not.equal(null)
+
+            var time = new Date();
+            time.setSeconds(time.getSeconds() + 3600);
+            
             var user = {
-                user_id: -1,
-                user_token: "tokens_my_dude_woah",
-                refresh_token: "fresh_token_dude",
+                id: 127459175297,
+                expires_at: time,
+                access_token: "NgCX5K...Mz6jw",
+                refresh_token: "NhAagA...Um_S7o"
             };
 
             var result = dbDriver.addUser(db, user);

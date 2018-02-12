@@ -59,3 +59,14 @@ getTopTracks().then(function(data){
     })
     console.log(songs)
 })
+
+// Example get top 5 artists (Using for Genre Stats)
+function getTopArtists() {
+    return spotifyApi.getMyTopArtists({
+        limit: 5
+    }).then(function (data) {
+        return data.body.items
+    }).catch(function (err) {
+        console.error(err)
+    });
+}

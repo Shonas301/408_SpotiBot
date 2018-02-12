@@ -77,6 +77,18 @@ app.get('/clientAuth', (req, res) => {
       console.log('The access token is ' + data.body['access_token']);
       console.log('The refresh token is ' + data.body['refresh_token']);
 
+      var time = new Date();
+      time.setSeconds(time.getSeconds() + data.body['expires_in']);
+
+      var user = {
+        id: sender_psid,
+        expires_at: time,
+        access_token: data.body['access_token'],
+        refresh_token: data.body['refresh_token']
+      }
+
+      dbDriver.addUser(db, user);
+
       // Set the access token on the API object to use it in later calls
       spotifyApi.setAccessToken(data.body['access_token']);
       spotifyApi.setRefreshToken(data.body['refresh_token']);
@@ -187,10 +199,15 @@ function handleMessage(sender_psid, received_message) {
         //response = { "text": `You sent command: "${received_message.text}".` }
         var songs = [];
         getTopSongs(50, 0, "short_term").then(function(data) { 
-          console.log(data)
-          console.log(typeof(data))
-          for(var i = 0; i < 50; i++) 
-            songs.push(data.name[i]);
+          console.log(data);
+          console.log(typeof(data));
+          console.log(Object(data));
+          for (var prop in data) {
+            console.log(data.prop);
+            if (prop === 'name') {
+              songs.push(data[prop]);
+            } 
+          }
           console.log(songs);
           response = {"text": songs.toString()};
         }).then(function() {
