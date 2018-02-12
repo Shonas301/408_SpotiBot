@@ -204,8 +204,9 @@ function handleMessage(sender_psid, received_message) {
              songs.push(song)
             });
           console.log('bout to print some songs')
-          for(var i = 0; i < 50, i++)
+          for(var i = 0; i < 50, i++){
             songlist.push(songs[i].name)
+          }
         }).then(function() { 
           callSendAPI(sender_psid,songlist.toString());
          });
