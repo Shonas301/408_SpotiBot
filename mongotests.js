@@ -24,7 +24,7 @@ describe("DB Test", function () {
         it("insert one user into the database", function () {
             expect(db).to.not.equal(null)
             var user = {
-                user_id: -1,
+                user_id: 2,
                 user_token: "tokens_my_dude",
                 refresh_token: "fresh_token_dude",
             };
