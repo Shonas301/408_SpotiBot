@@ -174,7 +174,7 @@ function handleMessage(sender_psid, received_message) {
     //
     if (received_message.text === "login") {
       response ={
-        "text": getLoginUrl(sender_psid);
+        "text": getLoginUrl(sender_psid)
       }
     }
     else {
