@@ -16,9 +16,8 @@ module.exports = {
   addUser: function (db, user) {
     if (isEmpty(user)) return false;
 
-    db.collection('users').updateOne(
-      user,
-      { upsert: true }, function (err, res) {
+    db.collection('users').insert(
+      user,function (err, res) {
         if (err) throw err;
       }
     );
