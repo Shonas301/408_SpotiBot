@@ -196,7 +196,8 @@ function handleMessage(sender_psid, received_message) {
     else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
-        response = { "text": `You sent command: "${received_message.text}".` }
+        //response = { "text": `You sent command: "${received_message.text}".` }
+        response = {"text": getTopSongs(50, 0, "short_term").toString() }
       }
       else if (res[2] === "long") {
         response = { "text": `You sent command: "${received_message.text}".` }
@@ -233,11 +234,11 @@ function handleMessage(sender_psid, received_message) {
       response = { "text": `You sent command: "${received_message.text}".` }
 
     }
-    else if (!loggedIn) {
+    /*else if (!loggedIn) {
       response = {
         "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
       }
-    }
+    }*/
     else {
       response = { "text": `You sent the message: "${received_message.text}".` }
     }
@@ -302,11 +303,14 @@ function callSendAPI(sender_psid, response) {
 //function to throw user's top 25 played songs in a list
 // offset is optional (and not necessary for our implementation)
 function getTopSongs(limit, offset, time_range) {
-  spotifyApi.getMyTopTracks({
+  return spotifyApi.getMyTopTracks({
     limit: limit,
     offset: offset
   }).then(function (data) {
-    return data.body.items;
+    var songs = [];
+    for (var i = 0; i < limit; i++)
+      songs.push(data.body.items.name[i]);
+    return songs;
   }).catch(function (err) {
     throw err;
   });
