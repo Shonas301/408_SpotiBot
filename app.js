@@ -200,7 +200,7 @@ function handleMessage(sender_psid, received_message) {
         var songs = [];
         getTopSongs(50, 0, "short_term").then(function(data) { 
           data.map(function(song){songs.push(t)});
-        )}.then(function() {callSendAPI(sender_psid,songs)};
+        )}.then(function() {callSendAPI(sender_psid,{"text": songs.toString())};
         
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
