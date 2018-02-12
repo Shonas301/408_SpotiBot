@@ -199,8 +199,12 @@ function handleMessage(sender_psid, received_message) {
         //response = { "text": `You sent command: "${received_message.text}".` }
         var songs = [];
         getTopSongs(50, 0, "short_term").then(function(data) { 
-          data.map(function(song){songs.push(t)});
-        )}.then(function() {callSendAPI(sender_psid,songs)};
+          data.map(function(song) {
+             songs.push(t)
+            });
+        }).then(function() { 
+          callSendAPI(sender_psid,songs);
+         });
         
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
@@ -320,6 +324,18 @@ function getTopSongs(limit, offset, time_range) {
   });
 }
 
+// Example get top 5 artists (Using for Genre Stats)
+function getTopArtists(limit, offset, time_range) {
+    return spotifyApi.getMyTopArtists({
+        limit: limit,
+        offset: offset,
+        time_range: time_range
+    }).then(function (data) {
+        return data.body.items
+    }).catch(function (err) {
+        console.error(err)
+    });
+}
 /* !! PROBLEM !!  There is no 'genre' attribute in a track's
  'audio_features' list. Genres can only be extracted from
  full album objects, so singles cannot be used when determining
@@ -391,3 +407,4 @@ function createPlaylist(playlist_name) {
         throw err;
     })
 }
+
