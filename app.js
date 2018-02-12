@@ -198,21 +198,10 @@ function handleMessage(sender_psid, received_message) {
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
         var songs = [];
-        getTopSongs(50, 0, "short_term").then(function(data) { 
-          console.log(data);
-          console.log(typeof(data));
-          console.log(Object(data));
-          for (var prop in data) {
-            console.log(data.prop);
-            if (prop === 'name') {
-              songs.push(data[prop]);
-            } 
-          }
-          console.log(songs);
-          response = {"text": songs.toString()};
-        }).then(function() {
-          callSendAPI(sender_psid, response);
-        });
+        getTopSongs(50, 0, "short_term").map(function(data) { 
+          console.log("data " + data)
+        )};
+        
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
       else if (res[2] === "long") {
