@@ -73,6 +73,7 @@ app.post('/clientAuth', (req,res) => {
 app.get('/clientAuth', (req, res) => {
   var code = req.query.code;
   console.log(req);
+  var sender_psid = req.query.state;
   spotifyApi.authorizationCodeGrant(code)
   .then(function(data) {
     console.log('The token expires in ' + data.body['expires_in']);
@@ -91,7 +92,7 @@ app.get('/clientAuth', (req, res) => {
     }).catch(function(err) {
       console.log('Something went wrong!', err)
     });
-  res.send(code);
+  res.send(sender_psid + " " + code);
 });
 
 app.post('/', (req, res) => {
@@ -173,8 +174,9 @@ function handleMessage(sender_psid, received_message) {
     // will be added to the body of our request to the Send API
     //
     if (received_message.text === "login") {
+      var url = getLoginUrl(sender_psid);
       response ={
-        "text": getLoginUrl(sender_psid)
+        "text": `Great! Here is a link to get you started! \n\n "${url}"`
       }
     }
     else {
