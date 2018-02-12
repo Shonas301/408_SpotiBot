@@ -198,9 +198,9 @@ function handleMessage(sender_psid, received_message) {
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
         var songs = [];
-        getTopSongs(50, 0, "short_term").map(function(data) { 
-          console.log("data " + data)
-        )};
+        getTopSongs(50, 0, "short_term").then(function(data) { 
+          data.map(function(song){songs.push(t)});
+        )}.then(function() {callSendAPI(sender_psid,songs)};
         
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
