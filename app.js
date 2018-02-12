@@ -189,8 +189,11 @@ function handleMessage(sender_psid, received_message) {
         getTopSongs(50, 0, "short_term").then(function(data) { 
           console.log(data)
           console.log(typeof(data))
-          for(var i = 0; i < 50; i++) 
-            songs.push(data.name[i]);
+          for (var prop in data) {
+            if (prop === 'name') {
+              songs.push(data[prop])
+            } 
+          }
           console.log(songs);
           response = {"text": songs.toString()};
         }).then(function() {
