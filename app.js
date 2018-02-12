@@ -74,6 +74,7 @@ app.get('/clientAuth', (req, res) => {
   var code = req.query.code;
   console.log(req);
   var sender_psid = req.query.state;
+  var response;
   spotifyApi.authorizationCodeGrant(code)
   .then(function(data) {
     console.log('The token expires in ' + data.body['expires_in']);
@@ -83,15 +84,16 @@ app.get('/clientAuth', (req, res) => {
     // Set the access token on the API object to use it in later calls
     spotifyApi.setAccessToken(data.body['access_token']);
     spotifyApi.setRefreshToken(data.body['refresh_token']);
+    response = {
+      'text': "Great! Thanks for logging in!" 
+    }
   }, function(err) {
+    response = {
+      'text': "Oops, I'm sorry there was an error, why don't you try emailing us at admin@spotibot.tech!" 
+    }
     console.log('Something went wrong!', err);
   });  
-  spotifyApi.getMe()
-    .then(function(data) {
-      console.log('info about the user', data.body)
-    }).catch(function(err) {
-      console.log('Something went wrong!', err)
-    });
+  callSendAPI(sender_psid, response)
   res.send(sender_psid + " " + code);
 });
 
