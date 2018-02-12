@@ -190,6 +190,7 @@ function handleMessage(sender_psid, received_message) {
           console.log(data)
           for(var i = 0; i < 50; i++) 
             songs.push(data.name[i]);
+          console.log(songs);
           response = {"text": songs.toString()};
         }).then(function() {
           callSendAPI(sender_psid, response);
