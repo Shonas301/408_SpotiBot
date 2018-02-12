@@ -185,7 +185,7 @@ function handleMessage(sender_psid, received_message) {
       var res = received_message.text.split(" ");
       if (res[2] === "short") {
         //response = { "text": `You sent command: "${received_message.text}".` }
-        response = {"text": getTopTracks(50, 0, "short_term") }
+        response = {"text": getTopSongs(50, 0, "short_term") }
       }
       else if (res[2] === "long") {
         response = { "text": `You sent command: "${received_message.text}".` }
