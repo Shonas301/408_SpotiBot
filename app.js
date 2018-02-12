@@ -293,7 +293,8 @@ function callSendAPI(sender_psid, response) {
 function getTopSongs(limit, offset, time_range) {
   return spotifyApi.getMyTopTracks({
     limit: limit,
-    offset: offset
+    offset: offset,
+    time_range: time_range
   }).then(function (data) {
     var songs = [];
     console.log(data);
