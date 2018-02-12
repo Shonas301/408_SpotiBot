@@ -195,7 +195,7 @@ function getLoginUrl(sender_psid) {
     clientId = clientID,
     state = '10';
   var str = spotifyApi.createAuthorizeURL(scopes, sender_psid);
-  return authorizeURL;
+  return str;
 };
 
 function handlePostback(sender_psid, received_postback) {
