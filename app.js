@@ -87,7 +87,7 @@ app.get('/clientAuth', (req, res) => {
         refresh_token: data.body['refresh_token']
       }
 
-      mongodriver.addUser(db, user);
+      dbDriver.addUser(db, user);
 
       // Set the access token on the API object to use it in later calls
       spotifyApi.setAccessToken(data.body['access_token']);
