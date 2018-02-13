@@ -406,7 +406,3 @@ function createPlaylist(playlist_name) {
         throw err;
     })
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 52b12c88c5bac852973b86fafa3b7d3f5228a0d4

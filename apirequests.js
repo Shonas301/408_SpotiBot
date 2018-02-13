@@ -9,7 +9,7 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi();
 
-spotifyApi.setAccessToken('BQDkUTqsz7Y46WJjAWsz25RSgZ5RcIorwDlJ7uAPvne5o-0EvF4_zjYTmyp12HvEV2lf9GPMCUZbxDH6bnDdfk8G3JCc-EwRtQHtusX4ZL0OjM8_Wu3hlJerHrEjx2l6wb4BbVQ0RRpkUf82y8bLD1aiCcA8v0e1mTj5wMF3Vz_UR9Enxw3wvzZSNv5NvHc1TuRl9q4fEmPFzJhWb2cg30NcIEHg6Bk41dBl8fw1lIWO0w2IKdcaJfwXXLk');
+spotifyApi.setAccessToken('BQAIfQ2n4HuNL971xQ-ILGsvzZmyjgzfFVv8m00UzUnhIlLeXkhxkGApAwxCokIh8qjlFyxPpp8HR3DM3AbcXkonFMBRfPq65_cROMVsWAeF3VoJq5Zw38-9m9WM3ECkrmtUxl8O0xEDlhyC_3aDWhZM_0qXNx5mOLUI0pNrrc903qE3xt2DWfUiMIqmx49ENhkQCqeYzfDIDFIiAoxrSUdCeC_GRzwdurjc6YsoYjNVjbE3LivDY8ifMEk');
 
 // Example get top 5 tracks
 function getTopTracks() {
@@ -38,30 +38,17 @@ function createPlaylist(playlist_name) {
         spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
             .then(function (data) {
                 console.log('Created playlist!');
-                console.log(data.body.external_urls.spotify)
-                return data.body.external_urls.spotify;
+                console.log(data.body)
+                return data.body;
             }).catch(function (err) {
                 console.log('Something went wrong!', err);
             });
-    }).catch(function (err) {
-        throw err;
-    })
+    });
 }
 
-/*
-createPlaylist("testing").then(function(data){
+createPlaylist("test playlist").then(function(data) {
     console.log(data)
 });
-
-getTopTracks().then(function(data){
-    var songs = []
-    data.map(function(t) {
-        songs.push(t)
-    })
-    console.log(songs)
-})
-*/
-
 // Example get top 5 artists (Using for Genre Stats)
 function getTopArtists() {
     return spotifyApi.getMyTopArtists({
@@ -73,6 +60,22 @@ function getTopArtists() {
     });
 }
 
-getTopArtists().then(function(data){
-    console.log(data)
-})
+function addTracksToPlaylist(playlist_id, tracks) {
+    // Get the user's id
+    var promise = spotifyApi.getMe()
+        .then(function (data) {
+            return data.body.id;
+        }).catch(function (err) {
+            throw err;
+        })
+
+    // Add tracks to a playlist
+    promise.then(function (user_id) {
+        spotifyApi.addTracksToPlaylist(user_id, playlist_id, ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"])
+            .then(function (data) {
+                console.log('Added tracks to playlist!');
+            }, function (err) {
+                console.log('Something went wrong!', err);
+            });
+    });
+}
