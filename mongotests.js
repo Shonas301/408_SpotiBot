@@ -16,9 +16,10 @@ describe("DB Test", function () {
             MongoClient.connect(mongoUrl, function (err, database) {
                 db = database.db("users");
                 expect(err).to.equal(null);
+                done();
             });
         })
-    })
+    });
 
     describe("DB insertion", function () {
         it("insert one user into the database", function () {
@@ -35,7 +36,10 @@ describe("DB Test", function () {
             }
 
             var result = dbDriver.addUser(db, user);
-            expect(result).to.equal(true);
+            result.then((res, rej) => {
+                expect(res).to.equal(true);
+                done();
+            });
         });
     });
 
@@ -45,7 +49,7 @@ describe("DB Test", function () {
 
             var time = new Date();
             time.setSeconds(time.getSeconds() + 3600);
-            
+
             var user = {
                 id: 127459175297,
                 expires_at: time,
@@ -53,16 +57,29 @@ describe("DB Test", function () {
                 refresh_token: "NhAagA...Um_S7o"
             };
 
-            var result = dbDriver.addUser(db, user);
-            expect(result).to.equal(true);
+            var new_token = "token"
+            var result = dbDriver.updateUserAccessToken(db, user,new_token);
+            result.then((res, err) => {
+                console.log(res)
+                expect(res).to.equal(true);
+                done();
+            }).catch((err) => {
+                done(new Error("Failed to update user"))
+            });
         });
     });
 
     describe("DB Fetch Users", function () {
-        it("Get all users from database", function () {
+        it("Get all users from database", function (done) {
             expect(db).to.not.equal(null)
-            var result = dbDriver.findAllUsers(db)
-            expect(result.length > 1).to.equal(true);
+            var result = dbDriver.findAllUsers(db);
+            result.then((res, rej) => {
+                console.log(res);
+                expect(res.length > 1).to.equal(true);
+                done();
+            }).catch((err) => {
+                done(err);
+            });
         });
     });
 
@@ -71,7 +88,12 @@ describe("DB Test", function () {
             expect(db).to.not.equal(null)
             var user = {};
             var result = dbDriver.removeUser(db, user);
-            expect(result).to.not.equal(true);
+            result.then((res, rej) => {
+                expect(res).to.not.equal(true);
+                done();
+            }).catch((err) => {
+                done(err);
+            });
         });
 
         it("Remove one user in the database", function () {
@@ -82,7 +104,20 @@ describe("DB Test", function () {
                 refresh_token: "fresh_token_dude",
             };
             var result = dbDriver.removeUser(db, user);
-            expect(result).to.equal(true);
+            result.then((res, rej) => {
+                expect(res).to.equal(true);
+                done();
+            }).catch((err) => {
+                done(err);
+            })
         });
     });
+
+    after(() => {
+        var result = dbDriver.emptyCollection((res, rej) => {
+            console.log("EMPTYING COLLECTION AFTER TESTING")
+            console.log(res)
+            done();
+        });
+    })
 });

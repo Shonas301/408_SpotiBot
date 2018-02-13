@@ -1,40 +1,79 @@
 module.exports = {
 
   findAllUsers: function (db) {
-    if (!db) {
-      console.error("No DB connection")
-      return null;
-    }
+    if (!db) throw new Error("No DB connection");
 
-    return db.collection("users").find({}).toArray(function (err, result) {
-      if (err) throw err;
-      console.log(result);
-      return result;
+    return new Promise(function (resolve, rej) {
+      db.collection("users").find({}).toArray(function (err, result) {
+        if (err) throw err;
+        return resolve(result);
+      });
     });
   },
 
   addUser: function (db, user) {
-    if (isEmpty(user)) return false;
+    if (!db) throw new Error("No DB connection");
+    if (isEmpty(user)) throw new Error("Attempt to add Empty User");
 
-    db.collection('users').insert(
-      user,function (err, res) {
-        if (err) throw err;
-      }
-    );
-
-    return true;
+    return new Promise((resolve, reject) => {
+      db.collection('users').insert(
+        user, function (err, res) {
+          if (err) throw err;
+          return resolve(res);
+        });
+    });
   },
 
+  updateUserAccessToken: function (db, user, new_token) {
+    if (!db) throw new Error("No DB connection");
+    if (isEmpty(user)) throw new Error("Attempt to add Empty User");
+
+    var query = { user_id: user.user_id }
+    var newvalues = { access_token: new_token }
+    return new Promise((resolve, reject) => {
+      db.collection('users').updateOne(
+        query, function (err, res) {
+          if (err) throw err;
+          return resolve(res);
+        });
+    });
+  },
+
+
   removeUser: function (db, user) {
-    if (isEmpty(user)) return false;
+    if (!db) throw new Error("No DB connection");
+    if (isEmpty(user)) throw new Error("Attempt to add Empty User");
 
     var query = { user_id: user.user_id };
-    db.collection("users").remove(query, function (err, obj) {
-      if (err) throw error;
-      console.log(obj.result.n + " document(s) deleted");
-    });
+    return new Promise((resolve, reject) => {
+      db.collection("users").remove(query, function (err, obj) {
+        if (err) throw error;
+        console.log(obj.result.n + " document(s) deleted");
+        return resolve(obj.result.n);
+      });
+    })
+  },
 
-    return true;
+  dropDB: function (db) {
+    if (!db) throw new Error("No DB connection");
+    return new Promise((resolve, reject) => {
+      db.dropDatabase(function (err, res) {
+        if (err) throw err;
+        db.close();
+        resolve(res);
+      });
+    });
+  },
+
+  emptyCollection: function (db) {
+    if (!db) throw new Error("No DB connection");
+    return new Promise((resolve, reject) => {
+      db.deleteMany({}, function (err, obj) {
+        if (err) throw err;
+        db.close();
+        resolve(obj.result);
+      });
+    });
   }
 }
 
