@@ -49,6 +49,7 @@ function createPlaylist(playlist_name) {
 createPlaylist("test playlist").then(function(data) {
     console.log(data)
 });
+
 // Example get top 5 artists (Using for Genre Stats)
 function getTopArtists() {
     return spotifyApi.getMyTopArtists({
