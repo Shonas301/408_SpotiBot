@@ -1,10 +1,10 @@
 module.exports = {
 
-  findAllUsers: function (db) {
+  findUser: function (db, user) {
     if (!db) throw new Error("No DB connection");
-
-    return new Promise(function (resolve, rej) {
-      db.collection("users").find({}).toArray(function (err, result) {
+    
+    return new Promise(function (resolve, reject) {
+      db.collection("users").find({ user_id: user.user_id }).toArray((err, result) => {
         if (err) throw err;
         return resolve(result);
       });
@@ -29,16 +29,14 @@ module.exports = {
     if (isEmpty(user)) throw new Error("Attempt to add Empty User");
 
     var query = { user_id: user.user_id }
-    var newvalues = { access_token: new_token }
     return new Promise((resolve, reject) => {
       db.collection('users').updateOne(
-        query, function (err, res) {
+        query, {$set: {"access_token": new_token}} , function (err, res) {
           if (err) throw err;
           return resolve(res);
         });
     });
   },
-
 
   removeUser: function (db, user) {
     if (!db) throw new Error("No DB connection");
