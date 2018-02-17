@@ -241,20 +241,19 @@ function handleMessage(sender_psid, received_message) {
         }).then(function () {
           response = { "text": `Your top songs are:\n "${prettyString}"` }
           callSendAPI(sender_psid, response);
-        }).then(function () {
-          var date = new Date()
-          var dateString = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear()
+        }).then(function() {
+          var date = new Date();
+          var dateString = date.getMonth()+"/"+date.getDate()+"/"+date.getFullYear();
           createPlaylist("Top Tracks: " + dateString).then(function (data) {
-            /*data.map(function(playlist) {
+            data.map(function(playlist) {
               playlistObject.push(playlist)
-            });*/
-            playlistObject = data
+            });
             playlistUrl = playlistObject[0].external_urls.spotify
             playlistId = playlistObject[0].id
           }).then(function () {
             addTracksToPlaylist(playlistId, songlistUris);
-          }).then(function () {
-            response = { "text": `Here's the playlist: \n ${playListUrl}` }
+          }).then(function() {
+            response = {"text": `Here is the playlist: \n ${playListUrl}`}
             callSendAPI(sender_psid, response)
           });
         });
@@ -439,7 +438,7 @@ function createPlaylist(playlist_name) {
       // Create a public playlist
       spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
         .then(function (data) {
-          return resolve(data.body);
+          return resolve(data.body.items);
         }).catch(function (err) {
           return reject(err);
         });
