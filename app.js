@@ -212,6 +212,13 @@ function handleMessage(sender_psid, received_message) {
         var songs = []
         var songlist = []
         getTopSongs(50, 0, "short_term").then(function (data) {
+          data.map(function (song) {
+            songs.push(song)
+          });
+          console.log('bout to print some songs')
+          for (var i = 0; i < 50; i++) {
+            songlist.push(songs[i].name)
+          }
         }).then(function () {
           callSendAPI(sender_psid, data.toString());
         });
