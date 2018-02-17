@@ -21,7 +21,8 @@
     "https": "^1.0.0",
     "mocha": "^5.0.0",
     "mongodb": "^2.2.34",
-    "request": "^2.72.0",
+    "request": "^2.83.0",
+    "requests": "^0.2.2",
     "should": "^13.2.1",
     "spotify-web-api-node": "^2.5.0"
   },
