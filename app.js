@@ -102,6 +102,7 @@ app.get('/clientAuth', (req, res) => {
         'text': "Oops, I'm sorry there was an error, why don't you try emailing us at admin@spotibot.tech!"
       }
       console.log('Something went wrong!', err);
+      reject(err);
     }).then(function () {
             callSendAPI(sender_psid, response)  
     }).then(function () {
@@ -150,7 +151,6 @@ app.post('/webhook', (req, res) => {
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-
         handlePostback(sender_psid, webhook_event.postback);
       }
 
