@@ -104,7 +104,15 @@ app.get('/clientAuth', (req, res) => {
       console.log('Something went wrong!', err);
       reject(err);
     }).then(function () {
-            callSendAPI(sender_psid, response)  
+            callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
+    }).then(function () {
+        response = {
+            "text": `
+                Type "playlist" to begin creating a playlist or "stats" to begin generating your various listening statistics."
+            `
+            }
+    }).then(function () {
+            callSendAPI(sender_psid, response) // sends response explaining how to give SpotiBot arguments
     }).then(function () {
       var rep = `
         <script type="text/javascript">
@@ -450,4 +458,3 @@ function addTracksToPlaylist(playlist_id, tracks) {
             });
     });
 }
-
