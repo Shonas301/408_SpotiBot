@@ -9,46 +9,22 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi();
 
-spotifyApi.setAccessToken('BQAIfQ2n4HuNL971xQ-ILGsvzZmyjgzfFVv8m00UzUnhIlLeXkhxkGApAwxCokIh8qjlFyxPpp8HR3DM3AbcXkonFMBRfPq65_cROMVsWAeF3VoJq5Zw38-9m9WM3ECkrmtUxl8O0xEDlhyC_3aDWhZM_0qXNx5mOLUI0pNrrc903qE3xt2DWfUiMIqmx49ENhkQCqeYzfDIDFIiAoxrSUdCeC_GRzwdurjc6YsoYjNVjbE3LivDY8ifMEk');
+spotifyApi.setAccessToken('BQCZgOTUG8xhKljLbspAZYmgA-Bmpge80eDjynuDTXXzEK1Tsyf5tJ9ugfy7tj1YhT1z-zePqKc3L3kG6EL6zb7BHJzAgsh1ucSnjdNAoJcRjgvo6KictCpxhnLc4tBr_XETlA3MsJYHi0c9cJ-cdeNS7NraRYgReRSQ5wxRYnEYHBmdcanEarjd19Msgn47R8Rcc89C1j2HUJ6E477Xt3N91FUBNaSZwOGGPHyyvZ7SiWpacGMLSgdD-A');
 
 // Example get top 5 tracks
 function getTopTracks() {
-    return spotifyApi.getMyTopTracks({
-        limit: 5
-    }).then(function (data) {
-        return data.body.items
-    }).catch(function (err) {
-        console.error(err)
-    });
-}
-
-// Returns a promise containing the link to the users playlist
-function createPlaylist(playlist_name) {
-    // Get the user's id
-    var promise = spotifyApi.getMe()
-        .then(function (data) {
-            return data.body.id;
+    return new Promise((resolve, reject) => {
+        spotifyApi.getMyTopTracks({
+            limit: 25
+        }).then(function (data) {
+            return resolve(data.body.items);
         }).catch(function (err) {
-            throw err;
-        })
-
-    // Create a playlist using the user's id
-    return promise.then(function (user_id) {
-        // Create a public playlist
-        spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
-            .then(function (data) {
-                console.log('Created playlist!');
-                console.log(data.body)
-                return data.body;
-            }).catch(function (err) {
-                console.log('Something went wrong!', err);
-            });
+            console.error(err)
+            reject(err)
+        });
     });
 }
 
-createPlaylist("test playlist").then(function(data) {
-    console.log(data)
-});
 
 // Example get top 5 artists (Using for Genre Stats)
 function getTopArtists() {
@@ -61,6 +37,7 @@ function getTopArtists() {
     });
 }
 
+// Add an array of songs to a playlist
 function addTracksToPlaylist(playlist_id, tracks) {
     // Get the user's id
     var promise = spotifyApi.getMe()
@@ -72,11 +49,92 @@ function addTracksToPlaylist(playlist_id, tracks) {
 
     // Add tracks to a playlist
     promise.then(function (user_id) {
-        spotifyApi.addTracksToPlaylist(user_id, playlist_id, ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"])
+        spotifyApi.addTracksToPlaylist(user_id, playlist_id, tracks)
             .then(function (data) {
                 console.log('Added tracks to playlist!');
             }, function (err) {
                 console.log('Something went wrong!', err);
             });
+    });
+}
+
+// Returns a promise containing the link to the users playlist
+function createPlaylist(playlist_name) {
+    // Get the user's id
+    var getMe = spotifyApi.getMe()
+        .then(function (data) {
+            return data.body.id;
+        }).catch(function (err) {
+            throw err;
+        })
+
+    // Create a playlist using the user's id
+    return new Promise((resolve, reject) => {
+        getMe.then(function (user_id) {
+            // Create a public playlist
+            spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
+                .then(function (data) {
+                    return resolve(data.body);
+                }).catch(function (err) {
+                    return reject(err);
+                });
+        }).catch(function (err) {
+            return reject(err);
+        })
+    });
+}
+
+/*
+var tracks = ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"];
+// Create a playlist, then add the songs
+createPlaylist("test playlist").then(function(data) {
+    console.log(data)
+    //addTracksToPlaylist(data.id, tracks);
+}).catch((err) => {
+    throw err;
+});
+*/
+
+getTopKey().then((data) => {
+    console.log("top key is = " + data);
+});
+
+var pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'A♭', 'A', 'B♭', 'B'];
+
+// Returns a promise which contains the most common key
+function getTopKey() {
+    return new Promise((resolve, reject) => {
+        getTopTracks().then((data) => {
+            var keys = [];
+            var promises = data.map((track) => {
+                // return an array of promises getting an audio track keys
+                return spotifyApi.getAudioFeaturesForTrack(track.id).then((res) => {
+                    keys.push(res.body.key);
+                }).catch((err) => {
+                    throw err;
+                });
+            })
+
+            Promise.all(promises).then(() => {
+                console.log(keys);
+                // Find the most common item in the list
+                var counts = {};
+                var compare = 0;
+                var mostFrequent;
+                keys.map((item) => {
+                    if (counts[item] === undefined) {
+                        counts[item] = 1
+                    } else {
+                        counts[item] += 1
+                    }
+                    if (counts[item] > compare) {
+                        compare = counts[item]
+                        mostFrequent = item
+                    }
+                });
+                //console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
+                resolve(pitch_classes[mostFrequent]);
+            })
+        });
     });
 }
