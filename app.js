@@ -105,6 +105,7 @@ app.get('/clientAuth', (req, res) => {
       reject(err);
     }).then(function () {
             callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
+            await sleep(500);
     }).then(function () {
         response = {
             "text": `
