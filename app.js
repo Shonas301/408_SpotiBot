@@ -253,7 +253,7 @@ function handleMessage(sender_psid, received_message) {
           }).then(function() {
             addTracksToPlaylist(playlistId, songlistUris); 
           }).then(function() {
-            response = {"text": `Here's the playlist: \n ${playListUrl}`}
+            response = {"text": `Here is the playlist: \n ${playListUrl}`}
             callSendAPI(sender_psid, response)
           });
         });
