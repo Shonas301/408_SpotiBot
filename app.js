@@ -214,6 +214,7 @@ function handleMessage(sender_psid, received_message) {
         //response = { "text": `You sent command: "${received_message.text}".` }
         var songs = []
         var songlist = []
+        var prettyString = "";
         getTopSongs(50, 0, "short_term").then(function (data) {
           data.map(function (song) {
             songs.push(song)
@@ -221,9 +222,10 @@ function handleMessage(sender_psid, received_message) {
           console.log('bout to print some songs')
           for (var i = 0; i < 50; i++) {
             songlist.push(songs[i].name)
+            prettyString = prettyString + "\t" + songs[i].name + "\n"
           }
         }).then(function () {
-          response = {"text": `Your top songs are "${songlist}"`}
+          response = {"text": `Your top songs are:\n "${prettyString}"`}
           callSendAPI(sender_psid, response);
         });
 
