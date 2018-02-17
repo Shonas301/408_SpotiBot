@@ -28,7 +28,8 @@ const
   mongoUrl = "mongodb://localhost:27017/",
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
-  SpotifyWebApi = require('spotify-web-api-node');
+  SpotifyWebApi = require('spotify-web-api-node'),
+  pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'A♭', 'A', 'B♭', 'B'];
 
 var clientID = fs.readFileSync('encryption/client.id', 'utf8').replace(/\s/g, '');
 var clientSecret = fs.readFileSync('encryption/client.secret', 'utf8').replace(/\s/g, '');
@@ -453,3 +454,40 @@ function addTracksToPlaylist(playlist_id, tracks) {
     });
 }
 
+// Returns a promise which contains the most common key
+function getTopKey() {
+    return new Promise((resolve, reject) => {
+        getTopTracks().then((data) => {
+            var keys = [];
+            var promises = data.map((track) => {
+                // return an array of promises getting an audio track keys
+                return spotifyApi.getAudioFeaturesForTrack(track.id).then((res) => {
+                    keys.push(res.body.key);
+                }).catch((err) => {
+                    throw err;
+                });
+            })
+
+            Promise.all(promises).then(() => {
+                console.log(keys);
+                // Find the most common item in the list
+                var counts = {};
+                var compare = 0;
+                var mostFrequent;
+                keys.map((item) => {
+                    if (counts[item] === undefined) {
+                        counts[item] = 1
+                    } else {
+                        counts[item] += 1
+                    }
+                    if (counts[item] > compare) {
+                        compare = counts[item]
+                        mostFrequent = item
+                    }
+                });
+                //console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
+                resolve(pitch_classes[mostFrequent]);
+            })
+        });
+    });
+}
