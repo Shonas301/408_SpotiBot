@@ -115,9 +115,10 @@ app.get('/clientAuth', (req, res) => {
         window.close()
       }
         </script>`
+      callSendAPI(sender_psid, response)  
+    }).then(function () {
+      res.send(rep);
     });
-    res.send(rep);
-    callSendAPI(sender_psid, response)  
 });
 
 app.post('/', (req, res) => {
