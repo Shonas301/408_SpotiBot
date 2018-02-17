@@ -222,9 +222,8 @@ function handleMessage(sender_psid, received_message) {
           for (var i = 0; i < 50; i++) {
             songlist.push(songs[i].name)
           }
-          console.log(songlist)
-        }).then(function (data) {
-          callSendAPI(sender_psid, data.toString());
+        }).then(function () {
+          callSendAPI(sender_psid, songlist.toString());
         });
 
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
