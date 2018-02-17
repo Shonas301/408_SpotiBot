@@ -235,7 +235,7 @@ function handleMessage(sender_psid, received_message) {
           console.log('bout to print some songs')
           for (var i = 0; i < 50; i++) {
             songlist.push(songs[i].name)
-            songlist.push(songs[i].uri)
+            songlistUris.push(songs[i].uri)
             prettyString = prettyString + "\t" + songs[i].name + "\n"
           }
         }).then(function () {
@@ -249,7 +249,9 @@ function handleMessage(sender_psid, received_message) {
               playlistObject.push(playlist)
             });
             playlistUrl = playlistObject[0].external_urls.spotify
+            console.log(playlistUrl);
             playlistId = playlistObject[0].id
+            console.log(playlistId);
           }).then(function() {
             addTracksToPlaylist(playlistId, songlistUris);
           }).then(function() {
