@@ -403,17 +403,19 @@ function createPlaylist(playlist_name) {
     })
 
   // Create a playlist using the user's id
+  /*
   return new Promise((resolve, reject) => {
     getMe.then(function (user_id) {
       // Create a public playlist
       spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
         .then(function (data) {
-          return Promise.resolve(data.body);
+          return resolve(data.body);
         }).catch(function (err) {
-          return Promise.reject(err);
+          return reject(err);
         });
     }).catch(function (err) {
-      return Promise.reject(err);
+      return reject(err);
     })
   });
+  */
 }
