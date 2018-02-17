@@ -71,6 +71,7 @@ app.get('/clientAuth', (req, res) => {
   console.log(req);
   var sender_psid = req.query.state;
   var response = { 'text': "something wasn't initialized" };
+  var rep = ""
   spotifyApi.authorizationCodeGrant(code)
     .then(function (data) {
       console.log('The token expires in ' + data.body['expires_in']);
@@ -102,22 +103,21 @@ app.get('/clientAuth', (req, res) => {
       }
       console.log('Something went wrong!', err);
     }).then(function () {
-      callSendAPI(sender_psid, response).then(function () { 
-        var rep = `
-          <script type="text/javascript">
-          if (window.addEventListener) { // Mozilla, Netscape, Firefox
-            window.addEventListener('load', WindowLoad, false);
-          } else if (window.attachEvent) { // IE
-            window.attachEvent('onload', WindowLoad);
-          }
-
-        function WindowLoad(event) {
-          window.close()
+      callSendAPI(sender_psid, response)  
+      var rep = `
+        <script type="text/javascript">
+        if (window.addEventListener) { // Mozilla, Netscape, Firefox
+          window.addEventListener('load', WindowLoad, false);
+        } else if (window.attachEvent) { // IE
+          window.attachEvent('onload', WindowLoad);
         }
-          </script>`
-        res.send(rep);
-      });
+
+      function WindowLoad(event) {
+        window.close()
+      }
+        </script>`
     });
+    res.send(rep);
 });
 
 app.post('/', (req, res) => {
