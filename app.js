@@ -199,18 +199,18 @@ function handleMessage(sender_psid, received_message) {
         //response = { "text": `You sent command: "${received_message.text}".` }
         var songs = []
         var songlist = []
-        getTopSongs(50, 0, "short_term").then(function(data) { 
-          data.map(function(song) {
-             songs.push(song)
-            });
+        getTopSongs(50, 0, "short_term").then(function (data) {
+          data.map(function (song) {
+            songs.push(song)
+          });
           console.log('bout to print some songs')
-          for(var i = 0; i < 50, i++){
+          for (var i = 0; i < 50, i++) {
             songlist.push(songs[i].name)
           }
-        }).then(function() { 
-          callSendAPI(sender_psid,songlist.toString());
-         });
-        
+        }).then(function () {
+          callSendAPI(sender_psid, songlist.toString());
+        });
+
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
       else if (res[2] === "long") {
@@ -318,28 +318,32 @@ function callSendAPI(sender_psid, response) {
 // offset is optional (and not necessary for our implementation
 // returns a promise which contains the top user's songs
 function getTopSongs(limit, offset, time_range) {
-  return spotifyApi.getMyTopTracks({
-    limit: limit,
-    offset: offset,
-    time_range: time_range
-  }).then(function (data) {
-    return data.body.items;
-  }).catch(function (err) {
-    throw err;
+  return new Promise((resolve, reject) => {
+    spotifyApi.getMyTopTracks({
+      limit: limit,
+      offset: offset,
+      time_range: time_range
+    }).then(function (data) {
+      return resolve(data.body.items);
+    }).catch(function (err) {
+      return reject(err)
+    });
   });
 }
 
 // Example get top 5 artists (Using for Genre Stats)
 function getTopArtists(limit, offset, time_range) {
-    return spotifyApi.getMyTopArtists({
-        limit: limit,
-        offset: offset,
-        time_range: time_range
+  return new Promise((resolve, reject) => {
+    spotifyApi.getMyTopArtists({
+      limit: limit,
+      offset: offset,
+      time_range: time_range
     }).then(function (data) {
-        return data.body.items
+      return resolve(data.body.items)
     }).catch(function (err) {
-        console.error(err)
+      return reject(err)
     });
+  });
 }
 /* !! PROBLEM !!  There is no 'genre' attribute in a track's
  'audio_features' list. Genres can only be extracted from
@@ -389,26 +393,26 @@ function getTopKey(timeframe) {
 
 // Returns a promise containing the link to the users playlist
 function createPlaylist(playlist_name) {
-    // Get the user's id
-    var promise = spotifyApi.getMe()
-        .then(function (data) {
-            return data.body.id;
-        }).catch(function (err) {
-            throw err;
-        })
-
-    // Create a playlist using the user's id
-    return promise.then(function (user_id) {
-        // Create a public playlist
-        spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
-            .then(function (data) {
-                console.log('Created playlist!');
-                console.log(data.body.external_urls.spotify)
-                return data.body.external_urls.spotify;
-            }).catch(function (err) {
-                console.log('Something went wrong!', err);
-            });
+  // Get the user's id
+  var getMe = spotifyApi.getMe()
+    .then(function (data) {
+      return data.body.id;
     }).catch(function (err) {
-        throw err;
+      throw err;
     })
+
+  // Create a playlist using the user's id
+  return new Promise((resolve, reject) => {
+    getMe.then(function (user_id) {
+      // Create a public playlist
+      spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
+        .then(function (data) {
+          return resolve(data.body);
+        }).catch(function (err) {
+          return reject(err);
+        });
+    }).catch(function (err) {
+      return reject(err);
+    })
+  });
 }
