@@ -408,12 +408,12 @@ function createPlaylist(playlist_name) {
       // Create a public playlist
       spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
         .then(function (data) {
-          return resolve(data.body);
+          return Promise.resolve(data.body);
         }).catch(function (err) {
-          return reject(err);
+          return Promise.reject(err);
         });
     }).catch(function (err) {
-      return reject(err);
+      return Promise.reject(err);
     })
   });
 }
