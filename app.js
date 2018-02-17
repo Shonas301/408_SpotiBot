@@ -486,7 +486,7 @@ function addTracksToPlaylist(playlist_id, tracks) {
 // Returns a promise which contains the most common key
 function getTopKey() {
     return new Promise((resolve, reject) => {
-        getTopTracks().then((data) => {
+        getTopTracks(25, 0, "short_term").then((data) => {
             var keys = [];
             var promises = data.map((track) => {
                 // return an array of promises getting an audio track keys
