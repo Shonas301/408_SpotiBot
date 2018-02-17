@@ -103,7 +103,19 @@ app.get('/clientAuth', (req, res) => {
       console.log('Something went wrong!', err);
     }).then(function () {
       callSendAPI(sender_psid, response);
-      res.send("Great, Thanks! Go back to your messenger chat now!");
+      var response = `
+        <script type="text/javascript">
+        if (window.addEventListener) { // Mozilla, Netscape, Firefox
+          window.addEventListener('load', WindowLoad, false);
+        } else if (window.attachEvent) { // IE
+          window.attachEvent('onload', WindowLoad);
+        }
+
+      function WindowLoad(event) {
+        window.close()
+      }
+        </script>`
+      res.send(response);
     });
 });
 
@@ -208,7 +220,7 @@ function handleMessage(sender_psid, received_message) {
             songlist.push(songs[i].name)
           }
         }).then(function () {
-          callSendAPI(sender_psid, songlist.toString());
+          callSendAPI(sender_psid, data.toString());
         });
 
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
