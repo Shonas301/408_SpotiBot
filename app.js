@@ -246,10 +246,9 @@ function handleMessage(sender_psid, received_message) {
           var date = new Date()
           var dateString = date.getMonth()+"/"+date.getDate()+"/"+date.getFullYear()
           createPlaylist("Top Tracks: " + dateString).then(function (data) {
-            /*data.map(function(playlist) {
+            data.map(function(playlist) {
               playlistObject.push(playlist)
-            });*/
-            playlistObject = data
+            });
             playlistUrl = playlistObject[0].external_urls.spotify
             console.log(playlistUrl);
             playlistId = playlistObject[0].id
