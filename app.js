@@ -105,16 +105,16 @@ app.get('/clientAuth', (req, res) => {
       console.log('Something went wrong!', err);
       reject(err);
     }).then(function () {
-            callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
-            await sleep(5000);
+      callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
+      await sleep(5000);
     }).then(function () {
-        response = {
-            "text": `
+      response = {
+        "text": `
                 Type "playlist" to begin creating a playlist or "stats" to begin generating your various listening statistics."
             `
-            }
+      }
     }).then(function () {
-            callSendAPI(sender_psid, response) // sends response explaining how to give SpotiBot arguments
+      callSendAPI(sender_psid, response) // sends response explaining how to give SpotiBot arguments
     }).then(function () {
       var rep = `
         <script type="text/javascript">
@@ -239,11 +239,11 @@ function handleMessage(sender_psid, received_message) {
             prettyString = prettyString + "\t" + songs[i].name + "\n"
           }
         }).then(function () {
-          response = {"text": `Your top songs are:\n "${prettyString}"`}
+          response = { "text": `Your top songs are:\n "${prettyString}"` }
           callSendAPI(sender_psid, response);
-        }).then(function() {
+        }).then(function () {
           var date = new Date()
-          var dateString = date.getMonth()+"/"+date.getDate()+"/"+date.getFullYear()
+          var dateString = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear()
           createPlaylist("Top Tracks: " + dateString).then(function (data) {
             /*data.map(function(playlist) {
               playlistObject.push(playlist)
@@ -251,10 +251,10 @@ function handleMessage(sender_psid, received_message) {
             playlistObject = data
             playlistUrl = playlistObject[0].external_urls.spotify
             playlistId = playlistObject[0].id
-          }).then(function() {
+          }).then(function () {
             addTracksToPlaylist(playlistId, songlistUris);
-          }).then(function() {
-            response = {"text": `Here's the playlist: \n ${playListUrl}`}
+          }).then(function () {
+            response = { "text": `Here's the playlist: \n ${playListUrl}` }
             callSendAPI(sender_psid, response)
           });
         });
@@ -279,7 +279,10 @@ function handleMessage(sender_psid, received_message) {
 
     } else if (received_message.text.toLowerCase() === "key") {
       response = { "text": `You sent command: "${received_message.text}".` }
-
+      getTopKey().then((key) => {
+        response = { "text": `The most common musical key in your top songs is: \n ${key}` }
+        callSendAPI(sender_psid, response);
+      });
     } else if (received_message.text.toLowerCase() === "happiest") {
       response = { "text": `You sent command: "${received_message.text}".` }
 
@@ -420,22 +423,6 @@ function getTopGenre(timeframe) {
 
 }
 
-function getTopKey(timeframe) {
-  // TODO
-  // parse the received_message to get timeframe & args
-
-  if (timeframe != 1 && timeframe != 6) {
-    return; // not sure how we're handling error handling yet
-  }
-
-  top50List = getTopSongs(50, 0, timeframe);
-
-  // magical sorting shit
-  for (var i = 0; i < 50; i++) {
-    // syntax is top50List[i].key
-  }
-}
-
 // Returns a promise containing the link to the users playlist
 function createPlaylist(playlist_name) {
   // Get the user's id
@@ -464,59 +451,59 @@ function createPlaylist(playlist_name) {
 
 // Add an array of songs to a playlist
 function addTracksToPlaylist(playlist_id, tracks) {
-    // Get the user's id
-    var promise = spotifyApi.getMe()
-        .then(function (data) {
-            return data.body.id;
-        }).catch(function (err) {
-            throw err;
-        })
+  // Get the user's id
+  var promise = spotifyApi.getMe()
+    .then(function (data) {
+      return data.body.id;
+    }).catch(function (err) {
+      throw err;
+    })
 
-    // Add tracks to a playlist
-    promise.then(function (user_id) {
-        spotifyApi.addTracksToPlaylist(user_id, playlist_id, tracks)
-            .then(function (data) {
-                console.log('Added tracks to playlist!');
-            }, function (err) {
-                console.log('Something went wrong!', err);
-            });
-    });
+  // Add tracks to a playlist
+  promise.then(function (user_id) {
+    spotifyApi.addTracksToPlaylist(user_id, playlist_id, tracks)
+      .then(function (data) {
+        console.log('Added tracks to playlist!');
+      }, function (err) {
+        console.log('Something went wrong!', err);
+      });
+  });
 }
 
 // Returns a promise which contains the most common key
 function getTopKey() {
-    return new Promise((resolve, reject) => {
-        getTopTracks(25, 0, "short_term").then((data) => {
-            var keys = [];
-            var promises = data.map((track) => {
-                // return an array of promises getting an audio track keys
-                return spotifyApi.getAudioFeaturesForTrack(track.id).then((res) => {
-                    keys.push(res.body.key);
-                }).catch((err) => {
-                    throw err;
-                });
-            })
-
-            Promise.all(promises).then(() => {
-                console.log(keys);
-                // Find the most common item in the list
-                var counts = {};
-                var compare = 0;
-                var mostFrequent;
-                keys.map((item) => {
-                    if (counts[item] === undefined) {
-                        counts[item] = 1
-                    } else {
-                        counts[item] += 1
-                    }
-                    if (counts[item] > compare) {
-                        compare = counts[item]
-                        mostFrequent = item
-                    }
-                });
-                //console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
-                resolve(pitch_classes[mostFrequent]);
-            })
+  return new Promise((resolve, reject) => {
+    getTopTracks(25, 0, "short_term").then((data) => {
+      var keys = [];
+      var promises = data.map((track) => {
+        // return an array of promises getting an audio track keys
+        return spotifyApi.getAudioFeaturesForTrack(track.id).then((res) => {
+          keys.push(res.body.key);
+        }).catch((err) => {
+          throw err;
         });
+      })
+
+      Promise.all(promises).then(() => {
+        console.log(keys);
+        // Find the most common item in the list
+        var counts = {};
+        var compare = 0;
+        var mostFrequent;
+        keys.map((item) => {
+          if (counts[item] === undefined) {
+            counts[item] = 1
+          } else {
+            counts[item] += 1
+          }
+          if (counts[item] > compare) {
+            compare = counts[item]
+            mostFrequent = item
+          }
+        });
+        //console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
+        resolve(pitch_classes[mostFrequent]);
+      })
     });
+  });
 }
