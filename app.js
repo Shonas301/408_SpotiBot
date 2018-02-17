@@ -223,8 +223,8 @@ function handleMessage(sender_psid, received_message) {
             songlist.push(songs[i].name)
           }
         }).then(function () {
-          var rep = songlist.toString();
-          callSendAPI(sender_psid, {"text": `You sent command: "${rep}"`});
+          response = {"text": `Your top songs are "${songlist}"`}
+          callSendAPI(sender_psid, response);
         });
 
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
