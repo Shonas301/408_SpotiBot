@@ -103,7 +103,6 @@ app.get('/clientAuth', (req, res) => {
       }
       console.log('Something went wrong!', err);
     }).then(function () {
-      callSendAPI(sender_psid, response)  
       var rep = `
         <script type="text/javascript">
         if (window.addEventListener) { // Mozilla, Netscape, Firefox
@@ -118,6 +117,7 @@ app.get('/clientAuth', (req, res) => {
         </script>`
     });
     res.send(rep);
+    callSendAPI(sender_psid, response)  
 });
 
 app.post('/', (req, res) => {
