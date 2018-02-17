@@ -403,7 +403,6 @@ function createPlaylist(playlist_name) {
     })
 
   // Create a playlist using the user's id
-  /*
   return new Promise((resolve, reject) => {
     getMe.then(function (user_id) {
       // Create a public playlist
@@ -417,5 +416,4 @@ function createPlaylist(playlist_name) {
       return reject(err);
     })
   });
-  */
 }
