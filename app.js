@@ -102,20 +102,21 @@ app.get('/clientAuth', (req, res) => {
       }
       console.log('Something went wrong!', err);
     }).then(function () {
-      callSendAPI(sender_psid, response);
-      var response = `
-        <script type="text/javascript">
-        if (window.addEventListener) { // Mozilla, Netscape, Firefox
-          window.addEventListener('load', WindowLoad, false);
-        } else if (window.attachEvent) { // IE
-          window.attachEvent('onload', WindowLoad);
-        }
+      callSendAPI(sender_psid, response).then(function () { 
+        var rep = `
+          <script type="text/javascript">
+          if (window.addEventListener) { // Mozilla, Netscape, Firefox
+            window.addEventListener('load', WindowLoad, false);
+          } else if (window.attachEvent) { // IE
+            window.attachEvent('onload', WindowLoad);
+          }
 
-      function WindowLoad(event) {
-        window.close()
-      }
-        </script>`
-      res.send(response);
+        function WindowLoad(event) {
+          window.close()
+        }
+          </script>`
+        res.send(rep);
+      });
     });
 });
 
