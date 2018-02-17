@@ -452,7 +452,7 @@ function createPlaylist(playlist_name) {
       // Create a public playlist
       spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
         .then(function (data) {
-          return resolve(data.body);
+          return resolve(data.body.items);
         }).catch(function (err) {
           return reject(err);
         });
