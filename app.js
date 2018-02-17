@@ -242,7 +242,7 @@ function handleMessage(sender_psid, received_message) {
           response = {"text": `Your top songs are:\n "${prettyString}"`}
           callSendAPI(sender_psid, response);
         }).then(function() {
-          date = Date.now()
+          var date = Date.now()
           dateString = date.getMonth()+"/"+date.getDate()+"/"+date.getFullYear()
           createPlaylist("Top Tracks: " + dateString).then(function (data) {
             data.map(function(playlist) {
