@@ -222,7 +222,8 @@ function handleMessage(sender_psid, received_message) {
           for (var i = 0; i < 50; i++) {
             songlist.push(songs[i].name)
           }
-        }).then(function () {
+          console.log(songlist)
+        }).then(function (data) {
           callSendAPI(sender_psid, data.toString());
         });
 
