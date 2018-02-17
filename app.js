@@ -106,14 +106,12 @@ app.get('/clientAuth', (req, res) => {
     }).then(function () {
             callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
     }).then(function () {
-        console.log('bout to make usage msg');
         response = {
             "text": `
                 Type "playlist" to begin creating a playlist or "stats" to begin generating your various listening statistics."
             `
             }
     }).then(function () {
-            console.log('bout to send usage msg');
             callSendAPI(sender_psid, response) // sends response explaining how to give SpotiBot arguments
     }).then(function () {
       var rep = `
@@ -252,7 +250,7 @@ function handleMessage(sender_psid, received_message) {
             playlistUrl = playlistObject[0].external_urls.spotify
             playlistId = playlistObject[0].id
           }).then(function() {
-            addTracksToPlaylist(playlistId, songlistUris); 
+            addTracksToPlaylist(playlistId, songlistUris);
           }).then(function() {
             response = {"text": `Here's the playlist: \n ${playListUrl}`}
             callSendAPI(sender_psid, response)
