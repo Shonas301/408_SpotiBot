@@ -413,3 +413,25 @@ function createPlaylist(playlist_name) {
     })
   });
 }
+
+// Add an array of songs to a playlist
+function addTracksToPlaylist(playlist_id, tracks) {
+    // Get the user's id
+    var promise = spotifyApi.getMe()
+        .then(function (data) {
+            return data.body.id;
+        }).catch(function (err) {
+            throw err;
+        })
+
+    // Add tracks to a playlist
+    promise.then(function (user_id) {
+        spotifyApi.addTracksToPlaylist(user_id, playlist_id, tracks)
+            .then(function (data) {
+                console.log('Added tracks to playlist!');
+            }, function (err) {
+                console.log('Something went wrong!', err);
+            });
+    });
+}
+
