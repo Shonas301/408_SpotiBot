@@ -261,8 +261,13 @@ function handleMessage(sender_psid, received_message) {
     }
 
     else if (received_message.text.toLowerCase() === "genre") {
-      response = { "text": `You sent command: "${received_message.text}".` }
-      callSendAPI(sender_psid, response);
+      getTopGenre().then((genre) => {
+        response = { "text": `Your most listened to genre is: "${genre}".` }
+        callSendAPI(sender_psid, response);
+      }).catch((err) => {
+        response = { "text": `Sorry there was an error: "${err}".` }
+        callSendAPI(sender_psid, response);
+      });
     } else if (received_message.text.toLowerCase() === "key") {
       getTopKey().then((key) => {
         response = { "text": `The most common musical key in your top songs is: \n ${key}` }
@@ -444,34 +449,39 @@ function getTopArtists(limit, offset, time_range) {
     });
   });
 }
-/* !! PROBLEM !!  There is no 'genre' attribute in a track's
- 'audio_features' list. Genres can only be extracted from
- full album objects, so singles cannot be used when determining
- a user's top genre.
+
+/* !! PROBLEM !!  There is no 'genre' attribute in most track or album objects
+ * The only reliable place to get a genre is to check an artist's list of genres
 */
+function getTopGenre() {
+    return new Promise((resolve, reject) => {
+        getTopArtists(50, 0, "long_term").then((artists) => {
+            genres = [];
+            for (var i = 0; i < artists.length; i++)
+                for (var j = 0; j < artists[i].genres.length; j++)
+                    genres.push(artists[i].genres[j]);
 
-// @param timeframe: either 1 or 6 (number of months)
-function getTopGenre(timeframe) {
-  // TODO
-  // parse the received_message
+            // Find the most common item in the list
+            var counts = {};
+            var compare = 0;
+            var mostFrequent;
+            genres.map((item) => {
+                if (counts[item] === undefined) {
+                    counts[item] = 1;
+                } else {
+                    counts[item] += 1;
+                }
+                if (counts[item] > compare) {
+                    compare = counts[item];
+                    mostFrequent = item;
+                }
+            });
 
-  if (timeframe != 1 && timeframe != 6) {
-    return; // not sure how we're handling error handling yet
-  }
-
-  top50List = getTopSongs(50, 0, timeframe); // default to 50 for stat purposes
-
-  // make sure to only use tracks that are associated with albums
-  // or else the logic will fail & also might crash yoloswag
-  for (var i = 0; i < 50; i++) {
-    // check for album info
-    /* unfortunately we can't go from track->album->genre, because
-     * the genre is listed only in the album (full) object, which
-     * is not in the scope of the track object. the track objects
-     * only associate the album name, not the full object (i think)
-     */
-  }
-
+            resolve(mostFrequent);
+        }).catch((err) => {
+          reject(err);
+        })
+    });
 }
 
 // Returns a promise containing the link to the users playlist
