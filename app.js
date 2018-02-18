@@ -222,58 +222,10 @@ function handleMessage(sender_psid, received_message) {
       var 
         res = received_message.text.split(" "),
         term = "";
+      /*
       if (res[2] === "short") {
         term = "short_term"
-        //response = { "text": `You sent command: "${received_message.text}".` }
-        /*
-        var songs = []
-        var songlist = []
-        var songlistUris = []
-        var prettyString = "";
-        var playlistObject = [];
-        var playlistUrl = "";
-        var playlistId = "";
-        getTopSongs(50, 0, "short_term").then(function (data) {
-          data.map(function (song) {
-            songs.push(song)
-          });
-          console.log('bout to print some songs')
-          for (var i = 0; i < 50; i++) {
-            songlist.push(songs[i].name)
-            songlistUris.push(songs[i].uri)
-            prettyString = prettyString + "\t" + songs[i].name + "\n"
-          }
-        }).then(function () {
-          response = { "text": `Your top songs are:\n "${prettyString}"` }
-          callSendAPI(sender_psid, response);
-        }).then(function() {
-          var date = new Date()
-          var
-            month = date.getMonth()+1,
-            day = date.getDate(),
-            year = date.getFullYear();
-          var dateString = month+"/"+day + "/"+ yer
-          createPlaylist("Top Tracks: " + dateString).then(function (data) {
-            data.map(function(playlist) {
-              playlistObject.push(playlist)
-            });
-            console.log(playlistObject)
-            playlistUrl = playlistObject[0].external_urls.spotify
-            console.log(playlistUrl);
-            playlistId = playlistObject[0].id
-            console.log(playlistId);
-          }).then(function () {
-            addTracksToPlaylist(playlistId, songlistUris);
-          }).then(function() {
-            response = {"text": `Here's the playlist: \n ${playlistUrl}`}
-            callSendAPI(sender_psid, response)
-          });
-        });
-        */
-
-        //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
-      }
-      else if (res[2] === "long") {
+      } else if (res[2] === "long") {
         term = "long_term"
         response = { "text": `You sent command: "${received_message.text}".` }
       } else if (res[2] === "medium") {
@@ -283,6 +235,24 @@ function handleMessage(sender_psid, received_message) {
         response = {
           "text": `You sent the message: "${received_message.text}".`
         }
+      }*/
+      switch(res[2]) {
+        case('short'):
+          term = 'short_term'
+        case('medium'):
+          term = 'medium_term'
+        case('long'):
+          term = 'long_term'
+        default:
+          //Error State
+          request = {
+            'text': `I'm sorry there's been an error! Type: \n
+                    \t top playlist ? \n for a list of options or just: \n
+                    \t ? \n for the entire functionality listing`
+          }
+          callSendAPI(request);
+          return;
+
       }
       handleTopPlaylist(sender_psid)
     }
