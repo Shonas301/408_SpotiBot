@@ -255,12 +255,12 @@ function handleMessage(sender_psid, received_message) {
           return;
         default:
           //Error State
-          request = {
+          response = {
             'text': `I'm sorry there's been an error! Type: \n
                     \t top playlist ? \n for a list of options or just: \n
                     \t ? \n for the entire functionality listing`
           }
-          callSendAPI(sender_psid, request);
+          callSendAPI(sender_psid, response);
           return;
 
       }
