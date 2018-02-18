@@ -137,6 +137,13 @@ app.post('/', (req, res) => {
   res.status(200).send('EVENT_RECEIVED');
 
 });
+
+// Gets the privacy statement
+app.get('/privacy', (req, res) => {
+    console.log(req);
+    res.sendFile(path.join(__dirname + '/privacy.html'));
+});
+
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
