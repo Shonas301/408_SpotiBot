@@ -13,6 +13,7 @@
 const
   request = require('request'),
   express = require('express'),
+  path = require('path'),
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()), // creates express http server
   fs = require('fs'),
