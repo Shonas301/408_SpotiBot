@@ -227,6 +227,7 @@ function handleMessage(sender_psid, received_message) {
         var prettyString = "";
         var playlistObject = [];
         var playlistUrl = "";
+        var playlistId = "";
         getTopSongs(50, 0, "short_term").then(function (data) {
           data.map(function (song) {
             songs.push(song)
