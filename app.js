@@ -279,7 +279,7 @@ function handleMessage(sender_psid, received_message) {
     } else if (received_message.text.toLowerCase() === "happiest") {
       getHappiestSong().then(function(data) {
         getSongNameString(data).then(function(song_name) {
-          response = { "text": `Your happiest song is: "${song_name}".` }
+          response = { "text": `Your happiest song is ${song_name}.` }
           callSendAPI(sender_psid, response);
         })
       }).catch((err) => {
@@ -287,14 +287,35 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "saddest") {
-      response = { "text": `You sent command: "${received_message.text}".` }
-      callSendAPI(sender_psid, response);
+      getSaddestSong().then(function(data) {
+        getSongNameString(data).then(function(song_name) {
+          response = { "text": `Your saddest song is ${song_name}.` }
+          callSendAPI(sender_psid, response);
+        })
+      }).catch((err) => {
+        response = { "text": `Sorry there was an error: "${err}".` }
+        callSendAPI(sender_psid, response);
+      });
     } else if (received_message.text.toLowerCase() === "slowest") {
-      response = { "text": `You sent command: "${received_message.text}".` }
-      callSendAPI(sender_psid, response);
+      getSlowestSong().then(function(data) {
+        getSongNameString(data).then(function(song_name) {
+          response = { "text": `Your slowest song is ${song_name}.` }
+          callSendAPI(sender_psid, response);
+        })
+      }).catch((err) => {
+        response = { "text": `Sorry there was an error: "${err}".` }
+        callSendAPI(sender_psid, response);
+      });
     } else if (received_message.text.toLowerCase() === "fastest") {
-      response = { "text": `You sent command: "${received_message.text}".` }
-      callSendAPI(sender_psid, response);
+      getFastestSong().then(function(data) {
+        getSongNameString(data).then(function(song_name) {
+          response = { "text": `Your fastest song is ${song_name}.` }
+          callSendAPI(sender_psid, response);
+        })
+      }).catch((err) => {
+        response = { "text": `Sorry there was an error: "${err}".` }
+        callSendAPI(sender_psid, response);
+      });
     }
     /*else if (!loggedIn) {
       response = {
