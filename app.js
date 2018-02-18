@@ -219,8 +219,8 @@ function handleMessage(sender_psid, received_message) {
     }
     else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
       var 
-        res = received_message.text.split(" ");
-        term = ""
+        res = received_message.text.split(" "),
+        term = "";
       if (res[2] === "short") {
         term = "short_term"
         //response = { "text": `You sent command: "${received_message.text}".` }
