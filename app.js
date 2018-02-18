@@ -473,10 +473,9 @@ function getTopKey() {
     return new Promise((resolve, reject) => {
         getTopSongs(25,0,"short_term").then((data) => {
             var track_ids = [];
-            for (i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 track_ids.push(data[i].id)
             }
-
             var keys = [];
             spotifyApi.getAudioFeaturesForTracks(track_ids).then((res) => {
                 res.body.audio_features.map((item) => {
