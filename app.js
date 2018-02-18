@@ -272,6 +272,9 @@ function handleMessage(sender_psid, received_message) {
       getTopKey().then((key) => {
         response = { "text": `The most common musical key in your top songs is: \n ${key}` }
         callSendAPI(sender_psid, response);
+      }).catch((err) => {
+        response = { "text": `Sorry there was an error: "${err}".` }
+        callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "happiest") {
       response = { "text": `You sent command: "${received_message.text}".` }
@@ -456,7 +459,7 @@ function getTopArtists(limit, offset, time_range) {
 function getTopGenre() {
     return new Promise((resolve, reject) => {
         getTopArtists(50, 0, "long_term").then((artists) => {
-            genres = [];
+            var genres = [];
             for (var i = 0; i < artists.length; i++)
                 for (var j = 0; j < artists[i].genres.length; j++)
                     genres.push(artists[i].genres[j]);
@@ -476,7 +479,6 @@ function getTopGenre() {
                     mostFrequent = item;
                 }
             });
-
             resolve(mostFrequent);
         }).catch((err) => {
           reject(err);
