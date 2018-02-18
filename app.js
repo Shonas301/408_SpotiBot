@@ -323,7 +323,6 @@ function handleTopPlaylist(sender_psid, term) {
   //Call the API for their 50 top songs, can be changed to a variable number later
   //TODO Pagination
   //getTopSongs(50, 0, "short_term").then(function (data) {
-  for(i = 0; i < amount, i += )
   getTopSongs(50, 0, term).then(function (data) {
     //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
     //fall out of scope and lose object properties, pretty bizarre but it works
