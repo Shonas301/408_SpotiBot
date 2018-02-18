@@ -218,9 +218,13 @@ function handleMessage(sender_psid, received_message) {
       }
     }
     else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
-      var res = received_message.text.split(" ");
+      var 
+        res = received_message.text.split(" ");
+        term = ""
       if (res[2] === "short") {
+        term = "short_term"
         //response = { "text": `You sent command: "${received_message.text}".` }
+        /*
         var songs = []
         var songlist = []
         var songlistUris = []
@@ -264,19 +268,22 @@ function handleMessage(sender_psid, received_message) {
             callSendAPI(sender_psid, response)
           });
         });
+        */
 
         //response = {"text": getTopSongs(50, 0, "short_term").then(function(data) {data.toString()}); }
       }
       else if (res[2] === "long") {
+        term = "long_term"
         response = { "text": `You sent command: "${received_message.text}".` }
       } else if (res[2] === "medium") {
+        term = "medium_term"
         response = { "text": `You sent command: "${received_message.text}".` }
       } else {
         response = {
           "text": `You sent the message: "${received_message.text}".`
         }
       }
-
+      handleTopPlaylist(sender_psid)
     }
 
     else if (received_message.text.toLowerCase() === "genre") {
@@ -314,6 +321,64 @@ function handleMessage(sender_psid, received_message) {
   }*/
   // Send the response message
   callSendAPI(sender_psid, response);
+}
+
+function handleTopPlaylist(sender_psid, term) {
+  //Declare variables in score that are populated throughout the promise chaining 
+  var 
+    songs = [],
+    songlist = [],
+    songlistUris = [],
+    prettyString = "",
+    playlistObject = [],
+    playlistUrl = "",
+    playlistId = "";
+
+  //Call the API for their 50 top songs, can be changed to a variable number later
+  //TODO Pagination
+  //getTopSongs(50, 0, "short_term").then(function (data) {
+  getTopSongs(50, 0, term).then(function (data)
+    //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
+    //fall out of scope and lose object properties, pretty bizarre but it works
+    data.map(function (song) {
+      songs.push(song)
+    });
+    //TODO variable number must be changed here as well if we paginate
+    for (var i = 0; i < 50; i++) {
+      songlist.push(songs[i].name)
+      songlistUris.push(songs[i].uri)
+      prettyString = prettyString + "\t" + songs[i].name + "\n"
+    }
+  }).then(function () {
+    response = { "text": `Your top songs are:\n "${prettyString}"` }
+    callSendAPI(sender_psid, response);
+  }).then(function() {
+    var 
+      date = new Date(),
+      month = date.getMonth()+1,
+      day = date.getDate(),
+      year = date.getFullYear(),
+      dateString = month+"/"+ day + "/"+ year;
+    //Call the Promis to create the playlist needed with the title in the format:
+    //Top Tracks: XX/XX/XXXX
+    createPlaylist("Top Tracks: " + dateString).then(function (data) {
+      data.map(function(playlist) {
+        playlistObject.push(playlist)
+      });
+      console.log(playlistObject)
+      playlistUrl = playlistObject[0].external_urls.spotify
+      console.log(playlistUrl);
+      playlistId = playlistObject[0].id
+      console.log(playlistId);
+    }).then(function () {
+      //Add all the tracks in songlistUris to the playlist
+      addTracksToPlaylist(playlistId, songlistUris);
+    }).then(function() {
+      //finally send the message it's been completed
+      response = {"text": `Here's the playlist: \n ${playlistUrl}`}
+      callSendAPI(sender_psid, response)
+    });
+  });
 }
 
 function getLoginUrl(sender_psid) {
