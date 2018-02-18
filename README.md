@@ -9,12 +9,12 @@
   "genre"
 - [x] As a user, I want to be able to view the most common key of the music I listen to.
   "key"
-- [ ] As a user, I want to be able to see the happiest songs that I listen to.
+- [x] As a user, I want to be able to see the happiest songs that I listen to.
   "happiest"
-- [ ] As a user, I want to be able to see the saddest songs that I listen to.
+- [x] As a user, I want to be able to see the saddest songs that I listen to.
   "saddest"
-- [ ] As a user I want to be able to view the slowest songs that I listen to.
+- [x] As a user I want to be able to view the slowest songs that I listen to.
   "slowest"
-- [ ] As a user, I want to be able to view the fastest songs that I listen to.
+- [x] As a user, I want to be able to view the fastest songs that I listen to.
   "fastest"
 
