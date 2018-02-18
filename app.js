@@ -244,14 +244,14 @@ function handleMessage(sender_psid, received_message) {
           term = 'long_term'
           break;
         case('?'):
-          request = {
+          response = {
             'text': `Here are the options for that request: \n
                     \t top playlist short \n
                     \t top playlist medium \n
                     \t top playlist long \n 
                     (short = 4 weeks, medium = 6 months, long = ~ a few years)`
           }
-          callSendAPI(request);
+          callSendAPI(sender_psid, response);
           return;
         default:
           //Error State
