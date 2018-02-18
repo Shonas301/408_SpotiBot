@@ -222,20 +222,6 @@ function handleMessage(sender_psid, received_message) {
       var 
         res = received_message.text.split(" "),
         term = "";
-      /*
-      if (res[2] === "short") {
-        term = "short_term"
-      } else if (res[2] === "long") {
-        term = "long_term"
-        response = { "text": `You sent command: "${received_message.text}".` }
-      } else if (res[2] === "medium") {
-        term = "medium_term"
-        response = { "text": `You sent command: "${received_message.text}".` }
-      } else {
-        response = {
-          "text": `You sent the message: "${received_message.text}".`
-        }
-      }*/
       switch(res[2]) {
         case('short'):
           term = 'short_term'
@@ -253,11 +239,11 @@ function handleMessage(sender_psid, received_message) {
                     \t top playlist ? \n for a list of options or just: \n
                     \t ? \n for the entire functionality listing`
           }
-          callSendAPI(request);
+          callSendAPI(sender_psid, request);
           return;
 
       }
-      handleTopPlaylist(sender_psid)
+      handleTopPlaylist(sender_psid, term)
     }
 
     else if (received_message.text.toLowerCase() === "genre") {
