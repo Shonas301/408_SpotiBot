@@ -278,7 +278,9 @@ function handleMessage(sender_psid, received_message) {
       });
     } else if (received_message.text.toLowerCase() === "happiest") {
       getHappiestSong().then((data) => {
+        console.log("TEST" + data)
         getSongNameString(data).then(function(song_name) {
+          console.log("TEST song name " + song_name)
           response = { "text": `Your happiest song is: "${song_name}".` }
           callSendAPI(sender_psid, response);
         })
