@@ -110,7 +110,7 @@ app.get('/clientAuth', (req, res) => {
     }).then(function () {
       response = {
         "text": `
-                Type "top playlist" to begin creating a playlist or "stats" to begin generating your various listening statistics."
+                Type "top playlist ?" to begin creating a playlist or "stats" to begin generating your various listening statistics."
             `
       }
     }).then(function () {
