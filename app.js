@@ -224,14 +224,27 @@ function handleMessage(sender_psid, received_message) {
         term = "";
       switch(res[2]) {
         case('short'):
+          //4 weeks
           term = 'short_term'
           break;
         case('medium'):
+          //6 months
           term = 'medium_term'
           break;
         case('long'):
+          // a few years approx
           term = 'long_term'
           break;
+        case('?'):
+          request = {
+            'text': `Here are the options for that request: \n
+                    \t top playlist short \n
+                    \t top playlist medium \n
+                    \t top playlist long \n 
+                    (short = 4 weeks, medium = 6 months, long = ~ a few years)`
+          }
+          callSendAPI(request);
+          return;
         default:
           //Error State
           request = {
@@ -243,11 +256,13 @@ function handleMessage(sender_psid, received_message) {
           return;
 
       }
+      //successfully passed the turn in. 
       handleTopPlaylist(sender_psid, term)
     }
 
     else if (received_message.text.toLowerCase() === "genre") {
       response = { "text": `You sent command: "${received_message.text}".` }
+      callSendAPI(sender_psid, response);
     } else if (received_message.text.toLowerCase() === "key") {
       getTopKey().then((key) => {
         response = { "text": `The most common musical key in your top songs is: \n ${key}` }
@@ -255,16 +270,16 @@ function handleMessage(sender_psid, received_message) {
       });
     } else if (received_message.text.toLowerCase() === "happiest") {
       response = { "text": `You sent command: "${received_message.text}".` }
-
+      callSendAPI(sender_psid, response);
     } else if (received_message.text.toLowerCase() === "saddest") {
       response = { "text": `You sent command: "${received_message.text}".` }
-
+      callSendAPI(sender_psid, response);
     } else if (received_message.text.toLowerCase() === "slowest") {
       response = { "text": `You sent command: "${received_message.text}".` }
-
+      callSendAPI(sender_psid, response);
     } else if (received_message.text.toLowerCase() === "fastest") {
       response = { "text": `You sent command: "${received_message.text}".` }
-
+      callSendAPI(sender_psid, response);
     }
     /*else if (!loggedIn) {
       response = {
@@ -273,6 +288,7 @@ function handleMessage(sender_psid, received_message) {
     }*/
     else {
       response = { "text": `You sent the message: "${received_message.text}".` }
+      callSendAPI(sender_psid, response);
     }
     console.log('${received_message.text}')
   }
@@ -301,11 +317,13 @@ function handleTopPlaylist(sender_psid, term) {
     playlistObject = [],
     playlistUrl = "",
     playlistId = "",
-    response = "";
+    response = "",
+    offset = 0;
 
   //Call the API for their 50 top songs, can be changed to a variable number later
   //TODO Pagination
   //getTopSongs(50, 0, "short_term").then(function (data) {
+  for(i = 0; i < amount, i += )
   getTopSongs(50, 0, term).then(function (data) {
     //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
     //fall out of scope and lose object properties, pretty bizarre but it works
@@ -319,7 +337,7 @@ function handleTopPlaylist(sender_psid, term) {
       prettyString = prettyString + "\t" + songs[i].name + "\n"
     }
   }).then(function () {
-    response = { "text": `Your top songs are:\n "${prettyString}"` }
+    response = { "text": `Your top songs are:\n ${prettyString}` }
     callSendAPI(sender_psid, response);
   }).then(function() {
     var 
@@ -334,11 +352,8 @@ function handleTopPlaylist(sender_psid, term) {
       data.map(function(playlist) {
         playlistObject.push(playlist)
       });
-      console.log(playlistObject)
       playlistUrl = playlistObject[0].external_urls.spotify
-      console.log(playlistUrl);
       playlistId = playlistObject[0].id
-      console.log(playlistId);
     }).then(function () {
       //Add all the tracks in songlistUris to the playlist
       addTracksToPlaylist(playlistId, songlistUris);
