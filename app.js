@@ -256,9 +256,9 @@ function handleMessage(sender_psid, received_message) {
         default:
           //Error State
           var response = {
-            'text': `I'm sorry there's been an error! \n Type: \n
-                    top playlist ? \n for a list of options or just: \n
-                    ? \n for the entire functionality listing`
+            'text': `I'm sorry there's been an error! \nType: \n
+                    top playlist ? \nfor a list of options or just: 
+                    \n? \nfor the entire functionality listing`
           }
           callSendAPI(sender_psid, response);
           return;
