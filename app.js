@@ -588,12 +588,12 @@ function getHappiestSong() {
         var danceList = []
         var songs = data.body.items
         var happiest_song
-        for (index = 0; index < songs.length; ++index) {
+        for (var index = 0; index < songs.length; ++index) {
           songsList.push(songs[index].id)
         }
         spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
           var audio_features = data.body.audio_features
-            for (index = 0; index < songs.length; ++index) {
+            for (var index = 0; index < songs.length; ++index) {
               var temp = []
               temp.push(songsList[index])
               temp.push(audio_features[index].valence)
@@ -620,12 +620,12 @@ function getSaddestSong() {
       var danceList = []
         var songs = data.body.items
         var saddest_song
-        for (index = 0; index < songs.length; ++index) {
+        for (var index = 0; index < songs.length; ++index) {
           songsList.push(songs[index].id)
       }
       spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
         var audio_features = data.body.audio_features
-          for (index = 0; index < songs.length; ++index) {
+          for (var index = 0; index < songs.length; ++index) {
             var temp = []
             temp.push(songsList[index])
             temp.push(audio_features[index].valence)
@@ -652,12 +652,12 @@ function getFastestSong() {
       var danceList = []
         var songs = data.body.items
         var fastest_song
-        for (index = 0; index < songs.length; ++index) {
+        for (var index = 0; index < songs.length; ++index) {
           songsList.push(songs[index].id)
       }
       spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
         var audio_features = data.body.audio_features
-          for (index = 0; index < songs.length; ++index) {
+          for (var index = 0; index < songs.length; ++index) {
             var temp = []
             temp.push(songsList[index])
             temp.push(audio_features[index].energy)
@@ -684,12 +684,12 @@ function getSlowestSong() {
       var danceList = []
         var songs = data.body.items
         var slowest_song
-        for (index = 0; index < songs.length; ++index) {
+        for (var index = 0; index < songs.length; ++index) {
           songsList.push(songs[index].id)
       }
       spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
         var audio_features = data.body.audio_features
-          for (index = 0; index < songs.length; ++index) {
+          for (var index = 0; index < songs.length; ++index) {
             var temp = []
             temp.push(songsList[index])
             temp.push(audio_features[index].energy)
@@ -714,7 +714,7 @@ function getSongNameString(trackId) {
     spotifyApi.getTrack(trackId).then(function(data) {
       var artists = data.body.artists
       var artists_string = ''
-      for (index = 0; index < artists.length; ++index) {
+      for (var index = 0; index < artists.length; ++index) {
         artists_string = artists_string + data.body.artists[index].name + ' '
       }
       song_name_string = data.body.name + " by " + artists_string
