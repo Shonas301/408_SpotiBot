@@ -106,15 +106,13 @@ app.get('/clientAuth', (req, res) => {
       reject(err);
     }).then(function () {
             callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
-    }).then(function () {
-            setTimeout(console.log('sleeping'), 10000)
-    }).then(function () {
+    }).then(setTimeout(function () {
       response = {
         "text": `
                 Type "playlist" to begin creating a playlist or "stats" to begin generating your various listening statistics."
             `
       }
-    }).then(function () {
+  }, 10000)).then(function () {
       callSendAPI(sender_psid, response) // sends response explaining how to give SpotiBot arguments
     }).then(function () {
       var rep = `
