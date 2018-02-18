@@ -110,7 +110,7 @@ app.get('/clientAuth', (req, res) => {
     }).then(function () {
       response = {
         "text": `
-                Type "playlist" to begin creating a playlist or "stats" to begin generating your various listening statistics."
+                Type "top playlist" to begin creating a playlist or "stats" to begin generating your various listening statistics."
             `
       }
     }).then(function () {
@@ -210,7 +210,7 @@ app.get('/webhook', (req, res) => {
   }
 });
 function handleMessage(sender_psid, received_message) {
-  var response;
+  var response = "";
 
   // Checks if the message contains text
   if (received_message.text) {
@@ -244,7 +244,7 @@ function handleMessage(sender_psid, received_message) {
           term = 'long_term'
           break;
         case('?'):
-          response = {
+          var response = {
             'text': `Here are the options for that request: \n
                     \t top playlist short \n
                     \t top playlist medium \n
@@ -255,7 +255,7 @@ function handleMessage(sender_psid, received_message) {
           return;
         default:
           //Error State
-          response = {
+          var response = {
             'text': `I'm sorry there's been an error! \n Type: \n
                     top playlist ? \n for a list of options or just: \n
                     ? \n for the entire functionality listing`
