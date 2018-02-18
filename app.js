@@ -320,7 +320,7 @@ function handleMessage(sender_psid, received_message) {
     authToken = oAuth(recieved_message.text)
   }*/
   // Send the response message
-  callSendAPI(sender_psid, response);
+  //callSendAPI(sender_psid, response);
 }
 
 function handleTopPlaylist(sender_psid, term) {
@@ -332,7 +332,8 @@ function handleTopPlaylist(sender_psid, term) {
     prettyString = "",
     playlistObject = [],
     playlistUrl = "",
-    playlistId = "";
+    playlistId = "",
+    response = "";
 
   //Call the API for their 50 top songs, can be changed to a variable number later
   //TODO Pagination
