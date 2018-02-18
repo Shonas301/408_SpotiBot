@@ -270,7 +270,7 @@ function handleMessage(sender_psid, received_message) {
       });
     } else if (received_message.text.toLowerCase() === "key") {
       getTopKey().then((key) => {
-        response = { "text": `The most common musical key in your top songs is: \n ${key}` }
+        response = { "text": `The most common musical key in your top songs is: ${key}` }
         callSendAPI(sender_psid, response);
       }).catch((err) => {
         response = { "text": `Sorry there was an error: "${err}".` }
