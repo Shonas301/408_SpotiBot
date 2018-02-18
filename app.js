@@ -471,38 +471,40 @@ function addTracksToPlaylist(playlist_id, tracks) {
 
 // Returns a promise which contains the most common key
 function getTopKey() {
-  return new Promise((resolve, reject) => {
-    getTopTracks(25, 0, "short_term").then((data) => {
-      var keys = [];
-      var promises = data.map((track) => {
-        // return an array of promises getting an audio track keys
-        return spotifyApi.getAudioFeaturesForTrack(track.id).then((res) => {
-          keys.push(res.body.key);
-        }).catch((err) => {
-          throw err;
-        });
-      })
+    return new Promise((resolve, reject) => {
+        getTopSongs(25,0,"short_term").then((data) => {
+            var track_ids = [];
+            for (i = 0; i < data.length; i++) {
+                track_ids.push(data[i].id)
+            }
 
-      Promise.all(promises).then(() => {
-        console.log(keys);
-        // Find the most common item in the list
-        var counts = {};
-        var compare = 0;
-        var mostFrequent;
-        keys.map((item) => {
-          if (counts[item] === undefined) {
-            counts[item] = 1
-          } else {
-            counts[item] += 1
-          }
-          if (counts[item] > compare) {
-            compare = counts[item]
-            mostFrequent = item
-          }
+            var keys = [];
+            spotifyApi.getAudioFeaturesForTracks(track_ids).then((res) => {
+                res.body.audio_features.map((item) => {
+                    keys.push(item.key)
+                });
+            }).then(() => {
+                console.log(keys);
+                // Find the most common item in the list
+                var counts = {};
+                var compare = 0;
+                var mostFrequent;
+                keys.map((item) => {
+                    if (counts[item] === undefined) {
+                        counts[item] = 1
+                    } else {
+                        counts[item] += 1
+                    }
+                    if (counts[item] > compare) {
+                        compare = counts[item]
+                        mostFrequent = item
+                    }
+                });
+                console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
+                resolve(pitch_classes[mostFrequent]);
+            }).catch((err) => {
+                throw err;
+            });
         });
-        //console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
-        resolve(pitch_classes[mostFrequent]);
-      })
     });
-  });
 }
