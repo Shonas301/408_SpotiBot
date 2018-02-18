@@ -277,13 +277,10 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "happiest") {
-      getHappiestSong().then((data) => {
+      getHappiestSong().then(function(data) {
         console.log("TEST" + data)
-        getSongNameString(data).then(function(song_name) {
-          console.log("TEST song name " + song_name)
-          response = { "text": `Your happiest song is: "${song_name}".` }
+        response = { "text": `Your happiest song is: "${data}".` }
           callSendAPI(sender_psid, response);
-        })
       }).catch((err) => {
         response = { "text": `Sorry there was an error: "${err}".` }
         callSendAPI(sender_psid, response);
@@ -588,28 +585,28 @@ function getHappiestSong() {
           limit: 50
       }).then(function (data) {
         var songsList = []
-      var danceList = []
+        var danceList = []
         var songs = data.body.items
         var happiest_song
         for (index = 0; index < songs.length; ++index) {
           songsList.push(songs[index].id)
-      }
-      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
-        var audio_features = data.body.audio_features
-          for (index = 0; index < songs.length; ++index) {
-            var temp = []
-            temp.push(songsList[index])
-            temp.push(audio_features[index].valence)
-            danceList.push(temp)
         }
-        danceList.sort(function(a,b){return b[1] - a[1]});
-      }, function(err){
-          console.log(err)
-      }).then(function() {
-        return resolve(danceList[0][0])
-      })
-      }).catch(function (err) {
-          console.error(err)
+        spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+          var audio_features = data.body.audio_features
+            for (index = 0; index < songs.length; ++index) {
+              var temp = []
+              temp.push(songsList[index])
+              temp.push(audio_features[index].valence)
+              danceList.push(temp)
+          }
+          danceList.sort(function(a,b){return b[1] - a[1]});
+        }, function(err){
+            console.log(err)
+        }).then(function() {
+          resolve(danceList[0][0])
+        })
+      }).catch((err) => {
+          throw err;
       });
   });
 }
