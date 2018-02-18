@@ -247,6 +247,7 @@ function handleMessage(sender_psid, received_message) {
             data.map(function(playlist) {
               playlistObject.push(playlist)
             });
+            console.log(playlistObject)
             playlistUrl = playlistObject[0].external_urls.spotify
             console.log(playlistUrl);
             playlistId = playlistObject[0].id
@@ -437,7 +438,7 @@ function createPlaylist(playlist_name) {
       spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
         .then(function (data) {
           console.log(data)
-          return resolve(data.body);
+          return resolve([data.body]);
         }).catch(function (err) {
           return reject(err);
         });
