@@ -275,10 +275,7 @@ function handleMessage(sender_psid, received_message) {
 
     else if (received_message.text.toLowerCase() === "genre") {
       response = { "text": `You sent command: "${received_message.text}".` }
-
-
     } else if (received_message.text.toLowerCase() === "key") {
-      response = { "text": `You sent command: "${received_message.text}".` }
       getTopKey().then((key) => {
         response = { "text": `The most common musical key in your top songs is: \n ${key}` }
         callSendAPI(sender_psid, response);
