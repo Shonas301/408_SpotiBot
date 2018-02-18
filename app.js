@@ -243,7 +243,11 @@ function handleMessage(sender_psid, received_message) {
           callSendAPI(sender_psid, response);
         }).then(function() {
           var date = new Date()
-          var dateString = date.getMonth()+"/"+date.getDate()+"/"+date.getFullYear()
+          var
+            month = date.getMonth()+1,
+            day = date.getDate(),
+            year = date.getFullYear();
+          var dateString = month+"/"+day + "/"+ yer
           createPlaylist("Top Tracks: " + dateString).then(function (data) {
             data.map(function(playlist) {
               playlistObject.push(playlist)
