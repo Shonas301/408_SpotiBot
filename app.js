@@ -277,8 +277,15 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "happiest") {
-      response = { "text": `You sent command: "${received_message.text}".` }
-      callSendAPI(sender_psid, response);
+      getHappiestSong().then((data) => {
+        getSongNameString(data).then(function(song_name) {
+          response = { "text": `Your happiest song is: "${song_name}".` }
+          callSendAPI(sender_psid, response);
+        })
+      }).catch((err) => {
+        response = { "text": `Sorry there was an error: "${err}".` }
+        callSendAPI(sender_psid, response);
+      });
     } else if (received_message.text.toLowerCase() === "saddest") {
       response = { "text": `You sent command: "${received_message.text}".` }
       callSendAPI(sender_psid, response);
@@ -571,4 +578,151 @@ function getTopKey() {
             });
         });
     });
+}
+
+function getHappiestSong() {
+  return new Promise((resolve, reject) => {
+      spotifyApi.getMyTopTracks({
+          limit: 50
+      }).then(function (data) {
+        var songsList = []
+      var danceList = []
+        var songs = data.body.items
+        var happiest_song
+        for (index = 0; index < songs.length; ++index) {
+          songsList.push(songs[index].id)
+      }
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+        var audio_features = data.body.audio_features
+          for (index = 0; index < songs.length; ++index) {
+            var temp = []
+            temp.push(songsList[index])
+            temp.push(audio_features[index].valence)
+            danceList.push(temp)
+        }
+        danceList.sort(function(a,b){return b[1] - a[1]});
+      }, function(err){
+          console.log(err)
+      }).then(function() {
+        return resolve(danceList[0][0])
+      })
+      }).catch(function (err) {
+          console.error(err)
+      });
+  });
+}
+
+function getSaddestSong() {
+  return new Promise((resolve, reject) => {
+      spotifyApi.getMyTopTracks({
+          limit: 50
+      }).then(function (data) {
+        var songsList = []
+      var danceList = []
+        var songs = data.body.items
+        var saddest_song
+        for (index = 0; index < songs.length; ++index) {
+          songsList.push(songs[index].id)
+      }
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+        var audio_features = data.body.audio_features
+          for (index = 0; index < songs.length; ++index) {
+            var temp = []
+            temp.push(songsList[index])
+            temp.push(audio_features[index].valence)
+            danceList.push(temp)
+        }
+        danceList.sort(function(a,b){return a[1] - b[1]});
+      }, function(err){
+          console.log(err)
+      }).then(function() {
+        return resolve(danceList[0][0])
+      })
+      }).catch(function (err) {
+          console.error(err)
+      });
+  });
+}
+//finish
+function getFastestSong() {
+  return new Promise((resolve, reject) => {
+      spotifyApi.getMyTopTracks({
+          limit: 50
+      }).then(function (data) {
+        var songsList = []
+      var danceList = []
+        var songs = data.body.items
+        var fastest_song
+        for (index = 0; index < songs.length; ++index) {
+          songsList.push(songs[index].id)
+      }
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+        var audio_features = data.body.audio_features
+          for (index = 0; index < songs.length; ++index) {
+            var temp = []
+            temp.push(songsList[index])
+            temp.push(audio_features[index].energy)
+            danceList.push(temp)
+        }
+        danceList.sort(function(a,b){return b[1] - a[1]});
+      }, function(err){
+          console.log(err)
+      }).then(function() {
+          return resolve(danceList[0][0])
+        })
+      }).catch(function (err) {
+          console.error(err)
+      });
+  });
+}
+
+function getSlowestSong() {
+  return new Promise((resolve, reject) => {
+      spotifyApi.getMyTopTracks({
+          limit: 50
+      }).then(function (data) {
+        var songsList = []
+      var danceList = []
+        var songs = data.body.items
+        var slowest_song
+        for (index = 0; index < songs.length; ++index) {
+          songsList.push(songs[index].id)
+      }
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+        var audio_features = data.body.audio_features
+          for (index = 0; index < songs.length; ++index) {
+            var temp = []
+            temp.push(songsList[index])
+            temp.push(audio_features[index].energy)
+            danceList.push(temp)
+        }
+        danceList.sort(function(a,b){return a[1] - b[1]});
+      }, function(err){
+          console.log(err)
+      }).then(function() {
+        return resolve(danceList[0][0])
+      })
+      }).catch(function (err) {
+          console.error(err)
+      });
+  });
+}
+
+
+function getSongNameString(trackId) {
+  return new Promise((resolve, reject) => {
+    var song_name_string
+    spotifyApi.getTrack(trackId).then(function(data) {
+      var artists = data.body.artists
+      var artists_string = ''
+      for (index = 0; index < artists.length; ++index) {
+        artists_string = artists_string + data.body.artists[index].name + ' '
+      }
+      song_name_string = data.body.name + " by " + artists_string
+    }, function(err) {
+      console.log(err)
+    }).then(function() {
+      return resolve(song_name_string)
+    })
+  });
 }
