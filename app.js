@@ -239,10 +239,13 @@ function handleMessage(sender_psid, received_message) {
       switch(res[2]) {
         case('short'):
           term = 'short_term'
+          break;
         case('medium'):
           term = 'medium_term'
+          break;
         case('long'):
           term = 'long_term'
+          break;
         default:
           //Error State
           request = {
