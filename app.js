@@ -113,9 +113,7 @@ app.get('/clientAuth', (req, res) => {
             `
       }
     }).then(function () {
-          setTimeout(console.log('sleeping'), 2000)
-    }).then(function () {
-      callSendAPI(sender_psid, response) // sends response explaining how to give SpotiBot arguments
+      setTimeout(callSendAPI(sender_psid, response),2000) // sends response explaining how to give SpotiBot arguments
     }).then(function () {
       var rep = `
         <script type="text/javascript">
