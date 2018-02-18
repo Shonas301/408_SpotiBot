@@ -212,6 +212,7 @@ function handleMessage(sender_psid, received_message) {
     // TODO
     //var loggedIn = db.contains(sender_psid)
     if (received_message.text.toLowerCase() === "login") {
+      handleLoginRequest(sender_psid)
       var url = getLoginUrl(sender_psid);
       response = {
         "text": `Great! Here is a link to get you started! \n\n "${url}"`
@@ -320,7 +321,15 @@ function handleMessage(sender_psid, received_message) {
     authToken = oAuth(recieved_message.text)
   }*/
   // Send the response message
-  //callSendAPI(sender_psid, response);
+}
+
+function handleLoginRequest(sender_psid) {
+  var 
+    url = getLoginUrl(sender_psid),
+    response = {
+    "text": `Great! Here is a link to get you started \n\n ${url}`
+    };
+  callSendAPI(sender_psid, response)
 }
 
 function handleTopPlaylist(sender_psid, term) {
