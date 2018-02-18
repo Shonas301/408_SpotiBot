@@ -249,7 +249,7 @@ function handleMessage(sender_psid, received_message) {
                     \t top playlist short \n
                     \t top playlist medium \n
                     \t top playlist long \n 
-                    (short = 4 weeks, medium = 6 months, long = ~ a few years)`
+            (short = 4 weeks, medium = 6 months, long = ~ a few years)`
           }
           callSendAPI(sender_psid, response);
           return;
@@ -257,8 +257,8 @@ function handleMessage(sender_psid, received_message) {
           //Error State
           var response = {
             'text': `I'm sorry there's been an error! \nType: \n
-                    top playlist ? \nfor a list of options or just: 
-                    \n? \nfor the entire functionality listing`
+            top playlist ? \nfor a list of options or just: 
+            \n? \nfor the entire functionality listing`
           }
           callSendAPI(sender_psid, response);
           return;
