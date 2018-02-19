@@ -324,7 +324,7 @@ function handleMessage(sender_psid, received_message) {
         response = { "text": `Sorry there was an error: "${err}".` }
         callSendAPI(sender_psid, response);
       });
-    } else if (recieved_message.text.toLowerCase() === "stats") {
+    } else if (received_message.text.toLowerCase() === "stats") {
       response = {"text": `Right now you can type:
         "happiest", "saddest", "slowest", or "fastest" to get a report on your top song in that category!
         give it a try!`}
