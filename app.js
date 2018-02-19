@@ -336,7 +336,13 @@ function handleMessage(sender_psid, received_message) {
       }
     }*/
     else {
-      response = { "text": `You sent the message: "${received_message.text}".` }
+      response = { "text": `You sent a message SpotiBot doesn't recognize: "${received_message.text}" :( Try something else!` }
+      callSendAPI(sender_psid, response);
+      response = {
+        "text": `
+                Type "top playlist ?" to begin creating a playlist or "stats" to begin generating your various listening statistics."
+            `
+      }
       callSendAPI(sender_psid, response);
     }
     console.log('${received_message.text}')
