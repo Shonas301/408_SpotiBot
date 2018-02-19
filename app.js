@@ -326,7 +326,7 @@ function handleMessage(sender_psid, received_message) {
       });
     } else if (received_message.text.toLowerCase() === "stats") {
       response = {"text": `Right now you can type:
-        "happiest", "saddest", "slowest", or "fastest" to get a report on your top song in that category!
+        "genre", "key", "happiest", "saddest", "slowest", or "fastest" to get your top song or result in that category!
         give it a try!`}
       callSendAPI(sender_psid, response);
     }
