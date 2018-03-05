@@ -344,7 +344,7 @@ function handleMessage(sender_psid, received_message) {
         "text": `
                 Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
                 type "stats" to see statistics based on your listening history, \n
-                or type "byop" to begin building a playlist of your own design. \n"
+                or type "byop" to begin building a playlist of your own design. \n
             `
       }
       callSendAPI(sender_psid, response);
