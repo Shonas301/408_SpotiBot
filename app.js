@@ -31,8 +31,8 @@ const
   MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node'),
   pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'A♭', 'A', 'B♭', 'B'],
-  genreJSON = JSON.parse('model/genres.json');
-
+  genreFile = fs.readFileSync('model/genres.json'),
+  genreJSON = JSON.parse(genreFile);
 
 var clientID = fs.readFileSync('encryption/client.id', 'utf8').replace(/\s/g, '');
 var clientSecret = fs.readFileSync('encryption/client.secret', 'utf8').replace(/\s/g, '');
@@ -343,6 +343,7 @@ function handleMessage(sender_psid, received_message) {
     else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
 
     	var res = received_message.text.split(":")
+        console.log(res)
     	var input = res[0].substring(5)
       switch(input) {
         case('artist'):
