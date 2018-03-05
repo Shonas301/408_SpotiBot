@@ -344,7 +344,6 @@ function handleMessage(sender_psid, received_message) {
     	var input = res[0].substring(5)
       switch(input) {
         case('artist'):
-
         	var artists_list = res[1].split(",")
         	var artists_string = ''
         	for (var i = 0; i < artists_list.length; i++) {
@@ -354,19 +353,40 @@ function handleMessage(sender_psid, received_message) {
           callSendAPI(sender_psid, response);
           break;
         case('song'):
-        	var response = { "text": `Your input was:\n ${input}` }
+        	var songs_list = res[1].split(",")
+        	var songs_string = ''
+        	for (var i = 0; i < songs_list.length; i++) {
+        		songs_string = songs_string + songs_list[i] + ' '
+		    }
+        	var response = { "text": `Your songs are: ${songs_string}` }
+
           callSendAPI(sender_psid, response);
           break;
         case('mood'):
-        	var response = { "text": `Your input was:\n ${input}` }
-          callSendAPI(sender_psid, response);
+        	var moods_list = res[1].split(",")
+        	var moods_string = ''
+        	for (var i = 0; i < moods_list.length; i++) {
+        		moods_string = moods_string + moods_list[i] + ' '
+		    }
+        	var response = { "text": `Your moods are: ${moods_string}` }
+        	callSendAPI(sender_psid, response);
           break;
         case('genre'):
-        	var response = { "text": `Your input was:\n ${input}` }
-          callSendAPI(sender_psid, response);
+        	var genres_list = res[1].split(",")
+        	var genres_string = ''
+        	for (var i = 0; i < genres_list.length; i++) {
+        		genres_string = genres_string + genres_list[i] + ' '
+		    }
+        	var response = { "text": `Your genres are: ${genres_string}` }
+        	callSendAPI(sender_psid, response);
         	break;
         case('playlist'):
-        	var response = { "text": `Your input was:\n ${input}` }
+        	var playlists_list = res[1].split(",")
+        	var playlists_string = ''
+        	for (var i = 0; i < playlists_list.length; i++) {
+        		playlists_string = playlists_string + playlists_list[i] + ' '
+		    }
+        	var response = { "text": `Your genres are: ${playlists_string}` }
           callSendAPI(sender_psid, response);
         	break;
         case('?'):
