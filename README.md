@@ -1,16 +1,12 @@
 # SpotiBot
 
-## Sprint 1 Functionality
-- [x] As a user, I want to be able to sign into my Facebook Messenger account
-- [x] As a user, I want to be able to sign into my Spotify account, given that I have a Messenger account or Facebook account
-- [x] As a user, I want to be able to input a number of months and get a playlist of my top tracks from that time period
-  "top playlist short" "top playlist medium" "top playlist long"
-- [x] As a user, I want to be able to view what is the most common genre that I listen to.
-  "genre"
-- [x] As a user, I want to be able to view the most common key of the music I listen to.
-  "key"
-- [x] As a user, I want to be able to see the happiest songs that I listen to.
-  "happiest"
+## Sprint 2 Functionality
+- [] As a user, I want to be able to tell the bot how many songs I want in the generated playlist
+- [] As a user, I want to be able to input one or more genres into the chat after prompted and get a playlist based on those genres
+- [] As a user, I want to be able to input one or more moods into the chat after prompted and get a playlist based on those moods
+- [] As a user, I want to be able to input one or more songs into the chat after prompted and get a playlist based on those songs
+- [] As a user, I want to be able to input one or more of my playlists into the chat after prompted and get a playlist based on those playlists
+- []As a user, I want to be able to input one or more artists into the chat after prompted and get a playlist based on those artists
 - [x] As a user, I want to be able to see the saddest songs that I listen to.
   "saddest"
 - [x] As a user I want to be able to view the slowest songs that I listen to.
