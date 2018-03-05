@@ -383,16 +383,14 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
   //defaults to 50 if not a valid number
    if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
 	   	if (numSongs > 50) {
-	  		response = { "text": `The max number of songs is 50\n` }
+	  		response = { "text": `The max number of songs is 50 so here's 50 songs!\n` }
 	  		numSongs = 50; 
 	  		callSendAPI(sender_psid, response);
-
 	  	}
   	} else {
   		response = { "text": `Your input is invalid so we defaulted to 50.\n` }
       numSongs = 50; 
        callSendAPI(sender_psid, response);
-
   	}
   getTopSongs(numSongs, 0, term).then(function (data) {
     //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
