@@ -381,7 +381,7 @@ function handleMessage(sender_psid, received_message) {
             callSendAPI(sender_psid, response)
             break
           }
-          if(res.length > 1 && res[1].strip(' ') === '?') {
+          if(res.length > 1 && res[1] === ' ?') {
             var repString = "You seem confused! Here is an extensive list of all the genres you can use! \n"
             repString = repString += genreJSON.genres.join('\t\n')
             var response = {"text": repString}
