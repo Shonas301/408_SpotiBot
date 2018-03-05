@@ -344,7 +344,13 @@ function handleMessage(sender_psid, received_message) {
     	var input = res[0].substring(5)
       switch(input) {
         case('artist'):
-        	var response = { "text": `Your input was:\n ${input}` }
+
+        	var artists_list = res[1].split(",")
+        	var artists_string = ''
+        	for (var i = 0; i < artists_list.length; i++) {
+        		artists_string = artists_string + artists_list[i] + ' '
+		    }
+        	var response = { "text": `Your artists are: ${artists_string}` }
           callSendAPI(sender_psid, response);
           break;
         case('song'):
@@ -387,8 +393,6 @@ function handleMessage(sender_psid, received_message) {
       }
 
       //successfully passed the turn in. 
-    	response = {"text": `let's build a playlist!\n`}
-      	callSendAPI(sender_psid, response);
     }
     else {
       response = { "text": `You sent a message SpotiBot doesn't recognize: "${received_message.text}" :( Try something else!` }
