@@ -343,6 +343,10 @@ function handleMessage(sender_psid, received_message) {
     else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
 
     	var res = received_message.text.split(":")
+        if (res === undefined) {
+          var response {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
+          callSendAPI(sender_psid, response)
+        }
         console.log(res)
     	var input = res[0].substring(5)
       switch(input) {
