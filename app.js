@@ -343,10 +343,7 @@ function handleMessage(sender_psid, received_message) {
     else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
 
     	var res = received_message.text.split(":")
-        if (res === undefined) {
-          var response = {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
-          callSendAPI(sender_psid, response)
-        }
+        
         console.log(res)
     	var input = res[0].substring(5)
       switch(input) {
@@ -379,6 +376,10 @@ function handleMessage(sender_psid, received_message) {
         	callSendAPI(sender_psid, response);
           break;
         case('genre'):
+          if (res === undefined) {
+            var response = {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
+            callSendAPI(sender_psid, response)
+          }
           if(res.length > 2 && res[2] == '?') {
             var repString = "You seem confused! Here is an extensive list of all the genres you can use! \n"
             repString = repString += genreJSON.genres.join('\t\n')
