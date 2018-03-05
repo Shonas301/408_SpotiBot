@@ -246,9 +246,9 @@ function handleMessage(sender_psid, received_message) {
         case('?'):
           var response = {
             'text': `Here are the options for that request: \n
-                    \t top playlist short [number of songs]\n
-                    \t top playlist medium [number of songs]\n
-                    \t top playlist long [number of songs]\n 
+                    \t top playlist short [# of songs]\n
+                    \t top playlist medium [# of songs]\n
+                    \t top playlist long [# of songs]\n 
             (short = 4 weeks, medium = 6 months, long = ~ a few years)`
           }
           callSendAPI(sender_psid, response);
@@ -342,7 +342,9 @@ function handleMessage(sender_psid, received_message) {
       callSendAPI(sender_psid, response);
       response = {
         "text": `
-                Type "top playlist ?" to begin creating a playlist or "stats" to begin generating your various listening statistics."
+                Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
+                type "stats" to see statistics based on your listening history, \n
+                or type "byop" to begin building a playlist of your own design. \n"
             `
       }
       callSendAPI(sender_psid, response);
