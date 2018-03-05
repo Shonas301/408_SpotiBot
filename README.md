@@ -6,4 +6,4 @@
 - [ ] As a user, I want to be able to input one or more moods into the chat after prompted and get a playlist based on those moods
 - [ ] As a user, I want to be able to input one or more songs into the chat after prompted and get a playlist based on those songs
 - [ ] As a user, I want to be able to input one or more of my playlists into the chat after prompted and get a playlist based on those playlists
-- [ ]As a user, I want to be able to input one or more artists into the chat after prompted and get a playlist based on those artists
+- [ ] As a user, I want to be able to input one or more artists into the chat after prompted and get a playlist based on those artists
