@@ -382,8 +382,17 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
   //TODO Pagination
   //defaults to 50 if not a valid number
    if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
+
+  	} else if (numSongs > 50) {
+  		response = { "text": `The max number of songs is 50\n` }
+  		numSongs = 50; 
+  		callSendAPI(sender_psid, response);
+
   	} else {
+  		response = { "text": `Your input is invalid so we defaulted to 50.\n` }
       numSongs = 50; 
+       callSendAPI(sender_psid, response);
+
   	}
   getTopSongs(numSongs, 0, term).then(function (data) {
     //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
