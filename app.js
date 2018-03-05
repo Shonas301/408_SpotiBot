@@ -377,10 +377,11 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     response = "",
     offset = 0;
 
-  //Call the API for their 50 top songs, can be changed to a variable number later
+  //Call the API for their top songs, changed to a variable numSongs
+  //doesn't work for numbers greater than 50
   //TODO Pagination
-  //getTopSongs(50, 0, "short_term").then(function (data) {
-  	 if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
+  //defaults to 50 if not a valid number
+   if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
   	} else {
       numSongs = 50; 
   	}
