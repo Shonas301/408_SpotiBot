@@ -267,7 +267,7 @@ function handleMessage(sender_psid, received_message) {
 
       var numSongs = res[3];
       //successfully passed the turn in. 
-      handleTopPlaylist(sender_psid, term)
+      handleTopPlaylist(sender_psid, term, numSongs)
     }
 
     else if (received_message.text.toLowerCase() === "genre") {
