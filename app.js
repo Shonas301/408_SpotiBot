@@ -337,9 +337,9 @@ function handleMessage(sender_psid, received_message) {
         "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
       }
     }*/
-    else if (received_message.text.toLowerCase() === "byop") {
-    	      response = {"text": `let's build a playlist!\n`}
-      callSendAPI(sender_psid, response);
+    else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
+    	response = {"text": `let's build a playlist!\n`}
+      	callSendAPI(sender_psid, response);
     }
     else {
       response = { "text": `You sent a message SpotiBot doesn't recognize: "${received_message.text}" :( Try something else!` }
@@ -348,7 +348,7 @@ function handleMessage(sender_psid, received_message) {
         "text": `
                 Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
                 type "stats" to see statistics based on your listening history, \n
-                or type "byop" to begin building a playlist of your own design. \n
+                or type "byop ?" to begin building a playlist of your own design. \n
             `
       }
       callSendAPI(sender_psid, response);
