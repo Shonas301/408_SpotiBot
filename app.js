@@ -246,9 +246,9 @@ function handleMessage(sender_psid, received_message) {
         case('?'):
           var response = {
             'text': `Here are the options for that request: \n
-                    \t top playlist short \n
-                    \t top playlist medium \n
-                    \t top playlist long \n 
+                    \t top playlist short [number of songs]\n
+                    \t top playlist medium [number of songs]\n
+                    \t top playlist long [number of songs]\n 
             (short = 4 weeks, medium = 6 months, long = ~ a few years)`
           }
           callSendAPI(sender_psid, response);
@@ -264,6 +264,8 @@ function handleMessage(sender_psid, received_message) {
           return;
 
       }
+
+      var numSongs = res[3];
       //successfully passed the turn in. 
       handleTopPlaylist(sender_psid, term)
     }
@@ -362,7 +364,7 @@ function handleLoginRequest(sender_psid) {
   callSendAPI(sender_psid, response)
 }
 
-function handleTopPlaylist(sender_psid, term) {
+function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
   var 
     songs = [],
@@ -378,14 +380,18 @@ function handleTopPlaylist(sender_psid, term) {
   //Call the API for their 50 top songs, can be changed to a variable number later
   //TODO Pagination
   //getTopSongs(50, 0, "short_term").then(function (data) {
-  getTopSongs(50, 0, term).then(function (data) {
+  	 if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
+  	} else {
+      numSongs = 50; 
+  	}
+  getTopSongs(numSongs, 0, term).then(function (data) {
     //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
     //fall out of scope and lose object properties, pretty bizarre but it works
     data.map(function (song) {
       songs.push(song)
     });
     //TODO variable number must be changed here as well if we paginate
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < numSongs; i++) {
       songlist.push(songs[i].name)
       songlistUris.push(songs[i].uri)
       prettyString = prettyString + "\t" + songs[i].name + "\n"
