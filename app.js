@@ -30,7 +30,9 @@ const
   dbDriver = require('./mongodriver.js'),
   MongoClient = require('mongodb').MongoClient,
   SpotifyWebApi = require('spotify-web-api-node'),
-  pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'A♭', 'A', 'B♭', 'B'];
+  pitch_classes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'A♭', 'A', 'B♭', 'B'],
+  genreJSON = JSON.parse('model/genres.json');
+
 
 var clientID = fs.readFileSync('encryption/client.id', 'utf8').replace(/\s/g, '');
 var clientSecret = fs.readFileSync('encryption/client.secret', 'utf8').replace(/\s/g, '');
@@ -372,6 +374,13 @@ function handleMessage(sender_psid, received_message) {
         	callSendAPI(sender_psid, response);
           break;
         case('genre'):
+          if(res.length > 2 && res[2] == '?') {
+            var repString = "You seem confused! Here is an extensive list of all the genres you can use! \n"
+            repString = repString += genreJSON.genres.join('\t\n')
+            var response = {"text": repString}
+            callSendAPI(sender_psid, response)
+            break;
+          }
         	var genres_list = res[1].split(",")
         	var genres_string = ''
         	for (var i = 0; i < genres_list.length; i++) {
