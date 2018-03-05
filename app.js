@@ -110,10 +110,11 @@ app.get('/clientAuth', (req, res) => {
     }).then(function () {
       response = {
         "text": `
-                Type "top playlist ?" to begin creating a playlist or "stats" to begin generating your various listening statistics."
+                Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
+                type "stats" to see statistics based on your listening history, \n
+                or type "byop ?" to begin building a playlist of your own design. \n
             `
-      }
-    }).then(function () {
+      }    }).then(function () {
       setTimeout(function () {callSendAPI(sender_psid, response);},500) // sends response explaining how to give SpotiBot arguments
     }).then(function () {
       var rep = `
