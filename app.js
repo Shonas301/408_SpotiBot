@@ -338,6 +338,53 @@ function handleMessage(sender_psid, received_message) {
       }
     }*/
     else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
+
+    	var res = received_message.text.split(":")
+    	var input = res[0].substring(5)
+      switch(input) {
+        case('artist'):
+        	var response = { "text": `Your input was:\n ${input}` }
+          callSendAPI(sender_psid, response);
+          break;
+        case('song'):
+        	var response = { "text": `Your input was:\n ${input}` }
+          callSendAPI(sender_psid, response);
+          break;
+        case('mood'):
+        	var response = { "text": `Your input was:\n ${input}` }
+          callSendAPI(sender_psid, response);
+          break;
+        case('genre'):
+        	var response = { "text": `Your input was:\n ${input}` }
+          callSendAPI(sender_psid, response);
+        	break;
+        case('playlist'):
+        	var response = { "text": `Your input was:\n ${input}` }
+          callSendAPI(sender_psid, response);
+        	break;
+        case('?'):
+          var response = {
+            'text': `Here are the options for that request: \n
+                    \t top playlist short [# of songs]\n
+                    \t top playlist medium [# of songs]\n
+                    \t top playlist long [# of songs]\n 
+            (short = 4 weeks, medium = 6 months, long = ~ a few years)`
+          }
+          callSendAPI(sender_psid, response);
+          return;
+        default:
+          //Error State
+          var response = {
+            'text': `I'm sorry there's been an error! \nType: \n
+            byop ? \nfor a list of options or just: 
+            \n? \nfor the entire functionality listing`
+          }
+          callSendAPI(sender_psid, response);
+          return;
+
+      }
+
+      //successfully passed the turn in. 
     	response = {"text": `let's build a playlist!\n`}
       	callSendAPI(sender_psid, response);
     }
