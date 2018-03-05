@@ -337,6 +337,10 @@ function handleMessage(sender_psid, received_message) {
         "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
       }
     }*/
+    else if (received_message.text.toLowerCase() === "byop") {
+    	      response = {"text": `let's build a playlist!\n`}
+      callSendAPI(sender_psid, response);
+    }
     else {
       response = { "text": `You sent a message SpotiBot doesn't recognize: "${received_message.text}" :( Try something else!` }
       callSendAPI(sender_psid, response);
