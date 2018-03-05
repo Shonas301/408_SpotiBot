@@ -392,11 +392,11 @@ function handleMessage(sender_psid, received_message) {
         case('?'):
           var response = {
             'text': `Here are the options for that request: \n
-                    \t byop artist: [comma separated list of artist names]\n
-                    \t byop song: [comma separated list of song names]\n
-                    \t byop mood: [comma separated list of moods]\n 
-                    \t byop genre: [comma separated list of genres]\n 
-                    \t byop playlist: [comma separated list of playlist names]\n`
+                    \t byop artist: [comma separated list of artist names, example: Lady Gaga, Khalid, Lauv]\n
+                    \t byop song: [comma separated list of song names, example: Just Dance - Lady Gaga, Strange Love - Halsey]\n
+                    \t byop mood: [comma separated list of moods, example: focus, sleep, chill]\n 
+                    \t byop genre: [comma separated list of genres, example: pop, rock]\n 
+                    \t byop playlist: [comma separated list of playlist names, example: lit, sad]\n`
           }
           callSendAPI(sender_psid, response);
           return;
