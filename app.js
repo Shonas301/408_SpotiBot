@@ -11,7 +11,7 @@
 
 // Imports dependencies and set up http server
 const
-  request = require('request'),
+request = require('request'),
   express = require('express'),
   path = require('path'),
   body_parser = require('body-parser'),
@@ -108,32 +108,32 @@ app.get('/clientAuth', (req, res) => {
       console.log('Something went wrong!', err);
       reject(err);
     }).then(function () {
-            callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
+      callSendAPI(sender_psid, response) // sends response text "Great! Thanks ..."
     }).then(function () {
       response = {
         "text": `
-                Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
-                type "stats" to see statistics based on your listening history, \n
-                or type "byop ?" to begin building a playlist of your own design. \n
-            `
+        Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
+        type "stats" to see statistics based on your listening history, \n
+        or type "byop ?" to begin building a playlist of your own design. \n
+        `
       }    }).then(function () {
-      setTimeout(function () {callSendAPI(sender_psid, response);},500) // sends response explaining how to give SpotiBot arguments
-    }).then(function () {
-      var rep = `
-        <script type="text/javascript">
-        if (window.addEventListener) { // Mozilla, Netscape, Firefox
-          window.addEventListener('load', WindowLoad, false);
-        } else if (window.attachEvent) { // IE
-          window.attachEvent('onload', WindowLoad);
+        setTimeout(function () {callSendAPI(sender_psid, response);},500) // sends response explaining how to give SpotiBot arguments
+      }).then(function () {
+        var rep = `
+          <script type="text/javascript">
+          if (window.addEventListener) { // Mozilla, Netscape, Firefox
+            window.addEventListener('load', WindowLoad, false);
+          } else if (window.attachEvent) { // IE
+            window.attachEvent('onload', WindowLoad);
+          }
+
+        function WindowLoad(event) {
+          window.close()
         }
+          </script>`
 
-      function WindowLoad(event) {
-        window.close()
-      }
-        </script>`
-
-      res.send(rep);
-    });
+        res.send(rep);
+      });
 });
 
 app.post('/', (req, res) => {
@@ -144,8 +144,8 @@ app.post('/', (req, res) => {
 
 // Gets the privacy statement
 app.get('/privacy', (req, res) => {
-    console.log(req);
-    res.sendFile(path.join(__dirname + '/privacy.html'));
+  console.log(req);
+  res.sendFile(path.join(__dirname + '/privacy.html'));
 });
 
 // Accepts POST requests at /webhook endpoint
@@ -231,7 +231,7 @@ function handleMessage(sender_psid, received_message) {
     }
     else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
       var 
-        res = received_message.text.split(" "),
+      res = received_message.text.split(" "),
         term = "";
       switch(res[2]) {
         case('short'):
@@ -249,9 +249,9 @@ function handleMessage(sender_psid, received_message) {
         case('?'):
           var response = {
             'text': `Here are the options for that request: \n
-                    \t top playlist short [# of songs]\n
-                    \t top playlist medium [# of songs]\n
-                    \t top playlist long [# of songs]\n 
+            \t top playlist short [# of songs]\n
+            \t top playlist medium [# of songs]\n
+            \t top playlist long [# of songs]\n 
             (short = 4 weeks, medium = 6 months, long = ~ a few years)`
           }
           callSendAPI(sender_psid, response);
@@ -342,38 +342,38 @@ function handleMessage(sender_psid, received_message) {
     }*/
     else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
 
-    	var res = received_message.text.split(":")
-        
-        console.log(res)
-    	var input = res[0].substring(5)
+      var res = received_message.text.split(":")
+
+      console.log(res)
+      var input = res[0].substring(5)
       switch(input) {
         case('artist'):
-        	var artists_list = res[1].split(",")
-        	var artists_string = ''
-        	for (var i = 0; i < artists_list.length; i++) {
-        		artists_string = artists_string + artists_list[i] + ' '
-		    }
-        	var response = { "text": `Your artists are: ${artists_string}` }
+          var artists_list = res[1].split(",")
+          var artists_string = ''
+          for (var i = 0; i < artists_list.length; i++) {
+            artists_string = artists_string + artists_list[i] + ' '
+          }
+          var response = { "text": `Your artists are: ${artists_string}` }
           callSendAPI(sender_psid, response);
           break;
         case('song'):
-        	var songs_list = res[1].split(",")
-        	var songs_string = ''
-        	for (var i = 0; i < songs_list.length; i++) {
-        		songs_string = songs_string + songs_list[i] + ' '
-		    }
-        	var response = { "text": `Your songs are: ${songs_string}` }
+          var songs_list = res[1].split(",")
+          var songs_string = ''
+          for (var i = 0; i < songs_list.length; i++) {
+            songs_string = songs_string + songs_list[i] + ' '
+          }
+          var response = { "text": `Your songs are: ${songs_string}` }
 
           callSendAPI(sender_psid, response);
           break;
         case('mood'):
-        	var moods_list = res[1].split(",")
-        	var moods_string = ''
-        	for (var i = 0; i < moods_list.length; i++) {
-        		moods_string = moods_string + moods_list[i] + ' '
-		    }
-        	var response = { "text": `Your moods are: ${moods_string}` }
-        	callSendAPI(sender_psid, response);
+          var moods_list = res[1].split(",")
+          var moods_string = ''
+          for (var i = 0; i < moods_list.length; i++) {
+            moods_string = moods_string + moods_list[i] + ' '
+          }
+          var response = { "text": `Your moods are: ${moods_string}` }
+          callSendAPI(sender_psid, response);
           break;
         case('genre'):
           if (res[1] === undefined) {
@@ -381,38 +381,38 @@ function handleMessage(sender_psid, received_message) {
             callSendAPI(sender_psid, response)
             break
           }
-          if(res.length > 1 && res[2] === '?') {
+          if(res.length > 1 && res[2].strip(' ') === '?') {
             var repString = "You seem confused! Here is an extensive list of all the genres you can use! \n"
             repString = repString += genreJSON.genres.join('\t\n')
             var response = {"text": repString}
             callSendAPI(sender_psid, response)
             break;
           }
-        	var genres_list = res[1].split(",")
-        	var genres_string = ''
-        	for (var i = 0; i < genres_list.length; i++) {
-        		genres_string = genres_string + genres_list[i] + ' '
-		    }
-        	var response = { "text": `Your genres are: ${genres_string}` }
-        	callSendAPI(sender_psid, response);
-        	break;
-        case('playlist'):
-        	var playlists_list = res[1].split(",")
-        	var playlists_string = ''
-        	for (var i = 0; i < playlists_list.length; i++) {
-        		playlists_string = playlists_string + playlists_list[i] + ' '
-		    }
-        	var response = { "text": `Your genres are: ${playlists_string}` }
+          var genres_list = res[1].split(",")
+          var genres_string = ''
+          for (var i = 0; i < genres_list.length; i++) {
+            genres_string = genres_string + genres_list[i] + ' '
+          }
+          var response = { "text": `Your genres are: ${genres_string}` }
           callSendAPI(sender_psid, response);
-        	break;
+          break;
+        case('playlist'):
+          var playlists_list = res[1].split(",")
+          var playlists_string = ''
+          for (var i = 0; i < playlists_list.length; i++) {
+            playlists_string = playlists_string + playlists_list[i] + ' '
+          }
+          var response = { "text": `Your genres are: ${playlists_string}` }
+          callSendAPI(sender_psid, response);
+          break;
         case('?'):
           var response = {
             'text': `Here are the options for that request: \n
-                    \t byop artist: [comma separated list of artist names, example: Lady Gaga, Khalid, Lauv]\n
-                    \t byop song: [comma separated list of song names, example: Just Dance - Lady Gaga, Strange Love - Halsey]\n
-                    \t byop mood: [comma separated list of moods, example: focus, sleep, chill]\n 
-                    \t byop genre: [comma separated list of genres, example: pop, rock]\n 
-                    \t byop playlist: [comma separated list of playlist names, example: lit, sad]\n`
+            \t byop artist: [comma separated list of artist names, example: Lady Gaga, Khalid, Lauv]\n
+            \t byop song: [comma separated list of song names, example: Just Dance - Lady Gaga, Strange Love - Halsey]\n
+            \t byop mood: [comma separated list of moods, example: focus, sleep, chill]\n 
+            \t byop genre: [comma separated list of genres, example: pop, rock]\n 
+            \t byop playlist: [comma separated list of playlist names, example: lit, sad]\n`
           }
           callSendAPI(sender_psid, response);
           return;
@@ -435,10 +435,10 @@ function handleMessage(sender_psid, received_message) {
       callSendAPI(sender_psid, response);
       response = {
         "text": `
-                Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
-                type "stats" to see statistics based on your listening history, \n
-                or type "byop ?" to begin building a playlist of your own design. \n
-            `
+        Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
+        type "stats" to see statistics based on your listening history, \n
+        or type "byop ?" to begin building a playlist of your own design. \n
+        `
       }
       callSendAPI(sender_psid, response);
     }
@@ -452,9 +452,9 @@ function handleMessage(sender_psid, received_message) {
 
 function handleLoginRequest(sender_psid) {
   var 
-    url = getLoginUrl(sender_psid),
+  url = getLoginUrl(sender_psid),
     response = {
-    "text": `Great! Here is a link to get you started \n\n ${url}`
+      "text": `Great! Here is a link to get you started \n\n ${url}`
     };
   callSendAPI(sender_psid, response)
 }
@@ -462,7 +462,7 @@ function handleLoginRequest(sender_psid) {
 function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
   var 
-    songs = [],
+  songs = [],
     songlist = [],
     songlistUris = [],
     prettyString = "",
@@ -476,17 +476,17 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
   //doesn't work for numbers greater than 50
   //TODO Pagination
   //defaults to 50 if not a valid number
-   if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
-	   	if (numSongs > 50) {
-	  		response = { "text": `The max number of songs is 50 so here's 50 songs!\n` }
-	  		numSongs = 50; 
-	  		callSendAPI(sender_psid, response);
-	  	}
-  	} else {
-  		response = { "text": `Your input is invalid so we defaulted to 50.\n` }
+  if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
+    if (numSongs > 50) {
+      response = { "text": `The max number of songs is 50 so here's 50 songs!\n` }
       numSongs = 50; 
-       callSendAPI(sender_psid, response);
-  	}
+      callSendAPI(sender_psid, response);
+    }
+  } else {
+    response = { "text": `Your input is invalid so we defaulted to 50.\n` }
+    numSongs = 50; 
+    callSendAPI(sender_psid, response);
+  }
   getTopSongs(numSongs, 0, term).then(function (data) {
     //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
     //fall out of scope and lose object properties, pretty bizarre but it works
@@ -504,7 +504,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     callSendAPI(sender_psid, response);
   }).then(function() {
     var 
-      date = new Date(),
+    date = new Date(),
       month = date.getMonth()+1,
       day = date.getDate(),
       year = date.getFullYear(),
@@ -611,35 +611,35 @@ function getTopArtists(limit, offset, time_range) {
 
 /* !! PROBLEM !!  There is no 'genre' attribute in most track or album objects
  * The only reliable place to get a genre is to check an artist's list of genres
-*/
+ */
 function getTopGenre() {
-    return new Promise((resolve, reject) => {
-        getTopArtists(50, 0, "long_term").then((artists) => {
-            var genres = [];
-            for (var i = 0; i < artists.length; i++)
-                for (var j = 0; j < artists[i].genres.length; j++)
-                    genres.push(artists[i].genres[j]);
+  return new Promise((resolve, reject) => {
+    getTopArtists(50, 0, "long_term").then((artists) => {
+      var genres = [];
+      for (var i = 0; i < artists.length; i++)
+        for (var j = 0; j < artists[i].genres.length; j++)
+          genres.push(artists[i].genres[j]);
 
-            // Find the most common item in the list
-            var counts = {};
-            var compare = 0;
-            var mostFrequent;
-            genres.map((item) => {
-                if (counts[item] === undefined) {
-                    counts[item] = 1;
-                } else {
-                    counts[item] += 1;
-                }
-                if (counts[item] > compare) {
-                    compare = counts[item];
-                    mostFrequent = item;
-                }
-            });
-            resolve(mostFrequent);
-        }).catch((err) => {
-          reject(err);
-        })
-    });
+      // Find the most common item in the list
+      var counts = {};
+      var compare = 0;
+      var mostFrequent;
+      genres.map((item) => {
+        if (counts[item] === undefined) {
+          counts[item] = 1;
+        } else {
+          counts[item] += 1;
+        }
+        if (counts[item] > compare) {
+          compare = counts[item];
+          mostFrequent = item;
+        }
+      });
+      resolve(mostFrequent);
+    }).catch((err) => {
+      reject(err);
+    })
+  });
 }
 
 // Returns a promise containing the link to the users playlist
@@ -692,168 +692,168 @@ function addTracksToPlaylist(playlist_id, tracks) {
 
 // Returns a promise which contains the most common key
 function getTopKey() {
-    return new Promise((resolve, reject) => {
-        getTopSongs(25,0,"short_term").then((data) => {
-            var track_ids = [];
-            for (var i = 0; i < data.length; i++) {
-                track_ids.push(data[i].id)
-            }
-            var keys = [];
-            spotifyApi.getAudioFeaturesForTracks(track_ids).then((res) => {
-                res.body.audio_features.map((item) => {
-                    keys.push(item.key)
-                });
-            }).then(() => {
-                console.log(keys);
-                // Find the most common item in the list
-                var counts = {};
-                var compare = 0;
-                var mostFrequent;
-                keys.map((item) => {
-                    if (counts[item] === undefined) {
-                        counts[item] = 1
-                    } else {
-                        counts[item] += 1
-                    }
-                    if (counts[item] > compare) {
-                        compare = counts[item]
-                        mostFrequent = item
-                    }
-                });
-                console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
-                resolve(pitch_classes[mostFrequent]);
-            }).catch((err) => {
-                throw err;
-            });
+  return new Promise((resolve, reject) => {
+    getTopSongs(25,0,"short_term").then((data) => {
+      var track_ids = [];
+      for (var i = 0; i < data.length; i++) {
+        track_ids.push(data[i].id)
+      }
+      var keys = [];
+      spotifyApi.getAudioFeaturesForTracks(track_ids).then((res) => {
+        res.body.audio_features.map((item) => {
+          keys.push(item.key)
         });
+      }).then(() => {
+        console.log(keys);
+        // Find the most common item in the list
+        var counts = {};
+        var compare = 0;
+        var mostFrequent;
+        keys.map((item) => {
+          if (counts[item] === undefined) {
+            counts[item] = 1
+          } else {
+            counts[item] += 1
+          }
+          if (counts[item] > compare) {
+            compare = counts[item]
+            mostFrequent = item
+          }
+        });
+        console.log("Most Common Key is %s", pitch_classes[mostFrequent]);
+        resolve(pitch_classes[mostFrequent]);
+      }).catch((err) => {
+        throw err;
+      });
     });
+  });
 }
 
 function getHappiestSong() {
   return new Promise((resolve, reject) => {
-      spotifyApi.getMyTopTracks({
-          limit: 50
-      }).then(function (data) {
-        var songsList = []
-        var danceList = []
-        var songs = data.body.items
-        var happiest_song
+    spotifyApi.getMyTopTracks({
+      limit: 50
+    }).then(function (data) {
+      var songsList = []
+      var danceList = []
+      var songs = data.body.items
+      var happiest_song
+      for (var index = 0; index < songs.length; ++index) {
+        songsList.push(songs[index].id)
+      }
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+        var audio_features = data.body.audio_features
         for (var index = 0; index < songs.length; ++index) {
-          songsList.push(songs[index].id)
+          var temp = []
+          temp.push(songsList[index])
+          temp.push(audio_features[index].valence)
+          danceList.push(temp)
         }
-        spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
-          var audio_features = data.body.audio_features
-            for (var index = 0; index < songs.length; ++index) {
-              var temp = []
-              temp.push(songsList[index])
-              temp.push(audio_features[index].valence)
-              danceList.push(temp)
-          }
-          danceList.sort(function(a,b){return b[1] - a[1]});
-        }, function(err){
-            console.log(err)
-        }).then(function() {
-          resolve(danceList[0][0])
-        })
-      }).catch((err) => {
-          throw err;
-      });
+        danceList.sort(function(a,b){return b[1] - a[1]});
+      }, function(err){
+        console.log(err)
+      }).then(function() {
+        resolve(danceList[0][0])
+      })
+    }).catch((err) => {
+      throw err;
+    });
   });
 }
 
 function getSaddestSong() {
   return new Promise((resolve, reject) => {
-      spotifyApi.getMyTopTracks({
-          limit: 50
-      }).then(function (data) {
-        var songsList = []
+    spotifyApi.getMyTopTracks({
+      limit: 50
+    }).then(function (data) {
+      var songsList = []
       var danceList = []
-        var songs = data.body.items
-        var saddest_song
-        for (var index = 0; index < songs.length; ++index) {
-          songsList.push(songs[index].id)
+      var songs = data.body.items
+      var saddest_song
+      for (var index = 0; index < songs.length; ++index) {
+        songsList.push(songs[index].id)
       }
       spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
         var audio_features = data.body.audio_features
-          for (var index = 0; index < songs.length; ++index) {
-            var temp = []
-            temp.push(songsList[index])
-            temp.push(audio_features[index].valence)
-            danceList.push(temp)
+        for (var index = 0; index < songs.length; ++index) {
+          var temp = []
+          temp.push(songsList[index])
+          temp.push(audio_features[index].valence)
+          danceList.push(temp)
         }
         danceList.sort(function(a,b){return a[1] - b[1]});
       }, function(err){
-          console.log(err)
+        console.log(err)
       }).then(function() {
         return resolve(danceList[0][0])
       })
-      }).catch(function (err) {
-          console.error(err)
-      });
+    }).catch(function (err) {
+      console.error(err)
+    });
   });
 }
 //finish
 function getFastestSong() {
   return new Promise((resolve, reject) => {
-      spotifyApi.getMyTopTracks({
-          limit: 50
-      }).then(function (data) {
-        var songsList = []
+    spotifyApi.getMyTopTracks({
+      limit: 50
+    }).then(function (data) {
+      var songsList = []
       var danceList = []
-        var songs = data.body.items
-        var fastest_song
-        for (var index = 0; index < songs.length; ++index) {
-          songsList.push(songs[index].id)
+      var songs = data.body.items
+      var fastest_song
+      for (var index = 0; index < songs.length; ++index) {
+        songsList.push(songs[index].id)
       }
       spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
         var audio_features = data.body.audio_features
-          for (var index = 0; index < songs.length; ++index) {
-            var temp = []
-            temp.push(songsList[index])
-            temp.push(audio_features[index].energy)
-            danceList.push(temp)
+        for (var index = 0; index < songs.length; ++index) {
+          var temp = []
+          temp.push(songsList[index])
+          temp.push(audio_features[index].energy)
+          danceList.push(temp)
         }
         danceList.sort(function(a,b){return b[1] - a[1]});
       }, function(err){
-          console.log(err)
+        console.log(err)
       }).then(function() {
-          return resolve(danceList[0][0])
-        })
-      }).catch(function (err) {
-          console.error(err)
-      });
+        return resolve(danceList[0][0])
+      })
+    }).catch(function (err) {
+      console.error(err)
+    });
   });
 }
 
 function getSlowestSong() {
   return new Promise((resolve, reject) => {
-      spotifyApi.getMyTopTracks({
-          limit: 50
-      }).then(function (data) {
-        var songsList = []
+    spotifyApi.getMyTopTracks({
+      limit: 50
+    }).then(function (data) {
+      var songsList = []
       var danceList = []
-        var songs = data.body.items
-        var slowest_song
-        for (var index = 0; index < songs.length; ++index) {
-          songsList.push(songs[index].id)
+      var songs = data.body.items
+      var slowest_song
+      for (var index = 0; index < songs.length; ++index) {
+        songsList.push(songs[index].id)
       }
       spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
         var audio_features = data.body.audio_features
-          for (var index = 0; index < songs.length; ++index) {
-            var temp = []
-            temp.push(songsList[index])
-            temp.push(audio_features[index].energy)
-            danceList.push(temp)
+        for (var index = 0; index < songs.length; ++index) {
+          var temp = []
+          temp.push(songsList[index])
+          temp.push(audio_features[index].energy)
+          danceList.push(temp)
         }
         danceList.sort(function(a,b){return a[1] - b[1]});
       }, function(err){
-          console.log(err)
+        console.log(err)
       }).then(function() {
         return resolve(danceList[0][0])
       })
-      }).catch(function (err) {
-          console.error(err)
-      });
+    }).catch(function (err) {
+      console.error(err)
+    });
   });
 }
 
