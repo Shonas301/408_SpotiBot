@@ -344,7 +344,7 @@ function handleMessage(sender_psid, received_message) {
 
     	var res = received_message.text.split(":")
         if (res === undefined) {
-          var response {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
+          var response = {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
           callSendAPI(sender_psid, response)
         }
         console.log(res)
