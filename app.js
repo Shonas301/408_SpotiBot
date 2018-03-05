@@ -379,6 +379,7 @@ function handleMessage(sender_psid, received_message) {
           if (res[1] === undefined) {
             var response = {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
             callSendAPI(sender_psid, response)
+            break
           }
           if(res.length > 2 && res[2] == '?') {
             var repString = "You seem confused! Here is an extensive list of all the genres you can use! \n"
