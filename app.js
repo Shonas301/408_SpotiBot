@@ -366,10 +366,11 @@ function handleMessage(sender_psid, received_message) {
         case('?'):
           var response = {
             'text': `Here are the options for that request: \n
-                    \t top playlist short [# of songs]\n
-                    \t top playlist medium [# of songs]\n
-                    \t top playlist long [# of songs]\n 
-            (short = 4 weeks, medium = 6 months, long = ~ a few years)`
+                    \t byop artist: [comma separated list of artist names]\n
+                    \t byop song: [comma separated list of song names]\n
+                    \t byop mood: [comma separated list of moods]\n 
+                    \t byop genre: [comma separated list of genres]\n 
+                    \t byop playlist: [comma separated list of playlist names]\n`
           }
           callSendAPI(sender_psid, response);
           return;
