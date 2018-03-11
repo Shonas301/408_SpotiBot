@@ -377,10 +377,11 @@ function handleMessage(sender_psid, received_message) {
               msg = msg + 'name: ' + res[i].name + '  ' + res[i].link + '\n';
             }
             callSendAPI(sender_psid, msg);
+            break;
           }).catch((err) => {
             callSendAPI(sender_psid, "Sorry something went wrong. Ooopppsie");
+            break;
           });
-          break;
         case('genre'):
           if (res[1] === undefined) {
             var response = {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
