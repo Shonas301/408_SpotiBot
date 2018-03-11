@@ -373,7 +373,13 @@ function handleMessage(sender_psid, received_message) {
             moods_string = moods_string + moods_list[i] + ' '
           }
           var response = { "text": `Your moods are: ${moods_string}` }
-          callSendAPI(sender_psid, response);
+          createPlaylistForCategory(moods_list, 3).then(res => {
+            var msg = 'Here are some of your playlists\n';
+            for (var i = 0; i < moods_list.length * 3; i++) {
+              msg = msg + 'name: ' + res[i].name + '  ' + res[i].link
+            }
+            callSendAPI(sender_psid, response);
+          })
           break;
         case('genre'):
           if (res[1] === undefined) {
@@ -874,4 +880,17 @@ function getSongNameString(trackId) {
       return resolve(song_name_string)
     })
   });
+}
+// Creates playlists for categories. Creates @param count different playlists for each category
+function createPlaylistForCategory(categories, count) {
+    return Promise.all(categories.map(function (category) {
+        return new Promise((resolve, reject) => {
+            spotifyApi.getPlaylistsForCategory(category).then((res) => {
+                var playlists = [];
+                for (var i = 0; i < count; i++)
+                    playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
+                resolve(playlists);
+            });
+        })
+    }))
 }
