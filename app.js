@@ -374,6 +374,7 @@ function handleMessage(sender_psid, received_message) {
           }
           var response = { "text": `Your moods are: ${moods_string}` }
           createPlaylistForCategory(moods_list, 3).then((res) => {
+            console.log(res)
             var msg = 'Here are some of your playlists\n';
             for (var i = 0; i < moods_list.length * 3; i++) {
               msg = msg + 'name: ' + res[i].name + '  ' + res[i].link + '\n';
@@ -890,6 +891,8 @@ function createPlaylistForCategory(categories, count) {
                 for (var i = 0; i < count; i++)
                     playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
                 resolve(playlists);
+            }).catch(err => {
+              reject(err);
             });
         })
     }))
