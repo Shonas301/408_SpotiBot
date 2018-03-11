@@ -366,7 +366,10 @@ function handleMessage(sender_psid, received_message) {
           for (var i = 0; i < result.length; i++) {
             msg = msg + 'name: ' + result[i].name + '  ' + result[i].link + '\n';
           }
-          callSendAPI(sender_psid, msg);
+          var response = {
+            'text': msg
+          };
+          callSendAPI(sender_psid, response);
         }).catch((err) => {
           console.log(err)
           var response = {
