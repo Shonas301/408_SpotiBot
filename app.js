@@ -374,6 +374,7 @@ function handleMessage(sender_psid, received_message) {
           }
           var response = { "text": `Your moods are: ${moods_string}` }
           moods_list.splice(1, 1); // remove the first element
+          console.log(moods_list)
           createPlaylistForCategory(moods_list, 3).then((res) => {
             console.log(res)
             var msg = 'Here are some of your playlists\n';
