@@ -368,21 +368,16 @@ function handleMessage(sender_psid, received_message) {
           break;
         case('mood'):
           var moods_list = res[1].split(",")
-          var moods_string = ''
-          for (var i = 0; i < moods_list.length; i++) {
-            moods_string = moods_string + moods_list[i] + ' '
-          }
-          var response = { "text": `Your moods are: ${moods_string}` }
           moods_list.splice(1, 1); // remove the first element
+          //var response = { "text": `Your moods are: ${moods_string}` }
           console.log(moods_list)
-          createPlaylistForCategory(moods_list, 3).then((res) => {
-            console.log(res)
-            var msg = 'Here are some of your playlists\n';
-            for (var i = 0; i < moods_list.length * 3; i++) {
+          createPlaylistForCategory(moods_list, 5).then((res) => {
+            var msg = 'Here are some playlists\n';
+            for (var i = 0; i < res.length; i++) {
               msg = msg + 'name: ' + res[i].name + '  ' + res[i].link + '\n';
             }
             callSendAPI(sender_psid, msg);
-          }).catch(err => {
+          }).catch((err) => {
             callSendAPI(sender_psid, "Sorry something went wrong. Ooopppsie");
           });
           break;
@@ -893,7 +888,7 @@ function createPlaylistForCategory(categories, count) {
             spotifyApi.getPlaylistsForCategory(category).then((res) => {
                 var playlists = [];
                 for (var i = 0; i < count; i++)
-                    playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
+                    playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name });
                 resolve(playlists);
             }).catch(err => {
               reject(err);
