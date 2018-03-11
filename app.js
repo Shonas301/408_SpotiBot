@@ -355,10 +355,10 @@ function handleMessage(sender_psid, received_message) {
         var moods_list = res[1].split(",")
         moods_list.splice(1, 1); // remove the first element
         console.log(moods_list)
-        createPlaylistForCategory(moods_list, 5).then((res) => {
+        createPlaylistForCategory(moods_list, 5).then((result) => {
           var msg = 'Here are some playlists\n';
-          for (var i = 0; i < res.length; i++) {
-            msg = msg + 'name: ' + res[i].name + '  ' + res[i].link + '\n';
+          for (var i = 0; i < result.length; i++) {
+            msg = msg + 'name: ' + result[i].name + '  ' + result[i].link + '\n';
           }
           callSendAPI(sender_psid, msg);
         }).catch((err) => {
