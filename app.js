@@ -354,18 +354,16 @@ function handleMessage(sender_psid, received_message) {
       } else if (input == 'mood') {
         console.log(res)
         var moods_list = res[1].split(" ")
-        for (var i = 0; i < moods_list.length; i++){
-          if (moods_list[i] == "" || moods_list[i] == " "){
-              moods_list.splice(i, 1);
+        for (var i = 0; i < moods_list.length; i++) {
+          if (moods_list[i] == "" || moods_list[i] == " ") {
+            moods_list.splice(i, 1);
           }
         }
-        console.log("moods:")
-        console.log(moods_list)
         createPlaylistForCategory(moods_list, 5).then((result) => {
+          console.log(result)
           var msg = 'Here are some playlists:\n';
-          for (var i = 0; i < result[0].length; i++) {
+          for (var i = 0; i < result[0].length; i++)
             msg = msg + 'name: ' + result[0][i].name + '\n' + result[0][i].link + '\n\n';
-          }
           var response = {
             'text': msg
           };
