@@ -354,7 +354,11 @@ function handleMessage(sender_psid, received_message) {
       } else if (input == 'mood') {
         console.log(res)
         var moods_list = res[1].split(" ")
-        moods_list.filter(String)
+        for (var i = 0; i < moods_list.length; i++){
+          if (moods_list[i] == "" || moods_list[i] == " "){
+              moods_list.splice(i, 1);
+          }
+        }
         console.log("moods:")
         console.log(moods_list)
         createPlaylistForCategory(moods_list, 5).then((result) => {
@@ -364,6 +368,7 @@ function handleMessage(sender_psid, received_message) {
           }
           callSendAPI(sender_psid, msg);
         }).catch((err) => {
+          console.log(err)
           var response = {
             'text': `I'm sorry there's been an error! \nType: \n
             byop ? \nfor a list of options or just: 
