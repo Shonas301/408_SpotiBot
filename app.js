@@ -351,6 +351,32 @@ function handleMessage(sender_psid, received_message) {
       if (input == 'song') {
       } else if (input == 'artist') {
       } else if (input == 'genre') {
+        console.log(res)
+        var genres_list = res[1].split(" ")
+        for (var i = 0; i < genres_list.length; i++) {
+          if (genres_list[i] == "" || genres_list[i] == " ") {
+            genres_list.splice(i, 1);
+          }
+        }
+        createPlaylistForCategory(genres_list, 5).then((result) => {
+          console.log(result)
+          var msg = 'Here are some playlists:\n';
+          for (var i = 0; i < result.length; i++)
+            for (var j = 0; j < result[i].length; j++)
+              msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
+          var response = {
+            'text': msg
+          };
+          callSendAPI(sender_psid, response);
+        }).catch((err) => {
+          console.log(err)
+          var response = {
+            'text': `I'm sorry there's been an error! \nType: \n
+            byop ? \nfor a list of options or just: 
+            \n? \nfor the entire functionality listing`
+          }
+          callSendAPI(sender_psid, response);
+        });
       } else if (input == 'mood') {
         console.log(res)
         var moods_list = res[1].split(" ")
@@ -363,7 +389,7 @@ function handleMessage(sender_psid, received_message) {
           console.log(result)
           var msg = 'Here are some playlists:\n';
           for (var i = 0; i < result.length; i++)
-            for(var j = 0; j < result[i].length; j++)
+            for (var j = 0; j < result[i].length; j++)
               msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
           var response = {
             'text': msg
