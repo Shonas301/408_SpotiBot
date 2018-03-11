@@ -354,6 +354,7 @@ function handleMessage(sender_psid, received_message) {
       } else if (input == 'mood') {
         console.log(res)
         var moods_list = res[1].split(" ")
+        moods_list.filter(String)
         console.log("moods:")
         console.log(moods_list)
         createPlaylistForCategory(moods_list, 5).then((result) => {
