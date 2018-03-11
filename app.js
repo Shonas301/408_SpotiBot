@@ -371,9 +371,7 @@ function handleMessage(sender_psid, received_message) {
         }).catch((err) => {
           console.log(err)
           var response = {
-            'text': `I'm sorry there's been an error! \nType: \n
-            byop ? \nfor a list of options or just: 
-            \n? \nfor the entire functionality listing`
+            'text': `I'm sorry there's been an error! ${err.message}`
           }
           callSendAPI(sender_psid, response);
         });
@@ -398,9 +396,7 @@ function handleMessage(sender_psid, received_message) {
         }).catch((err) => {
           console.log(err)
           var response = {
-            'text': `I'm sorry there's been an error! \nType: \n
-            byop ? \nfor a list of options or just: 
-            \n? \nfor the entire functionality listing`
+            'text': `I'm sorry there's been an error! ${err.message}`
           }
           callSendAPI(sender_psid, response);
         });
