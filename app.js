@@ -363,6 +363,7 @@ function handleMessage(sender_psid, received_message) {
         console.log(moods_list)
         createPlaylistForCategory(moods_list, 5).then((result) => {
           var msg = 'Here are some playlists\n';
+          console.log(result)
           for (var i = 0; i < result.length; i++) {
             msg = msg + 'name: ' + result[i].name + '  ' + result[i].link + '\n';
           }
