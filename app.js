@@ -11,7 +11,7 @@
 
 // Imports dependencies and set up http server
 const
-request = require('request'),
+  request = require('request'),
   express = require('express'),
   path = require('path'),
   body_parser = require('body-parser'),
@@ -116,10 +116,11 @@ app.get('/clientAuth', (req, res) => {
         type "stats" to see statistics based on your listening history, \n
         or type "byop ?" to begin building a playlist of your own design. \n
         `
-      }    }).then(function () {
-        setTimeout(function () {callSendAPI(sender_psid, response);},500) // sends response explaining how to give SpotiBot arguments
-      }).then(function () {
-        var rep = `
+      }
+    }).then(function () {
+      setTimeout(function () { callSendAPI(sender_psid, response); }, 500) // sends response explaining how to give SpotiBot arguments
+    }).then(function () {
+      var rep = `
           <script type="text/javascript">
           if (window.addEventListener) { // Mozilla, Netscape, Firefox
             window.addEventListener('load', WindowLoad, false);
@@ -132,8 +133,8 @@ app.get('/clientAuth', (req, res) => {
         }
           </script>`
 
-        res.send(rep);
-      });
+      res.send(rep);
+    });
 });
 
 app.post('/', (req, res) => {
@@ -230,23 +231,23 @@ function handleMessage(sender_psid, received_message) {
       }
     }
     else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
-      var 
-      res = received_message.text.split(" "),
+      var
+        res = received_message.text.split(" "),
         term = "";
-      switch(res[2]) {
-        case('short'):
+      switch (res[2]) {
+        case ('short'):
           //4 weeks
           term = 'short_term'
           break;
-        case('medium'):
+        case ('medium'):
           //6 months
           term = 'medium_term'
           break;
-        case('long'):
+        case ('long'):
           // a few years approx
           term = 'long_term'
           break;
-        case('?'):
+        case ('?'):
           var response = {
             'text': `Here are the options for that request: \n
             \t top playlist short [# of songs]\n
@@ -290,8 +291,8 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "happiest") {
-      getHappiestSong().then(function(data) {
-        getSongNameString(data).then(function(song_name) {
+      getHappiestSong().then(function (data) {
+        getSongNameString(data).then(function (song_name) {
           response = { "text": `Your happiest song is ${song_name}.` }
           callSendAPI(sender_psid, response);
         })
@@ -300,8 +301,8 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "saddest") {
-      getSaddestSong().then(function(data) {
-        getSongNameString(data).then(function(song_name) {
+      getSaddestSong().then(function (data) {
+        getSongNameString(data).then(function (song_name) {
           response = { "text": `Your saddest song is ${song_name}.` }
           callSendAPI(sender_psid, response);
         })
@@ -310,8 +311,8 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "slowest") {
-      getSlowestSong().then(function(data) {
-        getSongNameString(data).then(function(song_name) {
+      getSlowestSong().then(function (data) {
+        getSongNameString(data).then(function (song_name) {
           response = { "text": `Your slowest song is ${song_name}.` }
           callSendAPI(sender_psid, response);
         })
@@ -320,8 +321,8 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "fastest") {
-      getFastestSong().then(function(data) {
-        getSongNameString(data).then(function(song_name) {
+      getFastestSong().then(function (data) {
+        getSongNameString(data).then(function (song_name) {
           response = { "text": `Your fastest song is ${song_name}.` }
           callSendAPI(sender_psid, response);
         })
@@ -330,7 +331,8 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
       });
     } else if (received_message.text.toLowerCase() === "stats") {
-      response = {"text": `Right now you can type:
+      response = {
+        "text": `Right now you can type:
         "genre", "key", "happiest", "saddest", "slowest", or "fastest" to get your top song or result in that category!
         give it a try!`}
       callSendAPI(sender_psid, response);
@@ -346,6 +348,37 @@ function handleMessage(sender_psid, received_message) {
 
       console.log(res)
       var input = res[0].substring(5)
+      if (input == 'song') {
+      } else if (input == 'artist') {
+      } else if (input == 'genre') {
+      } else if (input == 'mood') {
+        var moods_list = res[1].split(",")
+        moods_list.splice(1, 1); // remove the first element
+        console.log(moods_list)
+        createPlaylistForCategory(moods_list, 5).then((res) => {
+          var msg = 'Here are some playlists\n';
+          for (var i = 0; i < res.length; i++) {
+            msg = msg + 'name: ' + res[i].name + '  ' + res[i].link + '\n';
+          }
+          callSendAPI(sender_psid, msg);
+        }).catch((err) => {
+          var response = {
+            'text': `I'm sorry there's been an error! \nType: \n
+            byop ? \nfor a list of options or just: 
+            \n? \nfor the entire functionality listing`
+          }
+          callSendAPI(sender_psid, response);
+        });
+      } else {
+        var response = {
+          'text': `I'm sorry there's been an error! \nType: \n
+            byop ? \nfor a list of options or just: 
+            \n? \nfor the entire functionality listing`
+        }
+        callSendAPI(sender_psid, response);
+        return;
+      }
+      /*
       switch(input) {
         case('artist'):
           var artists_list = res[1].split(",")
@@ -430,8 +463,8 @@ function handleMessage(sender_psid, received_message) {
           }
           callSendAPI(sender_psid, response);
           return;
-
       }
+      */
 
       //successfully passed the turn in. 
     }
@@ -456,8 +489,8 @@ function handleMessage(sender_psid, received_message) {
 }
 
 function handleLoginRequest(sender_psid) {
-  var 
-  url = getLoginUrl(sender_psid),
+  var
+    url = getLoginUrl(sender_psid),
     response = {
       "text": `Great! Here is a link to get you started \n\n ${url}`
     };
@@ -466,8 +499,8 @@ function handleLoginRequest(sender_psid) {
 
 function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
-  var 
-  songs = [],
+  var
+    songs = [],
     songlist = [],
     songlistUris = [],
     prettyString = "",
@@ -481,15 +514,15 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
   //doesn't work for numbers greater than 50
   //TODO Pagination
   //defaults to 50 if not a valid number
-  if((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)){
+  if ((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)) {
     if (numSongs > 50) {
       response = { "text": `The max number of songs is 50 so here's 50 songs!\n` }
-      numSongs = 50; 
+      numSongs = 50;
       callSendAPI(sender_psid, response);
     }
   } else {
     response = { "text": `Your input is invalid so we defaulted to 50.\n` }
-    numSongs = 50; 
+    numSongs = 50;
     callSendAPI(sender_psid, response);
   }
   getTopSongs(numSongs, 0, term).then(function (data) {
@@ -507,17 +540,17 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
   }).then(function () {
     response = { "text": `Your top songs are:\n ${prettyString}` }
     callSendAPI(sender_psid, response);
-  }).then(function() {
-    var 
-    date = new Date(),
-      month = date.getMonth()+1,
+  }).then(function () {
+    var
+      date = new Date(),
+      month = date.getMonth() + 1,
       day = date.getDate(),
       year = date.getFullYear(),
-      dateString = month+"/"+ day + "/"+ year;
+      dateString = month + "/" + day + "/" + year;
     //Call the Promis to create the playlist needed with the title in the format:
     //Top Tracks: XX/XX/XXXX
     createPlaylist("Top Tracks: " + dateString).then(function (data) {
-      data.map(function(playlist) {
+      data.map(function (playlist) {
         playlistObject.push(playlist)
       });
       playlistUrl = playlistObject[0].external_urls.spotify
@@ -525,9 +558,9 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     }).then(function () {
       //Add all the tracks in songlistUris to the playlist
       addTracksToPlaylist(playlistId, songlistUris);
-    }).then(function() {
+    }).then(function () {
       //finally send the message it's been completed
-      response = {"text": `Here's the playlist: \n ${playlistUrl}`}
+      response = { "text": `Here's the playlist: \n ${playlistUrl}` }
       callSendAPI(sender_psid, response)
     });
   });
@@ -698,7 +731,7 @@ function addTracksToPlaylist(playlist_id, tracks) {
 // Returns a promise which contains the most common key
 function getTopKey() {
   return new Promise((resolve, reject) => {
-    getTopSongs(25,0,"short_term").then((data) => {
+    getTopSongs(25, 0, "short_term").then((data) => {
       var track_ids = [];
       for (var i = 0; i < data.length; i++) {
         track_ids.push(data[i].id)
@@ -746,7 +779,7 @@ function getHappiestSong() {
       for (var index = 0; index < songs.length; ++index) {
         songsList.push(songs[index].id)
       }
-      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function (data) {
         var audio_features = data.body.audio_features
         for (var index = 0; index < songs.length; ++index) {
           var temp = []
@@ -754,10 +787,10 @@ function getHappiestSong() {
           temp.push(audio_features[index].valence)
           danceList.push(temp)
         }
-        danceList.sort(function(a,b){return b[1] - a[1]});
-      }, function(err){
+        danceList.sort(function (a, b) { return b[1] - a[1] });
+      }, function (err) {
         console.log(err)
-      }).then(function() {
+      }).then(function () {
         resolve(danceList[0][0])
       })
     }).catch((err) => {
@@ -778,7 +811,7 @@ function getSaddestSong() {
       for (var index = 0; index < songs.length; ++index) {
         songsList.push(songs[index].id)
       }
-      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function (data) {
         var audio_features = data.body.audio_features
         for (var index = 0; index < songs.length; ++index) {
           var temp = []
@@ -786,10 +819,10 @@ function getSaddestSong() {
           temp.push(audio_features[index].valence)
           danceList.push(temp)
         }
-        danceList.sort(function(a,b){return a[1] - b[1]});
-      }, function(err){
+        danceList.sort(function (a, b) { return a[1] - b[1] });
+      }, function (err) {
         console.log(err)
-      }).then(function() {
+      }).then(function () {
         return resolve(danceList[0][0])
       })
     }).catch(function (err) {
@@ -810,7 +843,7 @@ function getFastestSong() {
       for (var index = 0; index < songs.length; ++index) {
         songsList.push(songs[index].id)
       }
-      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function (data) {
         var audio_features = data.body.audio_features
         for (var index = 0; index < songs.length; ++index) {
           var temp = []
@@ -818,10 +851,10 @@ function getFastestSong() {
           temp.push(audio_features[index].energy)
           danceList.push(temp)
         }
-        danceList.sort(function(a,b){return b[1] - a[1]});
-      }, function(err){
+        danceList.sort(function (a, b) { return b[1] - a[1] });
+      }, function (err) {
         console.log(err)
-      }).then(function() {
+      }).then(function () {
         return resolve(danceList[0][0])
       })
     }).catch(function (err) {
@@ -842,7 +875,7 @@ function getSlowestSong() {
       for (var index = 0; index < songs.length; ++index) {
         songsList.push(songs[index].id)
       }
-      spotifyApi.getAudioFeaturesForTracks(songsList).then(function(data){
+      spotifyApi.getAudioFeaturesForTracks(songsList).then(function (data) {
         var audio_features = data.body.audio_features
         for (var index = 0; index < songs.length; ++index) {
           var temp = []
@@ -850,10 +883,10 @@ function getSlowestSong() {
           temp.push(audio_features[index].energy)
           danceList.push(temp)
         }
-        danceList.sort(function(a,b){return a[1] - b[1]});
-      }, function(err){
+        danceList.sort(function (a, b) { return a[1] - b[1] });
+      }, function (err) {
         console.log(err)
-      }).then(function() {
+      }).then(function () {
         return resolve(danceList[0][0])
       })
     }).catch(function (err) {
@@ -866,32 +899,32 @@ function getSlowestSong() {
 function getSongNameString(trackId) {
   return new Promise((resolve, reject) => {
     var song_name_string
-    spotifyApi.getTrack(trackId).then(function(data) {
+    spotifyApi.getTrack(trackId).then(function (data) {
       var artists = data.body.artists
       var artists_string = ''
       for (var index = 0; index < artists.length; ++index) {
         artists_string = artists_string + data.body.artists[index].name + ' '
       }
       song_name_string = data.body.name + " by " + artists_string
-    }, function(err) {
+    }, function (err) {
       console.log(err)
-    }).then(function() {
+    }).then(function () {
       return resolve(song_name_string)
     })
   });
 }
 // Creates playlists for categories. Creates @param count different playlists for each category
 function createPlaylistForCategory(categories, count) {
-    return Promise.all(categories.map(function (category) {
-        return new Promise((resolve, reject) => {
-            spotifyApi.getPlaylistsForCategory(category).then((res) => {
-                var playlists = [];
-                for (var i = 0; i < count; i++)
-                    playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name });
-                resolve(playlists);
-            }).catch(err => {
-              reject(err);
-            });
-        })
-    }))
+  return Promise.all(categories.map(function (category) {
+    return new Promise((resolve, reject) => {
+      spotifyApi.getPlaylistsForCategory(category).then((res) => {
+        var playlists = [];
+        for (var i = 0; i < count; i++)
+          playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name });
+        resolve(playlists);
+      }).catch(err => {
+        reject(err);
+      });
+    })
+  }))
 }
