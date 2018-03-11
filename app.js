@@ -352,7 +352,9 @@ function handleMessage(sender_psid, received_message) {
       } else if (input == 'artist') {
       } else if (input == 'genre') {
       } else if (input == 'mood') {
+        console.log(res)
         var moods_list = res[1].split(" ")
+        console.log("moods:")
         console.log(moods_list)
         createPlaylistForCategory(moods_list, 5).then((result) => {
           var msg = 'Here are some playlists\n';
