@@ -373,12 +373,12 @@ function handleMessage(sender_psid, received_message) {
             moods_string = moods_string + moods_list[i] + ' '
           }
           var response = { "text": `Your moods are: ${moods_string}` }
-          createPlaylistForCategory(moods_list, 3).then(res => {
+          createPlaylistForCategory(moods_list, 3).then((res) => {
             var msg = 'Here are some of your playlists\n';
             for (var i = 0; i < moods_list.length * 3; i++) {
-              msg = msg + 'name: ' + res[i].name + '  ' + res[i].link
+              msg = msg + 'name: ' + res[i].name + '  ' + res[i].link + '\n';
             }
-            callSendAPI(sender_psid, response);
+            callSendAPI(sender_psid, msg);
           })
           break;
         case('genre'):
