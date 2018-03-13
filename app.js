@@ -342,10 +342,21 @@
       }*/
       else if (received_message.text.toLowerCase().substring(0, 6) === "byop ?") {
 
+        var response = {
+          'text': `Here are the options for that request: \n
+          \t byop artist: [comma separated list of artist names, example: Lady Gaga, Khalid, Lauv]\n
+          \t byop song: [comma separated list of song names, example: Just Dance - Lady Gaga, Strange Love - Halsey]\n
+          \t byop mood: [comma separated list of moods, example: focus, sleep, chill]\n 
+          \t byop genre: [comma separated list of genres, example: pop, rock]\n 
+          \t byop playlist: [comma separated list of playlist names, example: lit, sad]\n`
+        }
+        callSendAPI(sender_psid, response);
+
         var res = received_message.text.split(":")
 
         console.log(res)
-        var input = res[0].substring(5)
+        //var input = res[0].substring(5)
+        var input = res[0]
         if (input == 'song') {
         } else if (input == 'artist') {
         } else if (input == 'genre') {
