@@ -352,6 +352,8 @@
         }
         callSendAPI(sender_psid, response);
 
+      } else if(received_message.text.toLowerCase().substring(0, 4) === "byop") {  
+
         var res = received_message.text.split(":")
 
         console.log(res)
