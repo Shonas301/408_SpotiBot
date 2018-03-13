@@ -341,7 +341,7 @@
         }
       }*/
       else if (received_message.text.toLowerCase().substring(0, 6) === "byop ?") {
-        console.log(received_message.text)
+
         var response = {
           'text': `Here are the options for that request: \n
           \t byop artist: [comma separated list of artist names, example: Lady Gaga, Khalid, Lauv]\n
@@ -359,14 +359,19 @@
         console.log(res)
         //var input = res[0].substring(5)
         var input = res[0]
-        if (input == 'song') {
+        if (input == 'byop song') {
           //get track id of song
           //var songId = spotifyApi.
           //figure out a way to use this https://beta.developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/
           //with track id as user song
           //return that as a playlist
-        } else if (input == 'artist') {
-        } else if (input == 'genre') {
+          var response = {
+            'text': "insert seed song\n"
+          }
+          callSendAPI(sender_psid, response);
+        } else if (input == 'byop artist') {
+        } else if (input == 'byop playlist') {  
+        } else if (input == 'byop genre') {
           console.log(res)
           var genres_list = res[1].split(" ")
           for (var i = 0; i < genres_list.length; i++) {
@@ -391,7 +396,7 @@
             }
             callSendAPI(sender_psid, response);
           });
-        } else if (input == 'mood') {
+        } else if (input == 'byop mood') {
           console.log(res)
           var moods_list = res[1].split(" ")
           for (var i = 0; i < moods_list.length; i++) {
