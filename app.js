@@ -366,7 +366,7 @@
           //with track id as user song
           //return that as a playlist
           var response = {
-            'text': "insert seed song\n"
+            'text': "seed song is" + res[1] + "\n"
           }
           callSendAPI(sender_psid, response);
         } else if (input == 'byop artist') {
