@@ -61,3 +61,6 @@ typings/
 .next
 
 encryption/
+
+#DS-Store
+.DS_Store
