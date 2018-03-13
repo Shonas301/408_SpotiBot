@@ -340,7 +340,7 @@
           "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
         }
       }*/
-      else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
+      else if (received_message.text.toLowerCase().substring(0, 6) === "byop ?") {
 
         var res = received_message.text.split(":")
 
