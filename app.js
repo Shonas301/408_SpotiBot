@@ -341,7 +341,7 @@
         }
       }*/
       else if (received_message.text.toLowerCase().substring(0, 6) === "byop ?") {
-
+        console.log(received_message.text)
         var response = {
           'text': `Here are the options for that request: \n
           \t byop artist: [comma separated list of artist names, example: Lady Gaga, Khalid, Lauv]\n
@@ -360,6 +360,11 @@
         //var input = res[0].substring(5)
         var input = res[0]
         if (input == 'song') {
+          //get track id of song
+          //var songId = spotifyApi.
+          //figure out a way to use this https://beta.developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/
+          //with track id as user song
+          //return that as a playlist
         } else if (input == 'artist') {
         } else if (input == 'genre') {
           console.log(res)
@@ -945,7 +950,6 @@
     });
   }
 
-
   function getSongNameString(trackId) {
     return new Promise((resolve, reject) => {
       var song_name_string
@@ -963,6 +967,7 @@
       })
     });
   }
+
   // Creates playlists for categories. Creates @param count different playlists for each category
   function createPlaylistForCategory(categories, count) {
     return Promise.all(categories.map(function (category) {
