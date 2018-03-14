@@ -8,7 +8,6 @@
  */
 
 'use strict';
-
 // Imports dependencies and set up http server
 const
   request = require('request'),
@@ -224,6 +223,7 @@ function handleMessage(sender_psid, received_message) {
     //
     // TODO
     //var loggedIn = db.contains(sender_psid)
+    
     if (received_message.text.toLowerCase() === "login") {
       handleLoginRequest(sender_psid)
       var url = getLoginUrl(sender_psid);
@@ -384,6 +384,53 @@ function handleMessage(sender_psid, received_message) {
           console.log(err)
           var response = {
             'text': `I'm sorry there's been an error! ${err.message}`
+        //var input = res[0].substring(5)
+        var input = res[0]
+        if (input == 'byop song') {
+          //get track id of song
+          //var songId = spotifyApi.
+          //figure out a way to use this https://beta.developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/
+          //with track id as user song
+          //return that as a playlist
+          var response = {
+            'text': "seed song is" + res[1] + "\n"
+          }
+          callSendAPI(sender_psid, response);
+        } else if (input == 'byop artist') {
+        } else if (input == 'byop playlist') {  
+        } else if (input == 'byop genre') {
+          console.log(res)
+          var genres_list = res[1].split(" ")
+          for (var i = 0; i < genres_list.length; i++) {
+            if (genres_list[i] == "" || genres_list[i] == " ") {
+              genres_list.splice(i, 1);
+            }
+          }
+          createPlaylistForCategory(genres_list, 5).then((result) => {
+            console.log(result)
+            var msg = 'Here are some playlists:\n';
+            for (var i = 0; i < result.length; i++)
+              for (var j = 0; j < result[i].length; j++)
+                msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
+            var response = {
+              'text': msg
+            };
+            callSendAPI(sender_psid, response);
+          }).catch((err) => {
+            console.log(err)
+            var response = {
+              'text': `I'm sorry there's been an error! ${err.message}`
+            }
+            callSendAPI(sender_psid, response);
+          });
+        } else if (input == 'byop mood') {
+          console.log(res)
+          var moods_list = res[1].split(" ")
+          for (var i = 0; i < moods_list.length; i++) {
+            if (moods_list[i] == "" || moods_list[i] == " ") {
+              moods_list.splice(i, 1);
+            }
+>>>>>>> 6b50411ba438df57ac2a910316a24b077097e35d
           }
           callSendAPI(sender_psid, response);
         });
@@ -935,72 +982,21 @@ function getSlowestSong() {
           danceList.push(temp)
         }
         danceList.sort(function (a, b) { return a[1] - b[1] });
-      }, function (err) {
-        console.log(err)
-      }).then(function () {
-        return resolve(danceList[0][0])
-      })
-    }).catch(function (err) {
-      console.error(err)
-    });
-  });
-}
-
-
-function getSongNameString(trackId) {
-  return new Promise((resolve, reject) => {
-    var song_name_string
-    spotifyApi.getTrack(trackId).then(function (data) {
-      var artists = data.body.artists
-      var artists_string = ''
-      for (var index = 0; index < artists.length; ++index) {
-        artists_string = artists_string + data.body.artists[index].name + ' '
-      }
-      song_name_string = data.body.name + " by " + artists_string
-    }, function (err) {
-      console.log(err)
-    }).then(function () {
-      return resolve(song_name_string)
-    })
-  });
-}
-// Creates playlists for categories. Creates @param count different playlists for each category
-function createPlaylistForCategory(categories, count) {
-  return Promise.all(categories.map(function (category) {
-    return new Promise((resolve, reject) => {
-      spotifyApi.getPlaylistsForCategory(category).then((res) => {
-        var playlists = [];
-        for (var i = 0; i < count; i++)
-          playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name });
-        resolve(playlists);
-      }).catch(err => {
-        reject(err);
-      });
-    })
-  }))
-}
-
-/*
-const spotifyRecURL = 'https://api.spotify.com/v1/recommendations'
-const fetch = require('node-fetch')
-function createPlaylistFromGenre(genres, count) {
-  const params = new url.URLSearchParams()
-  params.append("genres",String(genres))
-  var queryURL = spotifyRecURL + params.toString()
-  var header = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer' + String(spotifyApi.getMe()),
-  }
-  fetch(queryURL, {
-    method: 'GET',
-    header: header
-  })
-    .then(response => {
-      response.json()
-        .then(json => {
-          console.log(json)
+        spotifyApi.getAudioFeaturesForTracks(songsList).then(function (data) {
+          var audio_features = data.body.audio_features
+          for (var index = 0; index < songs.length; ++index) {
+            var temp = []
+            temp.push(songsList[index])
+            temp.push(audio_features[index].energy)
+            danceList.push(temp)
+          }
+          danceList.sort(function (a, b) { return a[1] - b[1] });
+        }, function (err) {
+          console.log(err)
+        }).then(function () {
+          return resolve(danceList[0][0])
         })
-    })
-}
-*/
+      }).catch(function (err) {
+        console.error(err)
+      });
+    });
