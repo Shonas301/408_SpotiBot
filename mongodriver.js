@@ -5,7 +5,7 @@ module.exports = {
     if (!db) throw new Error("No DB connection");
     
     return new Promise(function (resolve, reject) {
-      db.collection("users").find("id": user.id } ).toArray((err, result) => {
+      db.collection("users").find({"id": user.id } ).toArray((err, result) => {
         if (err) throw err;
         return resolve(result);
       });
