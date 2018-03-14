@@ -224,11 +224,32 @@ function handleMessage(sender_psid, received_message) {
     // TODO
     //var loggedIn = db.contains(sender_psid)
 
-    if (received_message.text.toLowerCase() === "login") {
-      handleLoginRequest(sender_psid)
-      var url = getLoginUrl(sender_psid);
+    var loggedIn = await dbDriver.findUser(db, {"id": sender_psid})
+      .then((res, err) => 
+        if res.length === 0
+          return false
+        return res[0].id === sender_psid
+      )
+    if(!loggedIn && recieved_message.text.toLowerCase() !== "login") {
       response = {
-        "text": `Great! Here is a link to get you started! \n\n "${url}"`
+        "text": "Hey! Sorry we haven't met or you haven't logged in already! Check out this url!"
+      }
+      var url = getLoginUrl(sender_psid)
+      response.text = response.text + "\n\n" + url
+      callSendAPI(sender_psid,response);
+    }
+
+    if (received_message.text.toLowerCase() === "login") {
+      if(loggedIn) {
+        response = {"text": "You're already logged in! No worries!"}
+        callSendAPI(sender_psid, response);
+      }
+      else {
+        handleLoginRequest(sender_psid)
+        var url = getLoginUrl(sender_psid);
+        response = {
+          "text": `Great! Here is a link to get you started! \n\n "${url}"`
+        }
       }
     }
     else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
@@ -429,7 +450,7 @@ function handleMessage(sender_psid, received_message) {
 
 function handleLoginRequest(sender_psid) {
   var
-  url = getLoginUrl(sender_psid),
+    url = getLoginUrl(sender_psid),
     response = {
       "text": `Great! Here is a link to get you started \n\n ${url}`
     };

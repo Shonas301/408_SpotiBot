@@ -1,6 +1,6 @@
 module.exports = {
 
-  findUser: function (db, user) {
+  findUser: async function (db, user) {
     console.log(user.id)
     if (!db) throw new Error("No DB connection");
     
