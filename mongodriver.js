@@ -1,6 +1,6 @@
 module.exports = {
 
-  findUser: async function (db, user) {
+  findUser: function (db, user) {
     console.log(user.id)
     if (!db) throw new Error("No DB connection");
     
@@ -30,7 +30,7 @@ module.exports = {
     if (!db) throw new Error("No DB connection");
     if (isEmpty(user)) throw new Error("Attempt to add Empty User");
 
-    var query = { user_id: user.user_id }
+    var query = { "id": user.id }
     return new Promise((resolve, reject) => {
       db.collection('users').updateOne(
         query, {$set: {"access_token": new_token}} , function (err, res) {

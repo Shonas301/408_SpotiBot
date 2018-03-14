@@ -10,7 +10,7 @@
 'use strict';
 // Imports dependencies and set up http server
 const
-request = require('request'),
+  request = require('request'),
   express = require('express'),
   path = require('path'),
   body_parser = require('body-parser'),
@@ -224,12 +224,13 @@ function handleMessage(sender_psid, received_message) {
     // TODO
     //var loggedIn = db.contains(sender_psid)
 
-    var loggedIn = await dbDriver.findUser(db, {"id": sender_psid})
-      .then((res, err) => 
-        if res.length === 0
+    var loggedIn = dbDriver.findUser(db, {"id": sender_psid})
+      .then((res, err) => {
+        if(res.length === 0) {
           return false
+        }
         return res[0].id === sender_psid
-      )
+      })
     if(!loggedIn && recieved_message.text.toLowerCase() !== "login") {
       response = {
         "text": "Hey! Sorry we haven't met or you haven't logged in already! Check out this url!"
@@ -460,7 +461,7 @@ function handleLoginRequest(sender_psid) {
 function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
   var
-  songs = [],
+    songs = [],
     songlist = [],
     songlistUris = [],
     prettyString = "",
@@ -474,6 +475,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
   //doesn't work for numbers greater than 50
   //TODO Pagination
   //defaults to 50 if not a valid number
+  
   if ((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)) {
     if (numSongs > 50) {
       response = { "text": `The max number of songs is 50 so here's 50 songs!\n` }
@@ -485,45 +487,59 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     numSongs = 50;
     callSendAPI(sender_psid, response);
   }
-  getTopSongs(numSongs, 0, term).then(function (data) {
-    //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
-    //fall out of scope and lose object properties, pretty bizarre but it works
-    data.map(function (song) {
-      songs.push(song)
-    });
-    //TODO variable number must be changed here as well if we paginate
-    for (var i = 0; i < numSongs; i++) {
-      songlist.push(songs[i].name)
-      songlistUris.push(songs[i].uri)
-      prettyString = prettyString + "\t" + songs[i].name + "\n"
-    }
-  }).then(function () {
-    response = { "text": `Your top songs are:\n ${prettyString}` }
-    callSendAPI(sender_psid, response);
-  }).then(function () {
-    var
-    date = new Date(),
-      month = date.getMonth() + 1,
-      day = date.getDate(),
-      year = date.getFullYear(),
-      dateString = month + "/" + day + "/" + year;
-    //Call the Promis to create the playlist needed with the title in the format:
-    //Top Tracks: XX/XX/XXXX
-    createPlaylist("Top Tracks: " + dateString).then(function (data) {
-      data.map(function (playlist) {
-        playlistObject.push(playlist)
+  dbDriver.findUser(db, {"id": sender_psid}).then((res, err) => {
+    spotifyApi.setAccessToken(res[0].access_token)
+    spotifyApi.setRefreshToken(res[0].refresh_token)
+    spotifyApi.refreshAccessToken()
+      .then(function(data) {
+        console.log('The access token has been refreshed!');
+
+        // Save the access token so that it's used in future calls
+        spotifyApi.setAccessToken(data.body['access_token']);
+        dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
+      }, function(err) {
+        console.log('Could not refresh access token', err);
       });
-      playlistUrl = playlistObject[0].external_urls.spotify
-      playlistId = playlistObject[0].id
+    getTopSongs(numSongs, 0, term).then(function (data) {
+      //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
+      //fall out of scope and lose object properties, pretty bizarre but it works
+      data.map(function (song) {
+        songs.push(song)
+      });
+      //TODO variable number must be changed here as well if we paginate
+      for (var i = 0; i < numSongs; i++) {
+        songlist.push(songs[i].name)
+        songlistUris.push(songs[i].uri)
+        prettyString = prettyString + "\t" + songs[i].name + "\n"
+      }
     }).then(function () {
-      //Add all the tracks in songlistUris to the playlist
-      addTracksToPlaylist(playlistId, songlistUris);
+      response = { "text": `Your top songs are:\n ${prettyString}` }
+      callSendAPI(sender_psid, response);
     }).then(function () {
-      //finally send the message it's been completed
-      response = { "text": `Here's the playlist: \n ${playlistUrl}` }
-      callSendAPI(sender_psid, response)
+      var
+        date = new Date(),
+        month = date.getMonth() + 1,
+        day = date.getDate(),
+        year = date.getFullYear(),
+        dateString = month + "/" + day + "/" + year;
+      //Call the Promis to create the playlist needed with the title in the format:
+      //Top Tracks: XX/XX/XXXX
+      createPlaylist("Top Tracks: " + dateString).then(function (data) {
+        data.map(function (playlist) {
+          playlistObject.push(playlist)
+        });
+        playlistUrl = playlistObject[0].external_urls.spotify
+        playlistId = playlistObject[0].id
+      }).then(function () {
+        //Add all the tracks in songlistUris to the playlist
+        addTracksToPlaylist(playlistId, songlistUris);
+      }).then(function () {
+        //finally send the message it's been completed
+        response = { "text": `Here is the playlist: \n ${playlistUrl}` }
+        callSendAPI(sender_psid, response)
+      });
     });
-  });
+  }); 
 }
 
 function getLoginUrl(sender_psid) {
@@ -578,7 +594,10 @@ function callSendAPI(sender_psid, response) {
 //function to throw user's top 25 played songs in a list
 // offset is optional (and not necessary for our implementation
 // returns a promise which contains the top user's songs
-function getTopSongs(limit, offset, time_range) {
+function getTopSongs(id, limit, offset, time_range) {
+  var 
+    accessToken,
+    refreshToken;
   return new Promise((resolve, reject) => {
     spotifyApi.getMyTopTracks({
       limit: limit,
@@ -593,7 +612,7 @@ function getTopSongs(limit, offset, time_range) {
 }
 
 // Example get top 5 artists (Using for Genre Stats)
-function getTopArtists(limit, offset, time_range) {
+function getTopArtists(id, limit, offset, time_range) {
   return new Promise((resolve, reject) => {
     spotifyApi.getMyTopArtists({
       limit: limit,
@@ -610,7 +629,7 @@ function getTopArtists(limit, offset, time_range) {
 /* !! PROBLEM !!  There is no 'genre' attribute in most track or album objects
  * The only reliable place to get a genre is to check an artist's list of genres
  */
-function getTopGenre() {
+function getTopGenre(id) {
   return new Promise((resolve, reject) => {
     getTopArtists(50, 0, "long_term").then((artists) => {
       var genres = [];
@@ -641,7 +660,7 @@ function getTopGenre() {
 }
 
 // Returns a promise containing the link to the users playlist
-function createPlaylist(playlist_name) {
+function createPlaylist(id, playlist_name) {
   // Get the user's id
   var getMe = spotifyApi.getMe()
     .then(function (data) {
@@ -668,7 +687,7 @@ function createPlaylist(playlist_name) {
 }
 
 // Add an array of songs to a playlist
-function addTracksToPlaylist(playlist_id, tracks) {
+function addTracksToPlaylist(id, playlist_id, tracks) {
   // Get the user's id
   var promise = spotifyApi.getMe()
     .then(function (data) {
@@ -689,7 +708,7 @@ function addTracksToPlaylist(playlist_id, tracks) {
 }
 
 // Returns a promise which contains the most common key
-function getTopKey() {
+function getTopKey(id) {
   return new Promise((resolve, reject) => {
     getTopSongs(25, 0, "short_term").then((data) => {
       var track_ids = [];
@@ -727,7 +746,7 @@ function getTopKey() {
   });
 }
 
-function getHappiestSong() {
+function getHappiestSong(id) {
   return new Promise((resolve, reject) => {
     spotifyApi.getMyTopTracks({
       limit: 50
@@ -759,7 +778,7 @@ function getHappiestSong() {
   });
 }
 
-function getSaddestSong() {
+function getSaddestSong(id) {
   return new Promise((resolve, reject) => {
     spotifyApi.getMyTopTracks({
       limit: 50
@@ -791,7 +810,7 @@ function getSaddestSong() {
   });
 }
 //finish
-function getFastestSong() {
+function getFastestSong(id) {
   return new Promise((resolve, reject) => {
     spotifyApi.getMyTopTracks({
       limit: 50
@@ -823,7 +842,7 @@ function getFastestSong() {
   });
 }
 
-function getSlowestSong() {
+function getSlowestSong(id) {
   return new Promise((resolve, reject) => {
     spotifyApi.getMyTopTracks({
       limit: 50
