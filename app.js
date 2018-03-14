@@ -10,7 +10,7 @@
 'use strict';
 // Imports dependencies and set up http server
 const
-  request = require('request'),
+request = require('request'),
   express = require('express'),
   path = require('path'),
   body_parser = require('body-parser'),
@@ -223,7 +223,7 @@ function handleMessage(sender_psid, received_message) {
     //
     // TODO
     //var loggedIn = db.contains(sender_psid)
-    
+
     if (received_message.text.toLowerCase() === "login") {
       handleLoginRequest(sender_psid)
       var url = getLoginUrl(sender_psid);
@@ -336,11 +336,6 @@ function handleMessage(sender_psid, received_message) {
         give it a try!`}
       callSendAPI(sender_psid, response);
     }
-    /*else if (!loggedIn) {
-        response = {
-          "text": "I'm sorry we haven't received your info yet, try logging in with the command: \"login\""
-        }
-      }*/
     else if (received_message.text.toLowerCase().substring(0, 6) === "byop ?") {
 
       var response = {
@@ -359,7 +354,7 @@ function handleMessage(sender_psid, received_message) {
 
       console.log(res)
       //var input = res[0].substring(5)
-      var input = res[0]
+      var input = res[1]
       if (input == 'song') {
       } else if (input == 'artist') {
       } else if (input == 'genre') {
@@ -384,56 +379,18 @@ function handleMessage(sender_psid, received_message) {
           console.log(err)
           var response = {
             'text': `I'm sorry there's been an error! ${err.message}`
-        //var input = res[0].substring(5)
-        var input = res[0]
-        if (input == 'byop song') {
-          //get track id of song
-          //var songId = spotifyApi.
-          //figure out a way to use this https://beta.developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/
-          //with track id as user song
-          //return that as a playlist
-          var response = {
-            'text': "seed song is" + res[1] + "\n"
           }
-          callSendAPI(sender_psid, response);
-        } else if (input == 'byop artist') {
-        } else if (input == 'byop playlist') {  
-        } else if (input == 'byop genre') {
-          console.log(res)
-          var genres_list = res[1].split(" ")
-          for (var i = 0; i < genres_list.length; i++) {
-            if (genres_list[i] == "" || genres_list[i] == " ") {
-              genres_list.splice(i, 1);
-            }
-          }
-          createPlaylistForCategory(genres_list, 5).then((result) => {
-            console.log(result)
-            var msg = 'Here are some playlists:\n';
-            for (var i = 0; i < result.length; i++)
-              for (var j = 0; j < result[i].length; j++)
-                msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
-            var response = {
-              'text': msg
-            };
-            callSendAPI(sender_psid, response);
-          }).catch((err) => {
-            console.log(err)
-            var response = {
-              'text': `I'm sorry there's been an error! ${err.message}`
-            }
-            callSendAPI(sender_psid, response);
-          });
-        } else if (input == 'byop mood') {
-          console.log(res)
-          var moods_list = res[1].split(" ")
-          for (var i = 0; i < moods_list.length; i++) {
-            if (moods_list[i] == "" || moods_list[i] == " ") {
-              moods_list.splice(i, 1);
-            }
->>>>>>> 6b50411ba438df57ac2a910316a24b077097e35d
-          }
-          callSendAPI(sender_psid, response);
         });
+      } else if (input == 'playlist') {  
+      } else if (input == 'mood') {
+        console.log(res)
+        var moods_list = res[1].split(" ")
+        for (var i = 0; i < moods_list.length; i++) {
+          if (moods_list[i] == "" || moods_list[i] == " ") {
+            moods_list.splice(i, 1);
+          }
+        }
+        callSendAPI(sender_psid, response);
       } else if (input == 'mood') {
         console.log(res)
         var moods_list = res[1].split(" ")
@@ -468,122 +425,32 @@ function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response);
         return;
       }
-      /*
-        switch(input) {
-          case('artist'):
-            var artists_list = res[1].split(",")
-            var artists_string = ''
-            for (var i = 0; i < artists_list.length; i++) {
-              artists_string = artists_string + artists_list[i] + ' '
-            }
-            var response = { "text": `Your artists are: ${artists_string}` }
-            callSendAPI(sender_psid, response);
-            break;
-          case('song'):
-            var songs_list = res[1].split(",")
-            var songs_string = ''
-            for (var i = 0; i < songs_list.length; i++) {
-              songs_string = songs_string + songs_list[i] + ' '
-            }
-            var response = { "text": `Your songs are: ${songs_string}` }
-
-            callSendAPI(sender_psid, response);
-            break;
-          case('mood'):
-            var moods_list = res[1].split(",")
-            moods_list.splice(1, 1); // remove the first element
-//var response = { "text": `Your moods are: ${moods_string}` }
-            console.log(moods_list)
-            createPlaylistForCategory(moods_list, 5).then((res) => {
-              var msg = 'Here are some playlists\n';
-              for (var i = 0; i < res.length; i++) {
-                msg = msg + 'name: ' + res[i].name + '  ' + res[i].link + '\n';
-              }
-              callSendAPI(sender_psid, msg);
-            }).catch((err) => {
-              callSendAPI(sender_psid, "Sorry something went wrong. Ooopppsie");
-            });
-          case('genre'):
-            if (res[1] === undefined) {
-              var response = {"text": "Hey, looks like you forgot the colon! The correct format is:\nbyop -type-: list, "}
-              callSendAPI(sender_psid, response)
-              break
-            }
-            if(res.length > 1 && res[1] === ' ?') {
-              var repString = "You seem confused! Here is an extensive list of all the genres you can use! \n"
-              repString = repString += genreJSON.genres.join('\t\n')
-              var response = {"text": repString}
-              callSendAPI(sender_psid, response)
-              break;
-            }
-            var genres_list = res[1].split(",")
-            var genres_string = ''
-            for (var i = 0; i < genres_list.length; i++) {
-              genres_string = genres_string + genres_list[i] + ' '
-            }
-            var response = { "text": `Your genres are: ${genres_string}` }
-            callSendAPI(sender_psid, response);
-            break;
-          case('playlist'):
-            var playlists_list = res[1].split(",")
-            var playlists_string = ''
-            for (var i = 0; i < playlists_list.length; i++) {
-              playlists_string = playlists_string + playlists_list[i] + ' '
-            }
-            var response = { "text": `Your genres are: ${playlists_string}` }
-            callSendAPI(sender_psid, response);
-            break;
-          case('?'):
-            var response = {
-              'text': `Here are the options for that request: \n
-              \t byop artist: [comma separated list of artist names, example: Lady Gaga, Khalid, Lauv]\n
-              \t byop song: [comma separated list of song names, example: Just Dance - Lady Gaga, Strange Love - Halsey]\n
-              \t byop mood: [comma separated list of moods, example: focus, sleep, chill]\n 
-              \t byop genre: [comma separated list of genres, example: pop, rock]\n 
-              \t byop playlist: [comma separated list of playlist names, example: lit, sad]\n`
-            }
-            callSendAPI(sender_psid, response);
-            return;
-          default:
-    //Error State
-            var response = {
-              'text': `I'm sorry there's been an error! \nType: \n
-              byop ? \nfor a list of options or just: 
-              \n? \nfor the entire functionality listing`
-            }
-            callSendAPI(sender_psid, response);
-            return;
-        }
-  */
-
-    //successfully passed the turn in. 
-  } else if(received_message.text.toLowerCase() === "?") {
-    response = {
-      "text": `
-      Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
-      type "stats" to see statistics based on your listening history, \n
-      or type "byop ?" to begin building a playlist of your own design. \n
-      `
+      //successfully passed the turn in. 
+    } else if(received_message.text.toLowerCase() === "?") {
+      response = {
+        "text": `
+        Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
+        type "stats" to see statistics based on your listening history, \n
+        or type "byop ?" to begin building a playlist of your own design. \n
+        `
+      }
+      callSendAPI(sender_psid, response);
+    } else {
+      response = { 
+        "text": `You sent a message SpotiBot doesnt recognize: "${received_message.text}" :( Try something else!` 
+      }
+      callSendAPI(sender_psid, response);
+      response = {
+        "text": `
+        Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
+        type "stats" to see statistics based on your listening history, \n
+        or type "byop ?" to begin building a playlist of your own design. \n
+        `
+      }
+      callSendAPI(sender_psid, response);
     }
-    callSendAPI(sender_psid, response);
-  } else {
-    response = { "text": `You sent a message SpotiBot doesn't recognize: "${received_message.text}" :( Try something else!` }
-    callSendAPI(sender_psid, response);
-    response = {
-      "text": `
-      Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
-      type "stats" to see statistics based on your listening history, \n
-      or type "byop ?" to begin building a playlist of your own design. \n
-      `
-    }
-    callSendAPI(sender_psid, response);
-  }
     console.log('${received_message.text}')
   }
-  /*else if (recieved_message.text === "login") {
-      authToken = oAuth(recieved_message.text)
-    }*/
-  // Send the response message
 }
 
 function handleLoginRequest(sender_psid) {
@@ -1000,3 +867,5 @@ function getSlowestSong() {
         console.error(err)
       });
     });
+  });
+}
