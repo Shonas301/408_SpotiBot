@@ -1,10 +1,11 @@
 module.exports = {
 
   findUser: function (db, user) {
+    console.log(user.id)
     if (!db) throw new Error("No DB connection");
     
     return new Promise(function (resolve, reject) {
-      db.collection("users").find({ user_id: user.user_id }).toArray((err, result) => {
+      db.collection("users").find("id": user.id } ).toArray((err, result) => {
         if (err) throw err;
         return resolve(result);
       });
@@ -24,6 +25,8 @@ module.exports = {
     });
   },
 
+  useless: function() { console.log('fuck')}
+
   updateUserAccessToken: function (db, user, new_token) {
     if (!db) throw new Error("No DB connection");
     if (isEmpty(user)) throw new Error("Attempt to add Empty User");
@@ -42,7 +45,7 @@ module.exports = {
     if (!db) throw new Error("No DB connection");
     if (isEmpty(user)) throw new Error("Attempt to add Empty User");
 
-    var query = { user_id: user.user_id };
+    var query = { id: user.id };
     return new Promise((resolve, reject) => {
       db.collection("users").remove(query, function (err, obj) {
         if (err) throw error;
@@ -66,9 +69,8 @@ module.exports = {
   emptyCollection: function (db) {
     if (!db) throw new Error("No DB connection");
     return new Promise((resolve, reject) => {
-      db.deleteMany({}, function (err, obj) {
+      db.collection('users').remove({}, function (err, obj) {
         if (err) throw err;
-        db.close();
         resolve(obj.result);
       });
     });
