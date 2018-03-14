@@ -354,7 +354,7 @@ function handleMessage(sender_psid, received_message) {
 
       console.log(res)
       //var input = res[0].substring(5)
-      var input = res[1]
+      ;     var input = res[1]
       if (input == 'song') {
       } else if (input == 'artist') {
       } else if (input == 'genre') {
@@ -381,16 +381,6 @@ function handleMessage(sender_psid, received_message) {
             'text': `I'm sorry there's been an error! ${err.message}`
           }
         });
-      } else if (input == 'playlist') {  
-      } else if (input == 'mood') {
-        console.log(res)
-        var moods_list = res[1].split(" ")
-        for (var i = 0; i < moods_list.length; i++) {
-          if (moods_list[i] == "" || moods_list[i] == " ") {
-            moods_list.splice(i, 1);
-          }
-        }
-        callSendAPI(sender_psid, response);
       } else if (input == 'mood') {
         console.log(res)
         var moods_list = res[1].split(" ")
@@ -416,15 +406,59 @@ function handleMessage(sender_psid, received_message) {
           }
           callSendAPI(sender_psid, response);
         });
-      } else {
-        var response = {
-          'text': `I'm sorry there's been an error! \nType: \n
-          byop ? \nfor a list of options or just: 
-          \n? \nfor the entire functionality listing`
-        }
-        callSendAPI(sender_psid, response);
-        return;
       }
+      //var input = res[0].substring(5)
+      var input = res[0]
+      //get track id of song
+      //var songId = spotifyApi.
+      //figure out a way to use this https://beta.developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/
+      //with track id as user song
+      //return that as a playlist
+      if (input == 'byop song') {
+        var songs_list = res[1].split(",")
+        var songs_string = ''
+        for (var i = 0; i < songs_list.length; i++) {
+          songs_string = songs_string + songs_list[i] + ' '
+        }
+        var response = { "text": `Your songs are: ${songs_string}\n` }
+
+        callSendAPI(sender_psid, response);
+      } else if (input == 'byop artist') {
+      } else if (input == 'byop playlist') {  
+      } else if (input == 'byop genre') {
+        console.log(res)
+        var genres_list = res[1].split(" ")
+        for (var i = 0; i < genres_list.length; i++) {
+          if (genres_list[i] == "" || genres_list[i] == " ") {
+            genres_list.splice(i, 1);
+          }
+        }
+        createPlaylistForCategory(genres_list, 5).then((result) => {
+          console.log(result)
+          var msg = 'Here are some playlists:\n';
+          for (var i = 0; i < result.length; i++)
+            for (var j = 0; j < result[i].length; j++)
+              msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
+          var response = {
+            'text': msg
+          };
+          callSendAPI(sender_psid, response);
+        }).catch((err) => {
+          console.log(err)
+          var response = {
+            'text': `I'm sorry there's been an error! ${err.message}`
+          }
+          callSendAPI(sender_psid, response);
+        });
+      } else if (input == 'byop mood') {
+        console.log(res)
+        var moods_list = res[1].split(" ")
+        for (var i = 0; i < moods_list.length; i++) {
+          if (moods_list[i] == "" || moods_list[i] == " ") {
+            moods_list.splice(i, 1);
+          }
+        }
+      } 
       //successfully passed the turn in. 
     } else if(received_message.text.toLowerCase() === "?") {
       response = {
@@ -452,6 +486,7 @@ function handleMessage(sender_psid, received_message) {
     console.log('${received_message.text}')
   }
 }
+
 
 function handleLoginRequest(sender_psid) {
   var
