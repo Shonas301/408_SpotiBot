@@ -25,7 +25,6 @@ module.exports = {
     });
   },
 
-  useless: function() { console.log('fuck')}
 
   updateUserAccessToken: function (db, user, new_token) {
     if (!db) throw new Error("No DB connection");
