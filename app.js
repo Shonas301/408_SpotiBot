@@ -360,15 +360,19 @@
         //var input = res[0].substring(5)
         var input = res[0]
         if (input == 'byop song') {
+          var songs_list = res[1].split(",")
+          var songs_string = ''
+          for (var i = 0; i < songs_list.length; i++) {
+            songs_string = songs_string + songs_list[i] + ' '
+          }
+          var response = { "text": `Your songs are: ${songs_string}\n` }
+
+          callSendAPI(sender_psid, response);
           //get track id of song
           //var songId = spotifyApi.
           //figure out a way to use this https://beta.developer.spotify.com/documentation/web-api/reference/browse/get-recommendations/
           //with track id as user song
           //return that as a playlist
-          var response = {
-            'text': "seed song is" + res[1] + "\n"
-          }
-          callSendAPI(sender_psid, response);
         } else if (input == 'byop artist') {
         } else if (input == 'byop playlist') {  
         } else if (input == 'byop genre') {
