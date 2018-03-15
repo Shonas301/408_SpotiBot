@@ -499,7 +499,6 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
       })
       return true
     }
-    console.log(type(saved))
     saved.then( function() {
       spotifyApi.refreshAccessToken()
         .then(function(data) {
