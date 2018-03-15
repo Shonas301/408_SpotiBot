@@ -224,12 +224,13 @@ function handleMessage(sender_psid, received_message) {
     // TODO
     //var loggedIn = db.contains(sender_psid)
 
-    var loggedIn = dbDriver.findUser(db, {"id": sender_psid})
+    var loggedIn 
+    dbDriver.findUser(db, {"id": sender_psid})
       .then((res, err) => {
         if(res.length === 0) {
-          resolve(false)
+          loggedIn = false
         }
-        resolve(res[0].id === sender_psid)
+        loggedIn = (res[0].id === sender_psid)
       })
     console.log(loggedIn)
     if(!loggedIn && recieved_message.text.toLowerCase() !== "login") {
