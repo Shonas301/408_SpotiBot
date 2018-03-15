@@ -479,7 +479,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
   //doesn't work for numbers greater than 50
   //TODO Pagination
   //defaults to 50 if not a valid number
-  
+
   if ((parseFloat(numSongs) == parseInt(numSongs)) && !isNaN(numSongs)) {
     if (numSongs > 50) {
       response = { "text": `The max number of songs is 50 so here is 50 songs!\n` }
@@ -492,19 +492,23 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     callSendAPI(sender_psid, response);
   }
   dbDriver.findUser(db, {"id": sender_psid}).then((res, err) => {
-    spotifyApi.setAccessToken(res[0].access_token)
-    spotifyApi.setRefreshToken(res[0].refresh_token)
-    spotifyApi.refreshAccessToken()
-      .then(function(data) {
-        console.log('The access token has been refreshed!');
+    spotifyApi.setCredentials({
+      'access_token': res[0].access_token,
+      'refresh_token': res[0].refresh_token
+    }).then( function() {
+      spotifyApi.refreshAccessToken()
+        .then(function(data) {
+          console.log('The access token has been refreshed!');
 
-        // Save the access token so that it's used in future calls
-        spotifyApi.setAccessToken(data.body['access_token']);
-        dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
-      }, function(err) {
-        console.log('Could not refresh access token', err);
-      });
-    getTopSongs(numSongs, 0, term).then(function (data) {
+          // Save the access token so that it's used in future calls
+          spotifyApi.setAccessToken(data.body['access_token']);
+          dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
+        }, function(err) {
+          console.log('Could not refresh access token', err);
+        }); 
+    }).then(function () {
+      getTopSongs(numSongs, 0, term)
+    }).then(function (data) {
       //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
       //fall out of scope and lose object properties, pretty bizarre but it works
       data.map(function (song) {
@@ -521,7 +525,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
       callSendAPI(sender_psid, response);
     }).then(function () {
       var
-        date = new Date(),
+      date = new Date(),
         month = date.getMonth() + 1,
         day = date.getDate(),
         year = date.getFullYear(),
@@ -545,6 +549,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     });
   }); 
 }
+
 
 function getLoginUrl(sender_psid) {
   var scopes = ['user-read-private', 'user-read-email', 'user-top-read', 'user-library-read', 'playlist-modify-private', 'user-read-currently-playing', 'user-read-recently-played', 'user-follow-modify', 'user-follow-read', 'user-library-modify', 'playlist-modify-public', 'playlist-read-collaborative'],
