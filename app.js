@@ -227,9 +227,9 @@ function handleMessage(sender_psid, received_message) {
     dbDriver.findUser(db, {"id": sender_psid})
       .then((res, err) => {
         if(res.length === 0) {
-          resolve(false)
+          return false
         }
-        resolve((res[0].id === sender_psid))
+        return (res[0].id === sender_psid)
       })
       .then( (loggedIn) => {
         if(!loggedIn && recieved_message.text.toLowerCase() !== "login") {
