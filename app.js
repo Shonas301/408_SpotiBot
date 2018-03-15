@@ -232,7 +232,7 @@ function handleMessage(sender_psid, received_message) {
         return (res[0].id === sender_psid)
       })
       .then( (loggedIn) => {
-        if(!loggedIn && recieved_message.text.toLowerCase() !== "login") {
+        if(!loggedIn && received_message.text.toLowerCase() !== "login") {
           response = {
             "text": "Hey! Sorry we haven't met or you haven't logged in already! Check out this url!"
           }
