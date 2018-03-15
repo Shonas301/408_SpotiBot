@@ -465,7 +465,7 @@ function handleLoginRequest(sender_psid) {
 function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
   var
-    songs = [],
+  songs = [],
     songlist = [],
     songlistUris = [],
     prettyString = "",
@@ -492,10 +492,11 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     callSendAPI(sender_psid, response);
   }
   dbDriver.findUser(db, {"id": sender_psid}).then(async (res, err) => {
-    await spotifyApi.setCredentials({
+    saved = await spotifyApi.setCredentials({
       'access_token': res[0].access_token,
       'refresh_token': res[0].refresh_token
-    }).then( function() {
+    })
+    saved.then( function() {
       spotifyApi.refreshAccessToken()
         .then(function(data) {
           console.log('The access token has been refreshed!');
@@ -547,7 +548,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
         callSendAPI(sender_psid, response)
       });
     });
-  }); 
+  });
 }
 
 
