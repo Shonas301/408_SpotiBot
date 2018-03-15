@@ -492,7 +492,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     callSendAPI(sender_psid, response);
   }
   dbDriver.findUser(db, {"id": sender_psid}).then(async (res, err) => {
-    saved = await spotifyApi.setCredentials({
+    var saved = await spotifyApi.setCredentials({
       'access_token': res[0].access_token,
       'refresh_token': res[0].refresh_token
     })
