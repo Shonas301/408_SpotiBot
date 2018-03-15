@@ -240,8 +240,9 @@ function handleMessage(sender_psid, received_message) {
           response.text = response.text + "\n\n" + url
           callSendAPI(sender_psid,response);
         }
+        return loggedIn
       })
-      .then( () => { 
+      .then( (loggedIn) => { 
         if (received_message.text.toLowerCase() === "login") {
           if(loggedIn) {
             response = {"text": "You're already logged in! No worries!"}
@@ -498,6 +499,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     })
     return true
   }).then( function() {
+    console.log(spotifyApi.getCredentials())
     spotifyApi.refreshAccessToken()
       .then(function(data) {
         console.log('The access token has been refreshed!');
@@ -509,7 +511,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
         console.log('Could not refresh access token', err);
       }); 
   }).then(function () {
-    getTopSongs(numSongs, 0, term)
+    return getTopSongs(numSongs, 0, term)
   }).then(function (data) {
     //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
     //fall out of scope and lose object properties, pretty bizarre but it works
