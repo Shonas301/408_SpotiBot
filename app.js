@@ -491,64 +491,62 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     numSongs = 50;
     callSendAPI(sender_psid, response);
   }
-  dbDriver.findUser(db, {"id": sender_psid}).then(async (res, err) => {
-    await function() {
-      spotifyApi.setCredentials({
-        'access_token': res[0].access_token,
-        'refresh_token': res[0].refresh_token
-      })
-      return true
-    }.then( function() {
-      spotifyApi.refreshAccessToken()
-        .then(function(data) {
-          console.log('The access token has been refreshed!');
+  dbDriver.findUser(db, {"id": sender_psid}).then((res, err) => {
+    spotifyApi.setCredentials({
+      'access_token': res[0].access_token,
+      'refresh_token': res[0].refresh_token
+    })
+    return true
+  }).then( function() {
+    spotifyApi.refreshAccessToken()
+      .then(function(data) {
+        console.log('The access token has been refreshed!');
 
-          // Save the access token so that it's used in future calls
-          spotifyApi.setAccessToken(data.body['access_token']);
-          dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
-        }, function(err) {
-          console.log('Could not refresh access token', err);
-        }); 
-    }).then(function () {
-      getTopSongs(numSongs, 0, term)
-    }).then(function (data) {
-      //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
-      //fall out of scope and lose object properties, pretty bizarre but it works
-      data.map(function (song) {
-        songs.push(song)
+        // Save the access token so that it's used in future calls
+        spotifyApi.setAccessToken(data.body['access_token']);
+        dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
+      }, function(err) {
+        console.log('Could not refresh access token', err);
+      }); 
+  }).then(function () {
+    getTopSongs(numSongs, 0, term)
+  }).then(function (data) {
+    //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
+    //fall out of scope and lose object properties, pretty bizarre but it works
+    data.map(function (song) {
+      songs.push(song)
+    });
+    //TODO variable number must be changed here as well if we paginate
+    for (var i = 0; i < numSongs; i++) {
+      songlist.push(songs[i].name)
+      songlistUris.push(songs[i].uri)
+      prettyString = prettyString + "\t" + songs[i].name + "\n"
+    }
+  }).then(function () {
+    response = { "text": `Your top songs are:\n ${prettyString}` }
+    callSendAPI(sender_psid, response);
+  }).then(function () {
+    var
+    date = new Date(),
+      month = date.getMonth() + 1,
+      day = date.getDate(),
+      year = date.getFullYear(),
+      dateString = month + "/" + day + "/" + year;
+    //Call the Promis to create the playlist needed with the title in the format:
+    //Top Tracks: XX/XX/XXXX
+    createPlaylist("Top Tracks: " + dateString).then(function (data) {
+      data.map(function (playlist) {
+        playlistObject.push(playlist)
       });
-      //TODO variable number must be changed here as well if we paginate
-      for (var i = 0; i < numSongs; i++) {
-        songlist.push(songs[i].name)
-        songlistUris.push(songs[i].uri)
-        prettyString = prettyString + "\t" + songs[i].name + "\n"
-      }
+      playlistUrl = playlistObject[0].external_urls.spotify
+      playlistId = playlistObject[0].id
     }).then(function () {
-      response = { "text": `Your top songs are:\n ${prettyString}` }
-      callSendAPI(sender_psid, response);
+      //Add all the tracks in songlistUris to the playlist
+      addTracksToPlaylist(playlistId, songlistUris);
     }).then(function () {
-      var
-      date = new Date(),
-        month = date.getMonth() + 1,
-        day = date.getDate(),
-        year = date.getFullYear(),
-        dateString = month + "/" + day + "/" + year;
-      //Call the Promis to create the playlist needed with the title in the format:
-      //Top Tracks: XX/XX/XXXX
-      createPlaylist("Top Tracks: " + dateString).then(function (data) {
-        data.map(function (playlist) {
-          playlistObject.push(playlist)
-        });
-        playlistUrl = playlistObject[0].external_urls.spotify
-        playlistId = playlistObject[0].id
-      }).then(function () {
-        //Add all the tracks in songlistUris to the playlist
-        addTracksToPlaylist(playlistId, songlistUris);
-      }).then(function () {
-        //finally send the message it's been completed
-        response = { "text": `Here is the playlist: \n ${playlistUrl}` }
-        callSendAPI(sender_psid, response)
-      });
+      //finally send the message it's been completed
+      response = { "text": `Here is the playlist: \n ${playlistUrl}` }
+      callSendAPI(sender_psid, response)
     });
   });
 }
