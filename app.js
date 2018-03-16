@@ -463,6 +463,37 @@ function handleLoginRequest(sender_psid) {
   callSendAPI(sender_psid, response)
 }
 
+function refreshID(sender_psid) {
+  return new Promise((resolve, reject) => {
+    dbDriver.findUser(db, {"id": sender_psid})
+      .then((res,err) => {
+        spotifyApi.setCredentials({
+          'access_token': res[0].access_token,
+          'refresh_token': res[0].refresh_token
+        })
+      })
+      .catch( (err) => {
+        reject(err)
+      })
+      .then(spotifyApi.refreshAccessToken())
+      .catch( (err) => {
+        reject(err)
+      })
+      .then( (data) => {
+        console.log('The access token has been refreshed')
+        spotifyApi.setAccessToken(data.body['access_token'])
+        var update = dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
+        return(update)
+      })
+      .catch( (err) => {
+        reject(err)
+      })
+      .then( (update) => {
+        resolve(true)
+      })
+  })
+}
+
 function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
   var
@@ -492,65 +523,55 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     numSongs = 50;
     callSendAPI(sender_psid, response);
   }
-  dbDriver.findUser(db, {"id": sender_psid}).then((res, err) => {
-    spotifyApi.setCredentials({
-      'access_token': res[0].access_token,
-      'refresh_token': res[0].refresh_token
+  refreshID(sender_psid)
+    .then(function () {
+      return getTopSongs(numSongs, 0, term)
     })
-    return true
-  }).then( function() {
-    console.log(spotifyApi.getCredentials())
-    spotifyApi.refreshAccessToken()
-      .then(function(data) {
-        console.log('The access token has been refreshed!');
-
-        // Save the access token so that it's used in future calls
-        spotifyApi.setAccessToken(data.body['access_token']);
-        dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
-      }, function(err) {
-        console.log('Could not refresh access token', err);
-      }); 
-  }).then(function () {
-    return getTopSongs(numSongs, 0, term)
-  }).then(function (data) {
-    //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
-    //fall out of scope and lose object properties, pretty bizarre but it works
-    data.map(function (song) {
-      songs.push(song)
-    });
-    //TODO variable number must be changed here as well if we paginate
-    for (var i = 0; i < numSongs; i++) {
-      songlist.push(songs[i].name)
-      songlistUris.push(songs[i].uri)
-      prettyString = prettyString + "\t" + songs[i].name + "\n"
-    }
-  }).then(function () {
-    response = { "text": `Your top songs are:\n ${prettyString}` }
-    callSendAPI(sender_psid, response);
-  }).then(function () {
-    var
-    date = new Date(),
-      month = date.getMonth() + 1,
-      day = date.getDate(),
-      year = date.getFullYear(),
-      dateString = month + "/" + day + "/" + year;
-    //Call the Promis to create the playlist needed with the title in the format:
-    //Top Tracks: XX/XX/XXXX
-    createPlaylist("Top Tracks: " + dateString).then(function (data) {
+    .then(function (data) {
+      //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
+      //fall out of scope and lose object properties, pretty bizarre but it works
+      data.map(function (song) {
+        songs.push(song)
+      });
+      //TODO variable number must be changed here as well if we paginate
+      for (var i = 0; i < numSongs; i++) {
+        songlist.push(songs[i].name)
+        songlistUris.push(songs[i].uri)
+        prettyString = prettyString + "\t" + songs[i].name + "\n"
+      }
+    })
+    .then(function () {
+      response = { "text": `Your top songs are:\n ${prettyString}` }
+      callSendAPI(sender_psid, response);
+    })
+    .then(async function () {
+      var
+      date = new Date(),
+        month = date.getMonth() + 1,
+        day = date.getDate(),
+        year = date.getFullYear(),
+        dateString = month + "/" + day + "/" + year;
+      //Call the Promis to create the playlist needed with the title in the format:
+      //Top Tracks: XX/XX/XXXX
+      data = await createPlaylist("Top Tracks: " + dateString)
+      return data
+    })
+    .then(function (data) {
       data.map(function (playlist) {
         playlistObject.push(playlist)
       });
       playlistUrl = playlistObject[0].external_urls.spotify
       playlistId = playlistObject[0].id
-    }).then(function () {
+    })
+    .then(function () {
       //Add all the tracks in songlistUris to the playlist
       addTracksToPlaylist(playlistId, songlistUris);
-    }).then(function () {
+    })
+    .then(function () {
       //finally send the message it's been completed
       response = { "text": `Here is the playlist: \n ${playlistUrl}` }
       callSendAPI(sender_psid, response)
     });
-  });
 }
 
 
