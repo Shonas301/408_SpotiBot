@@ -480,8 +480,8 @@ function refreshID(sender_psid) {
         return reject(err)
       })
       .then( (data) => {
-        if(data.body === undefined) {
-          console.log(data.body)
+        if(typeof data.body === undefined) {
+          console.log(data)
           var token = data.body['access_token']
         }
         console.log('The access token has been refreshed')
@@ -491,10 +491,10 @@ function refreshID(sender_psid) {
         return(update)
       })
       .catch( (err) => {
-        reject(err)
+        return reject(err)
       })
       .then( (update) => {
-        resolve(true)
+        return resolve(true)
       })
   })
 }
