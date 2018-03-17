@@ -480,6 +480,10 @@ function refreshID(sender_psid) {
         reject(err)
       })
       .then( (data) => {
+        if(data.body === undefined) {
+          console.log(data.body)
+          var token = data.body['access_token']
+        }
         console.log('The access token has been refreshed')
         var token = data.body['access_token']
         spotifyApi.setAccessToken(token)
