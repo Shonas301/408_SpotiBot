@@ -933,3 +933,20 @@ function getSlowestSong(id) {
     });
   });
 }
+
+
+// PUJA HERE!!!!
+function createPlaylistForCategory(categories, count) {
+    return Promise.all(categories.map(function (category) {
+        return new Promise((resolve, reject) => {
+            spotifyApi.getPlaylistsForCategory(category).then((res) => {
+                var playlists = [];
+                for (var i = 0; i < count; i++)
+                    playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
+                resolve(playlists);
+            });
+        }).catch(err => {
+            reject(err);
+        })
+    }))
+}
