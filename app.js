@@ -532,6 +532,11 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     .then(function () {
       return getTopSongs(numSongs, 0, term)
     })
+    .catch( (err) => {
+      throwError(sender_psid)
+      console.log(err)
+      throw(err)
+    })
     .then(function (data) {
       //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
       //fall out of scope and lose object properties, pretty bizarre but it works
