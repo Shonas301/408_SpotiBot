@@ -405,8 +405,6 @@ function handleMessage(sender_psid, received_message) {
                 genres_list.splice(i, 1);
               }
             }
-            console.log("genres_list:")
-            console.log(genres_list)
             createPlaylistForCategory(genres_list, 5).then((result) => {
               console.log(result)
               var msg = 'Here are some playlists:\n';
@@ -470,8 +468,6 @@ function handleMessage(sender_psid, received_message) {
       })
   }
 }
-
-
 
 function handleLoginRequest(sender_psid) {
   var
@@ -966,6 +962,7 @@ function createPlaylistForCategory(categories, count) {
         var playlists = [];
         for (var i = 0; i < count; i++)
           playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
+        console.log(playlists)
         resolve(playlists);
       });
     }).catch(err => {
