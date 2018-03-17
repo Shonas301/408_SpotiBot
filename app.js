@@ -229,7 +229,7 @@ function handleMessage(sender_psid, received_message) {
         if(res.length === 0) {
           return false
         }
-        return (res[0].id === sender_psid)
+        return (res[0].id === parseInt(sender_psid))
       })
       .then( (loggedIn) => {
         if(!loggedIn && received_message.text.toLowerCase() !== "login") {
