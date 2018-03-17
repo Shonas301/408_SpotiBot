@@ -2,20 +2,19 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi();
 
-spotifyApi.setAccessToken('BQApyZIH0D60-C3hppsROVv3mHDXXtJbpee0HOtJfUzqo-5kCExuiEmMTf3CiRr7ob-VrNRK4ZFIy6_nsIj7SI3wfrM31KxoE2Zk_0WnQ_MlwcjOnrG4nIY4JngZ4fEnpVl6C5TrsRGGRxEiu1TbTbrdHbotwM0f7ZJvMtXXzXFgIhRDxXcf--n5oeCcF4vWZ2EuPxKSwAqpdgacTep3MRKQ6mSqUDpzdbHQWg_s4_4N7Sr6QXQ_wMs6SyBZ3-_YDIJncOLaLTs');
-
+spotifyApi.setAccessToken('BQAlECIpkrHKrGFC7wkGAUhtX3ePAt7s5QrWLzCWv_0ojOSGY6sB8Vb433pwUBtyVPeKorxD1uCICble-Y0GGv4G5F3wpn3ZwvIDpx2used0OfagcjWDZ-v_AWgqQMovaehinMWgubfcrBKA70lktBSWBRna_s6-rqELQ_qOf5erZu6u6omeS0M_DY9cRwdHIDGefkOQSp-472WtFISAISoHKqWwdOaA11yuapc-n8rRrDKPhi81LjmN1sJTJPKs1fCimQdN');
 // takes a name of artist in the format 'Hayley Kiyoko' and searches for the artist
 //returns the first result's artist id (should be accurate almost all the time)
 function searchForArtist(query) {
 	return new Promise((resolve, reject) => {
 		var result
-		spotifyApi.searchArtists(query).then(function(data) {
+		spotifyApi.searchArtists(query).then(function (data) {
 			//console.log(data)
 			result = data.body.artists.items[0].id;
 			console.log("here: " + result)
-		}, function(err) {
+		}, function (err) {
 			console.log(err)
-		}).then(function() {
+		}).then(function () {
 			return resolve(result)
 		})
 	});
@@ -29,7 +28,7 @@ function getArtistIDArray(artist_array) {
 	var artist_id_array = []
 	return new Promise((resolve, reject) => {
 		for (var index = 0; index < artist_array.length; ++index) {
-			searchForArtist(artist_array[index]).then(function(data) {
+			searchForArtist(artist_array[index]).then(function (data) {
 				artist_id_array.push(data)
 				resolve(artist_id_array);
 			})
@@ -44,10 +43,10 @@ function getArtistIDArray(artist_array) {
 function getPlaylist(artists) {
 	return new Promise((resolve, reject) => {
 		spotifyApi.getRecommendations({
-			min_energy: 0.4, 
-			seed_artists: artists, 
-			min_popularity: 50 
-		}).then(function(data) {
+			min_energy: 0.4,
+			seed_artists: artists,
+			min_popularity: 50
+		}).then(function (data) {
 			return resolve(data.body.tracks)
 		})
 	});
@@ -60,9 +59,9 @@ function getPlaylist(artists) {
 function playlistFromArtists(input) {
 	return new Promise((resolve, reject) => {
 		var artist_array = input.split(',');
-		getArtistIDArray(artist_array).then(function(artist_id_array) {
+		getArtistIDArray(artist_array).then(function (artist_id_array) {
 			console.log('artist array is: ' + artist_id_array)
-			getPlaylist(artist_id_array).then(function(playlist) {
+			getPlaylist(artist_id_array).then(function (playlist) {
 				return resolve(playlist);
 			})
 		}).catch(function (err) {
@@ -71,7 +70,48 @@ function playlistFromArtists(input) {
 	});
 }
 
-//tests these functions
-playlistFromArtists('Lady Gaga, Halsey').then(function(data) {
-	console.log(data) //uncomment this line to get result playlist
+var artists = 'Muse'
+// If this returns true that means the playlist was added to the users account
+buildArtistPlaylists(artists).then(res => {
+	console.log(res)
 })
+
+// This function combines everything and generates a playlist, and returns a promise contiaining the url
+function buildArtistPlaylists(artists) {
+	return new Promise((resolve, reject) => {
+		playlistFromArtists(artists).then(function (tracks) {
+			var song_ids = [];
+			for (var i =0; i < tracks.length;i++) {
+				song_ids.push("spotify:track:" + tracks[i].id)
+			}
+			var getMe = spotifyApi.getMe()
+				.then(function (data) {
+					return data.body.id;
+				}).catch(function (err) {
+					throw err;
+				})
+
+			// Create a playlist using the user's id
+			getMe.then(function (user_id) {
+				// Create a public playlist
+				return spotifyApi.createPlaylist(user_id, artists, { 'public': true })
+					.then(function (data) {
+						// Return array of playlist_id and user_id
+						return [data.body.id, user_id];
+					}).catch(function (err) {
+						throw err;
+					});
+			}).then((result) => {
+				console.log(result)
+				spotifyApi.addTracksToPlaylist(result[1], result[0], song_ids)
+					.then((res) => {
+						resolve(true)
+					}).catch((err) => {
+						reject(err);
+					})
+			}).catch((err) => {
+				reject(err);
+			})
+		})
+	})
+}
