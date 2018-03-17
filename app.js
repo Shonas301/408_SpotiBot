@@ -481,7 +481,7 @@ function refreshID(sender_psid) {
       })
       .then( (data) => {
         if(typeof data.body === undefined) {
-          console.log(data)
+          console.log('this is data' + data)
           var token = data.body['access_token']
         }
         console.log('The access token has been refreshed')
@@ -489,6 +489,9 @@ function refreshID(sender_psid) {
         spotifyApi.setAccessToken(token)
         var update = dbDriver.updateUserAccessToken(db, parseInt(sender_psid), token)
         return(update)
+      }, (err) => {
+        console.log('Something went wrong!', err)
+        throw(err)
       })
       .catch( (err) => {
         return reject(err)
