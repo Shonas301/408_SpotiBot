@@ -224,28 +224,28 @@ function handleMessage(sender_psid, received_message) {
     // TODO
     //var loggedIn = db.contains(sender_psid)
 
-    dbDriver.findUser(db, {"id": parseInt(sender_psid)})
+    dbDriver.findUser(db, { "id": parseInt(sender_psid) })
       .then((res, err) => {
-        if(res.length === 0) {
+        if (res.length === 0) {
           return false
         }
         return (res[0].id === parseInt(sender_psid))
       })
-      .then( (loggedIn) => {
-        if(!loggedIn && received_message.text.toLowerCase() !== "login") {
+      .then((loggedIn) => {
+        if (!loggedIn && received_message.text.toLowerCase() !== "login") {
           response = {
             "text": "Hey! Sorry we haven't met or you haven't logged in already! Check out this url!"
           }
           var url = getLoginUrl(sender_psid)
           response.text = response.text + "\n\n" + url
-          callSendAPI(sender_psid,response);
+          callSendAPI(sender_psid, response);
         }
         return loggedIn
       })
-      .then( (loggedIn) => { 
+      .then((loggedIn) => {
         if (received_message.text.toLowerCase() === "login") {
-          if(loggedIn) {
-            response = {"text": "You're already logged in! No worries!"}
+          if (loggedIn) {
+            response = { "text": "You're already logged in! No worries!" }
             callSendAPI(sender_psid, response);
           }
           else {
@@ -258,7 +258,7 @@ function handleMessage(sender_psid, received_message) {
         }
         else if (received_message.text.toLowerCase().substring(0, 12) === "top playlist") {
           var
-          res = received_message.text.split(" "),
+            res = received_message.text.split(" "),
             term = "";
           switch (res[2]) {
             case ('short'):
@@ -373,7 +373,7 @@ function handleMessage(sender_psid, received_message) {
           }
           callSendAPI(sender_psid, response);
 
-        } else if(received_message.text.toLowerCase().substring(0, 4) === "byop") {  
+        } else if (received_message.text.toLowerCase().substring(0, 4) === "byop") {
 
           var res = received_message.text.split(":")
 
@@ -396,7 +396,7 @@ function handleMessage(sender_psid, received_message) {
 
             callSendAPI(sender_psid, response);
           } else if (input == 'byop artist') {
-          } else if (input == 'byop playlist') {  
+          } else if (input == 'byop playlist') {
           } else if (input == 'byop genre') {
             console.log(res)
             var genres_list = res[1].split(" ")
@@ -430,9 +430,26 @@ function handleMessage(sender_psid, received_message) {
                 moods_list.splice(i, 1);
               }
             }
-          } 
+          }
+          createPlaylistForCategory(genres_list, 5).then((result) => {
+            console.log(result)
+            var msg = 'Here are some playlists:\n';
+            for (var i = 0; i < result.length; i++)
+              for (var j = 0; j < result[i].length; j++)
+                msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
+            var response = {
+              'text': msg
+            };
+            callSendAPI(sender_psid, response);
+          }).catch((err) => {
+            console.log(err)
+            var response = {
+              'text': `I'm sorry there's been an error! ${err.message}`
+            }
+            callSendAPI(sender_psid, response);
+          });
           //successfully passed the turn in. 
-        } else if(received_message.text.toLowerCase() === "?") {
+        } else if (received_message.text.toLowerCase() === "?") {
           response = {
             "text": `
             Type "top playlist ?" to generate a playlist of your most listened to tracks, \n
@@ -442,8 +459,8 @@ function handleMessage(sender_psid, received_message) {
           }
           callSendAPI(sender_psid, response);
         } else {
-          response = { 
-            "text": `You sent a message SpotiBot doesnt recognize: "${received_message.text}" :( Try something else!` 
+          response = {
+            "text": `You sent a message SpotiBot doesnt recognize: "${received_message.text}" :( Try something else!`
           }
           callSendAPI(sender_psid, response);
         }
@@ -465,22 +482,22 @@ function handleLoginRequest(sender_psid) {
 
 function refreshID(sender_psid) {
   return new Promise((resolve, reject) => {
-    dbDriver.findUser(db, {"id": parseInt(sender_psid)})
-      .then((res,err) => {
+    dbDriver.findUser(db, { "id": parseInt(sender_psid) })
+      .then((res, err) => {
         spotifyApi.setCredentials({
           'access_token': res[0].access_token,
           'refresh_token': res[0].refresh_token
         })
       })
-      .catch( (err) => {
+      .catch((err) => {
         return reject(err)
       })
       .then(spotifyApi.refreshAccessToken())
-      .catch( (err) => {
+      .catch((err) => {
         return reject(err)
       })
-      .then( (data) => {
-        if(typeof data.body === undefined) {
+      .then((data) => {
+        if (typeof data.body === undefined) {
           console.log('this is data' + data)
           var token = data.body['access_token']
         }
@@ -488,28 +505,28 @@ function refreshID(sender_psid) {
         var token = data.body['access_token']
         spotifyApi.setAccessToken(token)
         var update = dbDriver.updateUserAccessToken(db, parseInt(sender_psid), token)
-        return(update)
+        return (update)
       }, (err) => {
         console.log('Something went wrong!', err)
-        throw(err)
+        throw (err)
       })
-      .catch( (err) => {
+      .catch((err) => {
         return reject(err)
       })
-      .then( (update) => {
+      .then((update) => {
         return resolve(true)
       })
   })
 }
 
 function throwError(sender_psid) {
-  var response = {text: 'Sorry! There was an error and it has been reported to the dev team, check again with us soon!'}
+  var response = { text: 'Sorry! There was an error and it has been reported to the dev team, check again with us soon!' }
   callSendAPI(sender_psid, response)
 }
 function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
   var
-  songs = [],
+    songs = [],
     songlist = [],
     songlistUris = [],
     prettyString = "",
@@ -539,10 +556,10 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     .then(function () {
       return getTopSongs(numSongs, 0, term)
     })
-    .catch( (err) => {
+    .catch((err) => {
       throwError(sender_psid)
       console.log(err)
-      throw(err)
+      throw (err)
     })
     .then(function (data) {
       //Because of ASynchroninity we force js to evaluate and poplate songs first so data doesn't
@@ -563,7 +580,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     })
     .then(async function () {
       var
-      date = new Date(),
+        date = new Date(),
         month = date.getMonth() + 1,
         day = date.getDate(),
         year = date.getFullYear(),
@@ -645,7 +662,7 @@ function callSendAPI(sender_psid, response) {
 // offset is optional (and not necessary for our implementation
 // returns a promise which contains the top user's songs
 function getTopSongs(id, limit, offset, time_range) {
-  var 
+  var
     accessToken,
     refreshToken;
   return new Promise((resolve, reject) => {
@@ -934,18 +951,17 @@ function getSlowestSong(id) {
   });
 }
 
-// PUJA HERE!!!!
 function createPlaylistForCategory(categories, count) {
-    return Promise.all(categories.map(function (category) {
-        return new Promise((resolve, reject) => {
-            spotifyApi.getPlaylistsForCategory(category).then((res) => {
-                var playlists = [];
-                for (var i = 0; i < count; i++)
-                    playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
-                resolve(playlists);
-            });
-        }).catch(err => {
-            reject(err);
-        })
-    }))
+  return Promise.all(categories.map(function (category) {
+    return new Promise((resolve, reject) => {
+      spotifyApi.getPlaylistsForCategory(category).then((res) => {
+        var playlists = [];
+        for (var i = 0; i < count; i++)
+          playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
+        resolve(playlists);
+      });
+    }).catch(err => {
+      reject(err);
+    })
+  }))
 }
