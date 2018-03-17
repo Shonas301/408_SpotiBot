@@ -499,6 +499,10 @@ function refreshID(sender_psid) {
   })
 }
 
+function throwError(sender_psid) {
+  var response = {text: 'Sorry! There was an error and it has been reported to the dev team, check again with us soon!'}
+  callSendAPI(sender_psid, response)
+}
 function handleTopPlaylist(sender_psid, term, numSongs) {
   //Declare variables in score that are populated throughout the promise chaining 
   var
