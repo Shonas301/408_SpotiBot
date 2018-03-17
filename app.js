@@ -86,7 +86,7 @@ app.get('/clientAuth', (req, res) => {
       time.setSeconds(time.getSeconds() + data.body['expires_in']);
 
       var user = {
-        id: sender_psid,
+        id: parseInt(sender_psid),
         expires_at: time,
         access_token: data.body['access_token'],
         refresh_token: data.body['refresh_token']
@@ -224,7 +224,7 @@ function handleMessage(sender_psid, received_message) {
     // TODO
     //var loggedIn = db.contains(sender_psid)
 
-    dbDriver.findUser(db, {"id": sender_psid})
+    dbDriver.findUser(db, {"id": parseInt(sender_psid)})
       .then((res, err) => {
         if(res.length === 0) {
           return false
@@ -465,7 +465,7 @@ function handleLoginRequest(sender_psid) {
 
 function refreshID(sender_psid) {
   return new Promise((resolve, reject) => {
-    dbDriver.findUser(db, {"id": sender_psid})
+    dbDriver.findUser(db, {"id": parseInt(sender_psid)})
       .then((res,err) => {
         spotifyApi.setCredentials({
           'access_token': res[0].access_token,
@@ -482,7 +482,7 @@ function refreshID(sender_psid) {
       .then( (data) => {
         console.log('The access token has been refreshed')
         spotifyApi.setAccessToken(data.body['access_token'])
-        var update = dbDriver.updateUserAccessToken(db, sender_psid, data.body['access_token'])
+        var update = dbDriver.updateUserAccessToken(db, parseInt(sender_psid), data.body['access_token'])
         return(update)
       })
       .catch( (err) => {
