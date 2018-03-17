@@ -473,11 +473,11 @@ function refreshID(sender_psid) {
         })
       })
       .catch( (err) => {
-        reject(err)
+        return reject(err)
       })
       .then(spotifyApi.refreshAccessToken())
       .catch( (err) => {
-        reject(err)
+        return reject(err)
       })
       .then( (data) => {
         if(data.body === undefined) {
