@@ -955,7 +955,11 @@ function getSlowestSong(id) {
 
 function createPlaylistForCategory(categories, count) {
   console.log("Categories = ")
-  console.log(categories)
+
+  categories.map(function(cat) {
+    console.log(cat)
+  });
+
   return Promise.all(categories.map(function (category) {
     return new Promise((resolve, reject) => {
       spotifyApi.getPlaylistsForCategory(category).then((res) => {
