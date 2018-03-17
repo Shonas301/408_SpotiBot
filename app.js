@@ -531,7 +531,7 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
       callSendAPI(sender_psid, response);
     }
   } else {
-    response = { "text": `Your input is invalid so we defaulted to 50.\n` }
+    response = { "text": `Your playlist length input is invalid so we defaulted to 50.\n` }
     numSongs = 50;
     callSendAPI(sender_psid, response);
   }
@@ -933,7 +933,6 @@ function getSlowestSong(id) {
     });
   });
 }
-
 
 // PUJA HERE!!!!
 function createPlaylistForCategory(categories, count) {
