@@ -213,6 +213,7 @@ app.get('/webhook', (req, res) => {
     }
   }
 });
+
 function handleMessage(sender_psid, received_message) {
   var response = "";
 
@@ -398,13 +399,14 @@ function handleMessage(sender_psid, received_message) {
           } else if (input == 'byop artist') {
           } else if (input == 'byop playlist') {
           } else if (input == 'byop genre') {
-            console.log(res)
             var genres_list = res[1].split(" ")
             for (var i = 0; i < genres_list.length; i++) {
               if (genres_list[i] == "" || genres_list[i] == " ") {
                 genres_list.splice(i, 1);
               }
             }
+            console.log("genres_list:")
+            console.log(genres_list)
             createPlaylistForCategory(genres_list, 5).then((result) => {
               console.log(result)
               var msg = 'Here are some playlists:\n';
@@ -430,24 +432,24 @@ function handleMessage(sender_psid, received_message) {
                 moods_list.splice(i, 1);
               }
             }
+            createPlaylistForCategory(genres_list, 5).then((result) => {
+              console.log(result)
+              var msg = 'Here are some playlists:\n';
+              for (var i = 0; i < result.length; i++)
+                for (var j = 0; j < result[i].length; j++)
+                  msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
+              var response = {
+                'text': msg
+              };
+              callSendAPI(sender_psid, response);
+            }).catch((err) => {
+              console.log(err)
+              var response = {
+                'text': `I'm sorry there's been an error! ${err.message}`
+              }
+              callSendAPI(sender_psid, response);
+            });
           }
-          createPlaylistForCategory(genres_list, 5).then((result) => {
-            console.log(result)
-            var msg = 'Here are some playlists:\n';
-            for (var i = 0; i < result.length; i++)
-              for (var j = 0; j < result[i].length; j++)
-                msg = msg + 'name: ' + result[i][j].name + '\n' + result[i][j].link + '\n\n';
-            var response = {
-              'text': msg
-            };
-            callSendAPI(sender_psid, response);
-          }).catch((err) => {
-            console.log(err)
-            var response = {
-              'text': `I'm sorry there's been an error! ${err.message}`
-            }
-            callSendAPI(sender_psid, response);
-          });
           //successfully passed the turn in. 
         } else if (received_message.text.toLowerCase() === "?") {
           response = {
