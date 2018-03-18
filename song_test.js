@@ -2,8 +2,7 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 var spotifyApi = new SpotifyWebApi();
 
-spotifyApi.setAccessToken('BQApyZIH0D60-C3hppsROVv3mHDXXtJbpee0HOtJfUzqo-5kCExuiEmMTf3CiRr7ob-VrNRK4ZFIy6_nsIj7SI3wfrM31KxoE2Zk_0WnQ_MlwcjOnrG4nIY4JngZ4fEnpVl6C5TrsRGGRxEiu1TbTbrdHbotwM0f7ZJvMtXXzXFgIhRDxXcf--n5oeCcF4vWZ2EuPxKSwAqpdgacTep3MRKQ6mSqUDpzdbHQWg_s4_4N7Sr6QXQ_wMs6SyBZ3-_YDIJncOLaLTs');
-
+spotifyApi.setAccessToken('BQD9aFV82qOK1l46TjuMb0CNNY20cwPWJCYANXLddhz4XbNjDyEoA24SuYrtCyyQEJcAUTE0pUFzbUAj3MRJXB5Mb8qff3Nhh-W9qlgv7fcT5MpMSq_yeqdD_sKCCtZ1Oy3pRkh9vvy84reCPxeepubAPZRV2kiyXUVIB0vTyxt0KrenS7JIQwxxKgCBtK1mmoqvKGrC0uicBDgSHGSgoDjWNXEfnujwVL4RcwQk7c-dBTaM9gHrlyHsSQK2zR-0cT8Jm0-y');
 // takes a name of song and artist in the format "Curious - Hayley Kiyoko" and searches for the song
 //returns the first result's song id (should be accurate almost all the time)
 function searchForSongByArtist(query) {
@@ -71,6 +70,49 @@ function playlistFromSongs(input) {
 }
 
 //tests these functions
-playlistFromSongs('Just Dance - Lady Gaga, Strange Love - Halsey, Hold My Girl - George Ezra').then(function(data) {
-	console.log(data) //uncomment this line to get result playlist
+var songs = 'Humble - Kendrick Lamar, Psycho - Muse, Gravity - John Mayer';
+buildSongPlaylist(songs).then(res => {
+	console.log(res)
+}).catch(err => {
+	console.log(err)
 })
+
+// This function combines everything and generates a playlist, and returns a promise contiaining the url
+function buildSongPlaylist(songs) {
+	return new Promise((resolve, reject) => {
+		playlistFromSongs(songs).then(function (tracks) {
+			var song_ids = [];
+			for (var i =0; i < tracks.length;i++) {
+				song_ids.push("spotify:track:" + tracks[i].id)
+			}
+			var getMe = spotifyApi.getMe()
+				.then(function (data) {
+					return data.body.id;
+				}).catch(function (err) {
+					throw err;
+				})
+
+			// Create a playlist using the user's id
+			getMe.then(function (user_id) {
+				// Create a public playlist
+				return spotifyApi.createPlaylist(user_id, songs, { 'public': true })
+					.then(function (data) {
+						// Return array of playlist_id and user_id
+						return [data.body.id, user_id];
+					}).catch(function (err) {
+						throw err;
+					});
+			}).then((result) => {
+				console.log(result)
+				spotifyApi.addTracksToPlaylist(result[1], result[0], song_ids)
+					.then((res) => {
+						resolve(true)
+					}).catch((err) => {
+						reject(err);
+					})
+			}).catch((err) => {
+				reject(err);
+			})
+		})
+	})
+}
