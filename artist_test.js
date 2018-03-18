@@ -26,13 +26,14 @@ function searchForArtist(query) {
 //right now it adds the first artist ID to the array, returns the array and then gets the IDS for the rest of the artists
 function getArtistIDArray(artist_array) {
 	var artist_id_array = []
-	return new Promise((resolve, reject) => {
+	artist_id_array = new Promise((resolve, reject) => {
+          var temp_array = []
 		for (var index = 0; index < artist_array.length; ++index) {
 			searchForArtist(artist_array[index]).then(function (data) {
-				artist_id_array.push(data)
-				resolve(artist_id_array);
+				temp_array.push(data)
 			})
 		}
+		resolve(temp_array);
 	});
 	return artist_id_array;
 }
