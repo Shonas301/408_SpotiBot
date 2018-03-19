@@ -1003,6 +1003,8 @@ function searchForSongByArtist(query) {
       console.log(err)
     }).then(function () {
       return resolve(result)
+    }).catch(err => {
+      reject(err)
     })
   });
 }
@@ -1018,6 +1020,8 @@ function getSongIDArray(song_array) {
       searchForSongByArtist(song_array[index]).then(function (data) {
         song_id_array.push(data)
         resolve(song_id_array);
+      }).catch(err => {
+        reject(err)
       })
     }
   });
@@ -1036,6 +1040,8 @@ function getPlaylist(tracks) {
       min_popularity: 50
     }).then(function (data) {
       return resolve(data.body.tracks)
+    }).catch(err =>{
+      reject(err)
     })
   });
 }
@@ -1052,7 +1058,7 @@ function playlistFromSongs(input) {
         return resolve(playlist);
       })
     }).catch(function (err) {
-      console.error(err)
+      reject(err)
     });
   });
 }
@@ -1111,6 +1117,8 @@ function searchForArtist(query) {
       console.log(err)
     }).then(function () {
       return resolve(result)
+    }).catch(err => {
+      reject(err)
     })
   });
 }
@@ -1143,6 +1151,8 @@ function getPlaylist(artists) {
       min_popularity: 50
     }).then(function (data) {
       return resolve(data.body.tracks)
+    }).catch(err => {
+      reject(err)
     })
   });
 }
@@ -1160,7 +1170,7 @@ function playlistFromArtists(input) {
         return resolve(playlist);
       })
     }).catch(function (err) {
-      console.error(err)
+      reject(err)
     });
   });
 }
@@ -1188,7 +1198,7 @@ function buildArtistPlaylists(artists) {
             // Return array of playlist_id and user_id
             return [data.body.id, user_id, data.body.external_urls.spotify];
           }).catch(function (err) {
-            throw err;
+            reject(err);
           });
       }).then((result) => {
         console.log(result)
