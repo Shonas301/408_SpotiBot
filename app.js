@@ -485,6 +485,8 @@ function handleMessage(sender_psid, received_message) {
           callSendAPI(sender_psid, response);
         }
         console.log('${received_message.text}')
+      }).catch(err => {
+        console.log(err)
       })
   }
 }
