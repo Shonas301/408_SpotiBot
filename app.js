@@ -1070,6 +1070,7 @@ function buildSongPlaylist(songs) {
       for (var i = 0; i < tracks.length; i++) {
         song_ids.push("spotify:track:" + tracks[i].id)
       }
+      console.log(song_ids)
       var getMe = spotifyApi.getMe()
         .then(function (data) {
           return data.body.id;
@@ -1080,7 +1081,7 @@ function buildSongPlaylist(songs) {
       // Create a playlist using the user's id
       getMe.then(function (user_id) {
         // Create a public playlist
-        return spotifyApi.createPlaylist(user_id, tracks[0].name, { 'public': true })
+        return spotifyApi.createPlaylist(user_id, songs, { 'public': true })
           .then(function (data) {
             // Return array of playlist_id and user_id
             return [data.body.id, user_id, data.body.external_urls.spotify];
