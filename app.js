@@ -391,9 +391,11 @@ function handleMessage(sender_psid, received_message) {
             var songs_list = res[1].split(",")
             var songs_string = res[1].substring(1)
             console.log(songs_string)
+            /*
             for (var i = 0; i < songs_list.length; i++) {
               songs_string = songs_string + songs_list[i] + ' '
             }
+            */
             //var response = { "text": `Your songs are: ${songs_string}\n` }
             buildSongPlaylist(songs_string).then(res => {
               var response = { "text": `Your playlist:\n${res}\n` }
