@@ -604,11 +604,14 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
     callSendAPI(sender_psid, response);
   }
   refreshID(sender_psid)
+    .catch( err => {
+      console.log(err)
+      throw(err)
+    })
     .then(function () {
       return getTopSongs(numSongs, 0, term)
     })
     .catch((err) => {
-      throwError(sender_psid)
       console.log(err)
       throw (err)
     })
@@ -624,6 +627,10 @@ function handleTopPlaylist(sender_psid, term, numSongs) {
         songlistUris.push(songs[i].uri)
         prettyString = prettyString + "\t" + songs[i].name + "\n"
       }
+    })
+    .catch( (err) => {
+      console.log(err)
+      throw err
     })
     .then(function () {
       response = { "text": `Your top songs are:\n ${prettyString}` }
