@@ -983,6 +983,8 @@ function createPlaylistForCategory(categories, count) {
           playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
         console.log(playlists)
         resolve(playlists);
+      }).catch(err => {
+        reject(err);
       });
     }).catch(err => {
       reject(err);
