@@ -522,6 +522,7 @@ function refreshID(sender_psid) {
         console.log('refresh ' + res[0].refresh_token)
         spotifyApi.setAccessToken(res[0].access_token)
         spotifyApi.setRefreshToken(res[0].refresh_token)
+        console.log(spotifyApi.getMe())
         return(res[0].expires_at)
       })
       .catch((err) => {
