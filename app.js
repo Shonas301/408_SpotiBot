@@ -984,10 +984,8 @@ function createPlaylistForCategory(categories, count) {
         console.log(playlists)
         resolve(playlists);
       }).catch(err => {
-        reject(err);
-      });
-    }).catch(err => {
-      reject(err);
+        return reject(err);
+      })
     })
   }))
 }
@@ -1041,7 +1039,7 @@ function getPlaylist(tracks) {
       min_popularity: 50
     }).then(function (data) {
       return resolve(data.body.tracks)
-    }).catch(err =>{
+    }).catch(err => {
       reject(err)
     })
   });
