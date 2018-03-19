@@ -389,12 +389,13 @@ function handleMessage(sender_psid, received_message) {
           //return that as a playlist
           if (input == 'byop song') {
             var songs_list = res[1].split(",")
-            var songs_string = ''
+            var songs_string = res[1].substring(1)
+            
             for (var i = 0; i < songs_list.length; i++) {
               songs_string = songs_string + songs_list[i] + ' '
             }
             //var response = { "text": `Your songs are: ${songs_string}\n` }
-            buildSongPlaylist(res[1]).then(res => {
+            buildSongPlaylist(songs_string).then(res => {
               var response = { "text": `Your playlist:\n${res}\n` }
               callSendAPI(sender_psid, response);
             }).catch(err => {
