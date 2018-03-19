@@ -1065,7 +1065,7 @@ function playlistFromSongs(input) {
 // This function combines everything and generates a playlist, and returns a promise contiaining the url
 function buildSongPlaylist(songs) {
   return new Promise((resolve, reject) => {
-    playlistFromSongs(songs).then(function (tracks) {
+    playlistFromSongs(songs).then((tracks) => {
       var song_ids = [];
       console.log(tracks)
       for (var i = 0; i < tracks.length; i++) {
