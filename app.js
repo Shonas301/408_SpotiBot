@@ -1335,3 +1335,21 @@ function buildArtistPlaylists(id, artists) {
     })
   })
 }
+
+function getSongNameString(trackId) {
+  return new Promise((resolve, reject) => {
+    var song_name_string
+    spotifyApi.getTrack(trackId).then(function(data) {
+      var artists = data.body.artists
+      var artists_string = ''
+      for (index = 0; index < artists.length; ++index) {
+        artists_string = artists_string + data.body.artists[index].name + ' '
+      }
+      song_name_string = data.body.name + " by " + artists_string
+    }, function(err) {
+      console.log(err)
+    }).then(function() {
+      return resolve(song_name_string)
+    })
+  });
+}
