@@ -394,7 +394,7 @@ function handleMessage(sender_psid, received_message) {
               songs_string = songs_string + songs_list[i] + ' '
             }
             //var response = { "text": `Your songs are: ${songs_string}\n` }
-            buildSongPlaylist(songs_string).then(res => {
+            buildSongPlaylist(res[1]).then(res => {
               var response = { "text": `Your playlist:\n${res}\n` }
               callSendAPI(sender_psid, response);
             }).catch(err => {
