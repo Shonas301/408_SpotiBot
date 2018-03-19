@@ -299,7 +299,6 @@ async function handleMessage(sender_psid, received_message) {
             var numSongs = res[3];
             //successfully passed the turn in. 
             var res = handleTopPlaylist(sender_psid, term, numSongs)
-            res.then()
           } else if (received_message.text.toLowerCase() === "genre") {
             getTopGenre(sender_psid).then((genre) => {
               response = { "text": `Your most listened to genre is: "${genre}".` }
