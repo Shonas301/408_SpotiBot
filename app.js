@@ -515,6 +515,7 @@ function checkTime(time) {
 }
 function refreshID(sender_psid) {
   return new Promise((resolve, reject) => {
+    console.log('top of promise' + sender_psid)
     dbDriver.findUser(db, { id: parseInt(sender_psid) })
       .then((res, err) => {
         if (err)
