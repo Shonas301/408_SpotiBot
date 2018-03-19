@@ -507,7 +507,7 @@ function checkTime(time) {
   return new Promise((resolve, reject) => {
     var now = new Date() 
     var tMax = 3600000
-    if ((time - now) > tmax) {
+    if ((time - now) > tMax) {
       return resolve(true)
     }
     return resolve(false)
