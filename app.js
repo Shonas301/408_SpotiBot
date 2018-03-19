@@ -514,15 +514,14 @@ function checkTime(time) {
 }
 function refreshID(sender_psid) {
   return new Promise((resolve, reject) => {
-    console.log('top of promise' + sender_psid)
     dbDriver.findUser(db, { id: parseInt(sender_psid) })
       .then((res, err) => {
         if (err)
           throw err
-        spotifyApi.setCredentials({
-          'access_token': res[0].access_token,
-          'refresh_token': res[0].refresh_token
-        })
+        console.log('access ' + res[0].access_token)
+        console.log('refresh ' + res[0].refresh_token)
+        spotifyApi.setAccessToken(res[0].access_token)
+        spotifyApi.setRefreshToken(res[0].refresh_token)
         return(res[0].expires_at)
       })
       .catch((err) => {
