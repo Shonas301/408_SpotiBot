@@ -390,7 +390,7 @@ function handleMessage(sender_psid, received_message) {
           if (input == 'byop song') {
             var songs_list = res[1].split(",")
             var songs_string = res[1].substring(1)
-            
+            console.log(songs_string)
             for (var i = 0; i < songs_list.length; i++) {
               songs_string = songs_string + songs_list[i] + ' '
             }
