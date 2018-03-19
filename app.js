@@ -1067,6 +1067,7 @@ function buildSongPlaylist(songs) {
   return new Promise((resolve, reject) => {
     playlistFromSongs(songs).then(function (tracks) {
       var song_ids = [];
+      console.log(tracks)
       for (var i = 0; i < tracks.length; i++) {
         song_ids.push("spotify:track:" + tracks[i].id)
       }
@@ -1089,7 +1090,6 @@ function buildSongPlaylist(songs) {
             throw err;
           });
       }).then((result) => {
-        console.log(song_ids);
         spotifyApi.addTracksToPlaylist(result[1], result[0], song_ids)
           .then((res) => {
             resolve(result[2])
