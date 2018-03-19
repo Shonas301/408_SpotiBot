@@ -7,7 +7,6 @@
  *
  */
 
-'use strict';
 // Imports dependencies and set up http server
 const
   request = require('request'),
@@ -780,7 +779,7 @@ function getTopGenre(id) {
   refreshID(id)
     .then( () => {
       return new Promise((resolve, reject) => {
-        getTopArtists(50, 0, "long_term").then((artists) => {
+        getTopArtists(id, 50, 0, "long_term").then((artists) => {
           var genres = [];
           for (var i = 0; i < artists.length; i++)
             for (var j = 0; j < artists[i].genres.length; j++)
@@ -829,7 +828,7 @@ function createPlaylist(id, playlist_name) {
       return new Promise((resolve, reject) => {
         getMe.then(function (user_id) {
           // Create a public playlist
-          spotifyApi.createPlaylist(user_id, playlist_name, { 'public': true })
+          spotifyApi.createPlaylist(id, user_id, playlist_name, { 'public': true })
             .then(function (data) {
               console.log(data)
               return resolve([data.body]);
@@ -896,7 +895,7 @@ function getTopKey(id) {
   refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
-        getTopSongs(25, 0, "short_term").then((data) => {
+        getTopSongs(id, 25, 0, "short_term").then((data) => {
           var track_ids = [];
           for (var i = 0; i < data.length; i++) {
             track_ids.push(data[i].id)
@@ -1094,7 +1093,7 @@ function createPlaylistForCategory(id, categories, count) {
     .then(() => {
       return Promise.all(categories.map(function (category) {
         return new Promise((resolve, reject) => {
-          spotifyApi.getPlaylistsForCategory(category).then((res) => {
+          spotifyApi.getPlaylistsForCategory(id, category).then((res) => {
             var playlists = [];
             for (var i = 0; i < count; i++)
               playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
@@ -1169,7 +1168,7 @@ function getPlaylist(id, tracks) {
 function playlistFromSongs(id, input) {
   return new Promise((resolve, reject) => {
     var song_array = input.split(',');
-    getSongIDArray(song_array).then(function (song_id_array) {
+    getSongIDArray(id, song_array).then(function (song_id_array) {
       console.log('song array is: ' + song_id_array)
       getPlaylist(id, song_id_array).then(function (playlist) {
         return resolve(playlist);
@@ -1208,7 +1207,7 @@ function buildSongPlaylist(id, songs) {
                 throw err;
               });
           }).then((result) => {
-            spotifyApi.addTracksToPlaylist(result[1], result[0], song_ids)
+            spotifyApi.addTracksToPlaylist(id, result[1], result[0], song_ids)
               .then((res) => {
                 resolve(result[2])
               }).catch((err) => {
@@ -1324,7 +1323,7 @@ function buildArtistPlaylists(id, artists) {
           });
       }).then((result) => {
         console.log(result)
-        spotifyApi.addTracksToPlaylist(result[1], result[0], song_ids)
+        spotifyApi.addTracksToPlaylist(id, result[1], result[0], song_ids)
           .then((res) => {
             resolve(result[2])
           }).catch((err) => {
