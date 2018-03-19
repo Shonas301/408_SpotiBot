@@ -737,7 +737,7 @@ function getTopSongs(id, limit, offset, time_range) {
   var
     accessToken,
     refreshToken;
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
@@ -751,6 +751,7 @@ function getTopSongs(id, limit, offset, time_range) {
         });
       })
     })
+  return ret
 }
 
 // Example get top 5 artists (Using for Genre Stats)
@@ -973,7 +974,12 @@ function getSaddestSong(id) {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
           limit: 50
-        }).then(function (data) {
+        })
+        .catch( (err) => {
+          console.log(err)
+          reject(err)
+        })
+        .then(function (data) {
           var songsList = []
           var danceList = []
           var songs = data.body.items
