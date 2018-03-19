@@ -450,7 +450,7 @@ function handleMessage(sender_psid, received_message) {
                 moods_list.splice(i, 1);
               }
             }
-            createPlaylistForCategory(genres_list, 5).then((result) => {
+            createPlaylistForCategory(moods_list, 5).then((result) => {
               console.log(result)
               var msg = 'Here are some playlists:\n';
               for (var i = 0; i < result.length; i++)
@@ -970,12 +970,6 @@ function getSlowestSong(id) {
 }
 
 function createPlaylistForCategory(categories, count) {
-  console.log("Categories = ")
-
-  categories.map(function (cat) {
-    console.log(cat)
-  });
-
   return Promise.all(categories.map(function (category) {
     return new Promise((resolve, reject) => {
       spotifyApi.getPlaylistsForCategory(category).then((res) => {
