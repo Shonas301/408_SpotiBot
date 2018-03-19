@@ -522,7 +522,7 @@ function refreshID(sender_psid) {
           'access_token': res[0].access_token,
           'refresh_token': res[0].refresh_token
         })
-        return(res.expires_at)
+        return(res[0].expires_at)
       })
       .catch((err) => {
         return reject(err)
