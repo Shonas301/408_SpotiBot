@@ -227,7 +227,7 @@ function handleMessage(sender_psid, received_message) {
 
     dbDriver.findUser(db, { "id": parseInt(sender_psid) })
       .then((res, err) => {
-        if (res.length === 0) {
+        if (!res || res.length === 0) {
           return false
         }
         return (res[0].id === parseInt(sender_psid))
