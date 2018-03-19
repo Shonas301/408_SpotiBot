@@ -504,6 +504,16 @@ function handleLoginRequest(sender_psid) {
   callSendAPI(sender_psid, response)
 }
 
+function checkTime(time) {
+  return new Promise((resolve, reject) => {
+    var now = new Data() 
+    var tMax = 3600000
+    if ((time - now) > tmax) {
+      return resolve(true)
+    }
+    return resolve(false)
+  })
+}
 function refreshID(sender_psid) {
   return new Promise((resolve, reject) => {
     dbDriver.findUser(db, { "id": parseInt(sender_psid) })
@@ -512,27 +522,45 @@ function refreshID(sender_psid) {
           'access_token': res[0].access_token,
           'refresh_token': res[0].refresh_token
         })
+        return(res.expires_at)
       })
       .catch((err) => {
         return reject(err)
       })
-      .then(spotifyApi.refreshAccessToken())
+      .then( (time) => {
+        var refreshNeeded = checkTime(time)
+        return refreshNeeded
+      })
       .catch((err) => {
         return reject(err)
       })
-      .then((data) => {
-        if (typeof data.body === undefined) {
-          console.log('this is data' + data)
-          var token = data.body['access_token']
+      .then((refreshNeeded) => {
+        if(refreshNeeded) {
+          spotifyApi.refreshAccessToken()
+            .then((data) => {
+              if (typeof data.body === undefined) {
+                console.log('this is data' + data)
+                var token = data.body['access_token']
+              }
+              console.log('The access token has been refreshed')
+              var token = data.body['access_token']
+              spotifyApi.setAccessToken(token)
+              var update = dbDriver.updateUserAccessToken(db, parseInt(sender_psid), token)
+              return (update)
+            }, (err) => {
+              console.log('Something went wrong!', err)
+              throw (err)
+            })
+            .catch((err) => {
+              return reject(err)
+            })
+            .then( () => {
+              return true
+            })
         }
-        console.log('The access token has been refreshed')
-        var token = data.body['access_token']
-        spotifyApi.setAccessToken(token)
-        var update = dbDriver.updateUserAccessToken(db, parseInt(sender_psid), token)
-        return (update)
-      }, (err) => {
-        console.log('Something went wrong!', err)
-        throw (err)
+        else {
+          return true
+        }
       })
       .catch((err) => {
         return reject(err)
