@@ -505,7 +505,7 @@ function handleLoginRequest(sender_psid) {
 
 function checkTime(time) {
   return new Promise((resolve, reject) => {
-    var now = new Data() 
+    var now = new Date() 
     var tMax = 3600000
     if ((time - now) > tmax) {
       return resolve(true)
