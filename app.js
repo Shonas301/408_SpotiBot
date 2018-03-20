@@ -1318,42 +1318,47 @@ function playlistFromArtists(id, input) {
 
 // This function combines everything and generates a playlist, and returns a promise containing the playlist url
 function buildArtistPlaylists(id, artists) {
-  return new Promise((resolve, reject) => {
-    playlistFromArtists(id, artists).then(function (tracks) {
-      var song_ids = [];
-      for (var i = 0; i < tracks.length; i++) {
-        song_ids.push("spotify:track:" + tracks[i].id)
-      }
-      var getMe = spotifyApi.getMe()
-        .then(function (data) {
-          return data.body.id;
-        }).catch(function (err) {
-          throw err;
-        })
+  var ret = refreshID(id)
+    .then( () 
+      return new Promise((resolve, reject) => {
+        playlistFromArtists(id, artists).then(function (tracks) {
+          var song_ids = [];
+          for (var i = 0; i < tracks.length; i++) {
+            song_ids.push("spotify:track:" + tracks[i].id)
+          }
+          var getMe = spotifyApi.getMe()
+            .then(function (data) {
+              return data.body.id;
+            }).catch(function (err) {
+              throw err;
+            })
 
-      // Create a playlist using the user's id
-      getMe.then(function (user_id) {
-        // Create a public playlist
-        return spotifyApi.createPlaylist(user_id, artists, { 'public': true })
-          .then(function (data) {
-            // Return array of playlist_id and user_id
-            return [data.body.id, user_id, data.body.external_urls.spotify];
-          }).catch(function (err) {
-            throw err;
-          });
-      }).then((result) => {
-        console.log(result)
-        spotifyApi.addTracksToPlaylist(id, result[1], result[0], song_ids)
-          .then((res) => {
-            resolve(result[2])
+          // Create a playlist using the user's id
+          var user
+          getMe.then(function (user_id) {
+            // Create a public playlist
+            var user = user_id.body.id
+            return spotifyApi.createPlaylist(user, artists, { 'public': true })
+              .then(function (data) {
+                // Return array of playlist_id and user_id
+                return [data.body.id, user_id, data.body.external_urls.spotify];
+              }).catch(function (err) {
+                throw err;
+              });
+          }).then((result) => {
+            console.log(result)
+            spotifyApi.addTracksToPlaylist(user, result[1], result[0], song_ids)
+              .then((res) => {
+                resolve(result[2])
+              }).catch((err) => {
+                reject(err);
+              })
           }).catch((err) => {
             reject(err);
           })
-      }).catch((err) => {
-        reject(err);
+        })
       })
-    })
-  })
+    )}
 }
 
 function getSongNameString(trackId) {
