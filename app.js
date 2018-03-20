@@ -828,8 +828,8 @@ function createPlaylist(id, playlist_name) {
       throw err
     })
     .then((getMe) => {
-      return new Promise(async (resolve, reject) => {
-        await spotifyApi.createPlaylist(id, getMe, playlist_name, { 'public': true })
+      return new Promise((resolve, reject) => {
+        spotifyApi.createPlaylist(getMe, playlist_name, { 'public': true })
           .then(function (data) {
             console.log(data)
             return resolve([data.body]);
