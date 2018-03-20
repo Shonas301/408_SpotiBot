@@ -1362,6 +1362,7 @@ function buildArtistPlaylists(id, artists) {
         })
       })
     })
+  return ret
 }
 
 function getSongNameString(trackId) {
