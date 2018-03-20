@@ -1201,6 +1201,8 @@ function buildArtistPlaylists(artists) {
           }).catch(function (err) {
             reject(err);
           });
+      }).catch(err => {
+        reject(err)
       }).then((result) => {
         console.log(result)
         spotifyApi.addTracksToPlaylist(result[1], result[0], song_ids)
