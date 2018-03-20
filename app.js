@@ -1305,6 +1305,7 @@ function getPlaylist(id, artists) {
 function playlistFromArtists(id, input) {
   return new Promise((resolve, reject) => {
     var artist_array = input.split(',');
+    console.log(artist_array)
     getArtistIDArray(id, artist_array).then(function (artist_id_array) {
       console.log('artist array is: ' + artist_id_array)
       getPlaylist(id, artist_id_array).then(function (playlist) {
