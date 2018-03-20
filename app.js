@@ -1107,7 +1107,7 @@ function createPlaylistForCategory(id, categories, count) {
     .then(() => {
       return Promise.all(categories.map(function (category) {
         return new Promise((resolve, reject) => {
-          spotifyApi.getPlaylistsForCategory(id, category).then((res) => {
+          spotifyApi.getPlaylistsForCategory(category).then((res) => {
             var playlists = [];
             for (var i = 0; i < count; i++)
               playlists.push({ "link": res.body.playlists.items[i].external_urls.spotify, "name": res.body.playlists.items[i].name })
