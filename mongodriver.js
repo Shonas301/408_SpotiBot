@@ -33,7 +33,7 @@ module.exports = {
     var query = { "id": user.id }
     return new Promise((resolve, reject) => {
       db.collection('users').updateOne(
-        query, {$set: {"access_token": new_token}} , function (err, res) {
+        query, {$set: {"access_token": new_token, 'expires_at': new Date() + 3600000}} , function (err, res) {
           if (err) throw err;
           return resolve(res);
         });
