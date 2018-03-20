@@ -405,7 +405,7 @@ async function handleMessage(sender_psid, received_message) {
             } else if (input == 'byop artist') {
               var artist_list = res[1].split(",")
               var artist_string = ''
-              for (var i = 0; i < songs_list.length; i++) {
+              for (var i = 0; i < artist_list.length; i++) {
                 artist_string = artist_string + artist_list[i] + ' '
               }
 
