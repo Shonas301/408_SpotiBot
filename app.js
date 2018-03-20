@@ -1319,7 +1319,7 @@ function playlistFromArtists(id, input) {
 // This function combines everything and generates a playlist, and returns a promise containing the playlist url
 function buildArtistPlaylists(id, artists) {
   var ret = refreshID(id)
-    .then( () 
+    .then( () => {
       return new Promise((resolve, reject) => {
         playlistFromArtists(id, artists).then(function (tracks) {
           var song_ids = [];
