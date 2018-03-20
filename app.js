@@ -1274,7 +1274,7 @@ function getArtistIDArray(id, artist_array) {
         temp.push(data)
       })
     }
-    resolve(temp)
+    return resolve(temp)
   });
   return artist_id_array;
 }
@@ -1307,7 +1307,7 @@ function playlistFromArtists(id, input) {
     var artist_array = input.split(',');
     getArtistIDArray(id, artist_array).then(function (artist_id_array) {
       console.log('artist array is: ' + artist_id_array)
-      getPlaylist(artist_id_array).then(function (playlist) {
+      getPlaylist(id, artist_id_array).then(function (playlist) {
         return resolve(playlist);
       })
     }).catch(function (err) {
