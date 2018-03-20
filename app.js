@@ -1252,6 +1252,7 @@ function searchForArtist(id, query) {
           //console.log(data)
           result = data.body.artists.items[0].id;
           console.log("here: " + result)
+          return result
         }, function (err) {
           console.log(err)
         }).then(function () {
