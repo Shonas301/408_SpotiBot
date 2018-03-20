@@ -829,18 +829,13 @@ function createPlaylist(id, playlist_name) {
     })
     .then((getMe) => {
       return new Promise((resolve, reject) => {
-        getMe.then(function (user_id) {
-          // Create a public playlist
-          spotifyApi.createPlaylist(id, user_id, playlist_name, { 'public': true })
-            .then(function (data) {
-              console.log(data)
-              return resolve([data.body]);
-            }).catch(function (err) {
-              return reject(err);
-            });
-        }).catch(function (err) {
-          return reject(err);
-        })
+        spotifyApi.createPlaylist(id, getMe, playlist_name, { 'public': true })
+          .then(function (data) {
+            console.log(data)
+            return resolve([data.body]);
+          }).catch(function (err) {
+            return reject(err);
+          });
       })
     })
   return ret
