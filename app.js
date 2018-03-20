@@ -412,6 +412,7 @@ function handleMessage(sender_psid, received_message) {
               artist_string = artist_string + artist_list[i] + ' '
             }
 
+            console.log("artist string: " + artist_string)
             buildArtistPlaylists(artist_string).then(res => {
               var response = { "text": `Your playlist:\n${res}\n` }
               callSendAPI(sender_psid, response);
