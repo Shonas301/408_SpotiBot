@@ -1180,7 +1180,7 @@ function playlistFromArtists(input) {
 function buildArtistPlaylists(artists) {
   return new Promise((resolve, reject) => {
     playlistFromArtists(artists).then(function (tracks) {
-      console.log("Artist Tracks:");
+      console.log("Artist Tracks length: " + tracks.length);
       console.log(tracks);
       var song_ids = [];
       for (var i = 0; i < tracks.length; i++) {
