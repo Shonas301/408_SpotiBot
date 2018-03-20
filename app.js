@@ -756,7 +756,7 @@ function getTopSongs(id, limit, offset, time_range) {
 
 // Example get top 5 artists (Using for Genre Stats)
 function getTopArtists(id, limit, offset, time_range) {
-  refreshID(id)
+  var ret = refreshID(id)
   .then( () => {
     return new Promise((resolve, reject) => {
       spotifyApi.getMyTopArtists({
@@ -770,14 +770,14 @@ function getTopArtists(id, limit, offset, time_range) {
       });
     });
   })
-  
+  return ret
 }
 
 /* !! PROBLEM !!  There is no 'genre' attribute in most track or album objects
  * The only reliable place to get a genre is to check an artist's list of genres
  */
 function getTopGenre(id) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then( () => {
       return new Promise((resolve, reject) => {
         getTopArtists(id, 50, 0, "long_term").then((artists) => {
@@ -807,12 +807,14 @@ function getTopGenre(id) {
         })
       });
     })
+  return ret
 }
 
 // Returns a promise containing the link to the users playlist
 function createPlaylist(id, playlist_name) {
+  //
   // Get the user's id
-  refreshID(id)
+  var ret = refreshID(id)
     .then( () => {
       return spotifyApi.getMe()
     })
@@ -841,6 +843,7 @@ function createPlaylist(id, playlist_name) {
         })
       })
     })
+  return ret
   /*var getMe = spotifyApi.getMe()
     .then(function (data) {
       return data.body.id;
@@ -867,6 +870,7 @@ function createPlaylist(id, playlist_name) {
 
 // Add an array of songs to a playlist
 function addTracksToPlaylist(id, playlist_id, tracks) {
+  //
   // Get the user's id
   var promise = refreshID(id).then( () => {
     return spotifyApi.getMe()
@@ -893,7 +897,7 @@ function addTracksToPlaylist(id, playlist_id, tracks) {
 
 // Returns a promise which contains the most common key
 function getTopKey(id) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         getTopSongs(id, 25, 0, "short_term").then((data) => {
@@ -931,10 +935,11 @@ function getTopKey(id) {
         });
       });
     })
+  return ret
 }
 
 function getHappiestSong(id) {
-  refreshID
+  var ret = refreshID
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
@@ -966,10 +971,11 @@ function getHappiestSong(id) {
         });
       });
     })
+  return ret
 }
 
 function getSaddestSong(id) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
@@ -1006,10 +1012,11 @@ function getSaddestSong(id) {
         });
       });
     })
+  return ret
 }
 //finish
 function getFastestSong(id) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
@@ -1041,10 +1048,11 @@ function getFastestSong(id) {
         });
       });
     })
+  return ret
 }
 
 function getSlowestSong(id) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
@@ -1086,6 +1094,7 @@ function getSlowestSong(id) {
         });
       });
     })
+  return ret
 }
 
 function createPlaylistForCategory(id, categories, count) {
@@ -1095,7 +1104,7 @@ function createPlaylistForCategory(id, categories, count) {
     console.log(cat)
   });
 
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return Promise.all(categories.map(function (category) {
         return new Promise((resolve, reject) => {
@@ -1111,12 +1120,13 @@ function createPlaylistForCategory(id, categories, count) {
         })
       }))
     })
+  return ret
 }
 
 
 //************************** SONG PLAYLIST
 function searchForSongByArtist(id, query) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then( () => {
       return new Promise((resolve, reject) => {
         var result
@@ -1130,6 +1140,7 @@ function searchForSongByArtist(id, query) {
         })
       });
     })
+  return ret
 }
 
 //takes in an array of song names from user and returns an array of song IDs
@@ -1154,7 +1165,7 @@ function getSongIDArray(id, song_array) {
 //takes in array of song id's and returns and object that is a list of tracks in recommended playlist
 //TODO list could be converted to song uri's to work with creating a playlist that we have in app.js
 function getPlaylist(id, tracks) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getRecommendations({
@@ -1166,6 +1177,7 @@ function getPlaylist(id, tracks) {
         })
       });
     })
+  return ret
 }
 
 //function takes in a string from user like this 'Just Dance - Lady Gaga, Strange Love - Halsey'
@@ -1187,7 +1199,7 @@ function playlistFromSongs(id, input) {
 
 // This function combines everything and generates a playlist, and returns a promise contiaining the url
 function buildSongPlaylist(id, songs) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         playlistFromSongs(songs).then(function (tracks) {
@@ -1225,6 +1237,7 @@ function buildSongPlaylist(id, songs) {
         })
       })
     })
+  return ret
 }
 
 // **************** ARTIST PLAYLIST
@@ -1232,7 +1245,7 @@ function buildSongPlaylist(id, songs) {
 // takes a name of artist in the format 'Hayley Kiyoko' and searches for the artist
 //returns the first result's artist id (should be accurate almost all the time)
 function searchForArtist(id, query) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         var result
@@ -1247,6 +1260,7 @@ function searchForArtist(id, query) {
         })
       });
     })
+  return ret
 }
 
 
@@ -1270,7 +1284,7 @@ function getArtistIDArray(id, artist_array) {
 //takes in array of artist id's and returns and object that is a list of tracks in recommended playlist
 //TODO list could be converted to song uri's to work with creating a playlist that we have in app.js
 function getPlaylist(id, artists) {
-  refreshID(id)
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getRecommendations({
@@ -1282,6 +1296,7 @@ function getPlaylist(id, artists) {
         })
       });
     })
+  return ret
 }
 
 
