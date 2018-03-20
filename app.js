@@ -934,7 +934,7 @@ function getTopKey(id) {
 }
 
 function getHappiestSong(id) {
-  var ret = refreshID
+  var ret = refreshID(id)
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
