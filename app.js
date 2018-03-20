@@ -935,6 +935,10 @@ function getTopKey(id) {
 
 function getHappiestSong(id) {
   var ret = refreshID(id)
+    .catch( err => {
+      console.log(err)
+      throw err
+    })
     .then(() => {
       return new Promise((resolve, reject) => {
         spotifyApi.getMyTopTracks({
