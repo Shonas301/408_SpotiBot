@@ -409,13 +409,17 @@ async function handleMessage(sender_psid, received_message) {
                 artist_string = artist_string + artist_list[i] + ' '
               }
 
-              buildArtistPlaylists(sender_psid, artist_string).then(res => {
-                var response = { "text": `Your playlist:\n${res}\n` }
-                callSendAPI(sender_psid, response);
-              }).catch(err => {
-                var response = { "text": `Sorry there was an error: ${err.message}\n` }
-                callSendAPI(sender_psid, response);
-              })
+              buildArtistPlaylists(sender_psid, artist_string)
+                .catch( err => {
+                  throw err
+                })
+                .then(res => {
+                  var response = { "text": `Your playlist:\n${res}\n` }
+                  callSendAPI(sender_psid, response);
+                }).catch(err => {
+                  var response = { "text": `Sorry there was an error: ${err.message}\n` }
+                  callSendAPI(sender_psid, response);
+                })
 
             } else if (input == 'byop playlist') {
             } else if (input == 'byop genre') {
